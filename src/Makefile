@@ -1,0 +1,66 @@
+#!/usr/bin/make
+
+# Objects compiled for the general use of the library
+COMMON_OBJECTS = timers.o 
+CPP_OBJECTS = cpp/pin.o
+
+INCLUDES = -I $(LIB_BASE)/include
+INCLUDES_CPP = -I $(LIB_BASE)/include/cpp
+
+# Select objects and project compiler according to the language
+ifeq ($(LANGUAGE), CPP)
+    PCC = $(CXX)
+    INCLUDES += $(INCLUDES_CPP)
+    COMMON_OBJECTS += $(CPP_OBJECTS)
+else
+    PCC = $(CC)
+endif
+
+# Add path to objects
+COMMON_OBJECTS := $(addprefix $(LIB_BASE)/, $(COMMON_OBJECTS))
+
+# Include the appropriate Makefile
+ARCH_DIR = $(LIB_BASE)/portable/$(ARCH)
+include $(ARCH_DIR)/Makefile
+
+#########################################################################
+
+all: $(PROJECT).hex $(PROJECT).bin
+
+$(PROJECT).bin: $(PROJECT).elf
+	$(OBJCOPY) -O binary -j .text -j .data $(PROJECT).elf $(PROJECT).bin
+
+$(PROJECT).hex: $(PROJECT).elf
+	$(OBJCOPY) -R .stack -O ihex $(PROJECT).elf $(PROJECT).hex
+
+$(PROJECT).elf: $(PORT_OBJECTS) $(COMMON_OBJECTS) $(OBJECTS)
+	$(PCC) $(LDFLAGS) $(OBJECTS) $(PORT_OBJECTS) $(COMMON_OBJECTS) -o $(PROJECT).elf
+
+stats: $(PROJECT).elf
+	$(SIZE) $(PROJECT).elf
+
+clean:
+	$(REMOVE) $(OBJECTS)
+	$(REMOVE) $(PORT_OBJECTS)
+	$(REMOVE) $(COMMON_OBJECTS)
+	$(REMOVE) $(PROJECT).hex
+	$(REMOVE) $(PROJECT).elf
+	$(REMOVE) $(PROJECT).map
+	$(REMOVE) $(PROJECT).bin
+	$(REMOVE) *.lst
+
+#########################################################################
+#  Default rules to compile .c and .cpp file to .o
+#  and assemble .s files to .o
+
+.c.o :
+	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
+
+.cpp.o :
+	$(CXX) $(CPPFLAGS) -c $< -o $(<:.cpp=.o)
+
+.s.o :
+	#$(AS) $(ASFLAGS) -o $(notdir $@) $< > $(notdir $(basename $@)).lst
+	$(AS) $(ASFLAGS) -o $@ $< > $(basename $@).lst
+
+#########################################################################
