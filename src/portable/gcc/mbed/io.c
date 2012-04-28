@@ -59,7 +59,7 @@ __INLINE void Pin_Input(Pin_t pin) {
 void Pin_Input_Mode(Pin_t pin, PinMode mode) {
 // TODO: lock for concurrency
     if (mode < 4) {
-		uint32_t port = pin.port + pin.address / 16;
+		uint32_t port = (2 * pin.port) + pin.address / 16;
 		uint32_t shift = 2 * pin.address;
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
