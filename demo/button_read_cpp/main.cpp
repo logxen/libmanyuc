@@ -26,8 +26,9 @@
 
 int main() {
 
-    Pin leds[] = { Pin(LED1, Output), Pin(LED2, Output),
-        Pin(LED3, Output), Pin(LED4, Output) };
+    Pin leds[] = { 
+		Pin(LED1), Pin(LED2),
+        Pin(LED3), Pin(LED4) };
 
     Pin buttons[] = { Pin(P20, PullUp), Pin(P19, PullUp) };
 

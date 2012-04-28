@@ -27,7 +27,7 @@ class Pin {
 	private:
 		Pin_t pin;
 	public:
-		Pin(PinName pin_name, PinMode mode);
+		Pin(PinName pin_name, PinMode mode=Output);
 		int read();
 		void write(int value);
 		void mode(PinMode mode);
