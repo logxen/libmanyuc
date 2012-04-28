@@ -21,7 +21,7 @@
 #include "libmanyuc.h"
 
 /* This example turns the first and second leds on, when buttons located
-   in P19 and P20 are pressed.  Buttons are in PullUp mode, return 0 when
+   in P20 and P19 are pressed.  Buttons are in PullUp mode, return 0 when
    pressed. */
 
 int main() {
