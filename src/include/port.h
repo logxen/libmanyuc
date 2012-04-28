@@ -17,6 +17,7 @@ void Pin_On (Pin_t pin);
 void Pin_Output (Pin_t pin);
 void Pin_Off (Pin_t pin);
 void Pin_Input (Pin_t pin);
+void Pin_Input_Mode (Pin_t pin, PinMode mode);
 int Pin_Read (Pin_t pin);
 
 void Delay (uint32_t dlyTicks);

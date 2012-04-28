@@ -12,7 +12,7 @@ OPTIMIZATION = 0
 #LISTING = -ahls
 
 #  Compiler Options
-CFLAGS = -Wall -fno-common -mcpu=cortex-m3 -mthumb -I./ -I$(ARCH_DIR) $(INCLUDES) -O$(OPTIMIZATION) $(DEBUG) 
+CFLAGS := $(CFLAGS) -fno-common -mcpu=cortex-m3 -mthumb -I./ -I$(ARCH_DIR) $(INCLUDES) -O$(OPTIMIZATION) $(DEBUG) 
 #CFLAGS += -Wcast-align -Wcast-qual -Wimplicit -Wpointer-arith -Wswitch
 #CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
 LDFLAGS = -mcpu=cortex-m3 -mthumb -O$(OPTIMIZATION) -nostartfiles -Wl,-Map=$(PROJECT).map -T$(LSCRIPT) 

@@ -2,12 +2,8 @@
 #include "libmanyuc.h"
 
 Pin::Pin(PinName pin_name, PinMode mode) {
-	pin = Pin_Get(pin_name);
-	switch (mode) {
-		case Output:
-			Pin_Output(pin);
-			break;
-	}
+	this->pin = Pin_Get(pin_name);
+	this->mode(mode);
 }
 
 // TODO: ver tema de inlines
@@ -17,11 +13,21 @@ int Pin::read(){
 }
 
 void Pin::write(int value) {
-// TODO: ver si es posible evitar el IF
 	if (value) {
 		Pin_On(this->pin);
 	} else {
 		Pin_Off(this->pin);
+	}
+}
+
+void Pin::mode(PinMode mode) {
+	switch (mode) {
+		case Output:
+			Pin_Output(this->pin);
+			break;
+		default:
+			Pin_Input(this->pin);
+			Pin_Input_Mode(this->pin, mode);
 	}
 }
 

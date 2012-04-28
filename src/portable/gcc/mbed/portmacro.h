@@ -88,13 +88,14 @@ enum PinName {
 };
 typedef enum PinName PinName;
 
-enum PinMode { Output = -1, PullUp = 0, PullDown = 3, PullNone = 2, OpenDrain = 4 }; 
+enum PinMode { Output = -1, PullUp = 0, Repeater = 1, PullNone = 2, PullDown = 3, OpenDrain = 4 }; 
 typedef enum PinMode PinMode;
 
 // Pin structure to hold port and address
 struct _pin_t {
-    LPC_GPIO_TypeDef *port;
-    uint32_t address;
+    uint16_t port;
+    uint16_t address;
+    uint32_t mask;
 };
 
 #ifdef __cplusplus

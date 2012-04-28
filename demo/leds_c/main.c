@@ -16,11 +16,11 @@ int main(void) {
     while(1) {
 		for (i = 0; i < nleds; i++) {
 			Pin_On(leds[i]);
-        	wait(0.1);         // Delay 100 Msec
+        	wait(0.2);         // Delay 100 Msec
 		}
 		for (i = 0; i < nleds; i++) {
 			Pin_Off(leds[i]);
-        	wait(0.1);         // Delay 100 Msec
+        	wait(0.2);         // Delay 100 Msec
 		}
     }
 }

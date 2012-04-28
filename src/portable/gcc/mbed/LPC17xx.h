@@ -161,6 +161,8 @@ typedef struct
   __IO uint32_t PINSEL9;
   __IO uint32_t PINSEL10;
        uint32_t RESERVED0[5];
+  __IO uint32_t PINMODE[10];
+/*
   __IO uint32_t PINMODE0;
   __IO uint32_t PINMODE1;
   __IO uint32_t PINMODE2;
@@ -170,7 +172,7 @@ typedef struct
   __IO uint32_t PINMODE6;
   __IO uint32_t PINMODE7;
   __IO uint32_t PINMODE8;
-  __IO uint32_t PINMODE9;
+  __IO uint32_t PINMODE9;*/
   __IO uint32_t PINMODE_OD0;
   __IO uint32_t PINMODE_OD1;
   __IO uint32_t PINMODE_OD2;
@@ -982,6 +984,7 @@ typedef struct
 /*                         Peripheral declaration                             */
 /******************************************************************************/
 #define LPC_SC                ((LPC_SC_TypeDef        *) LPC_SC_BASE       )
+#define LPC_GPIO              ((LPC_GPIO_TypeDef      *) LPC_GPIO0_BASE    )
 #define LPC_GPIO0             ((LPC_GPIO_TypeDef      *) LPC_GPIO0_BASE    )
 #define LPC_GPIO1             ((LPC_GPIO_TypeDef      *) LPC_GPIO1_BASE    )
 #define LPC_GPIO2             ((LPC_GPIO_TypeDef      *) LPC_GPIO2_BASE    )
