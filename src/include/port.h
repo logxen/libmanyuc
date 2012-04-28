@@ -28,9 +28,9 @@ extern "C" {
 #include <portmacro.h>
 #include <stdint.h>
 
-typedef struct _pin_t Pin_t;
+void init();
 
-void led();
+typedef struct _pin_t Pin_t;
 
 Pin_t Pin_Get(PinName pin_name);
 void Pin_On (Pin_t pin);

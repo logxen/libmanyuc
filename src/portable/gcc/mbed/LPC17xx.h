@@ -149,35 +149,10 @@ typedef struct
 /*------------- Pin Connect Block (PINCON) -----------------------------------*/
 typedef struct
 {
-  __IO uint32_t PINSEL0;
-  __IO uint32_t PINSEL1;
-  __IO uint32_t PINSEL2;
-  __IO uint32_t PINSEL3;
-  __IO uint32_t PINSEL4;
-  __IO uint32_t PINSEL5;
-  __IO uint32_t PINSEL6;
-  __IO uint32_t PINSEL7;
-  __IO uint32_t PINSEL8;
-  __IO uint32_t PINSEL9;
-  __IO uint32_t PINSEL10;
+  __IO uint32_t PINSEL[11];
        uint32_t RESERVED0[5];
   __IO uint32_t PINMODE[10];
-/*
-  __IO uint32_t PINMODE0;
-  __IO uint32_t PINMODE1;
-  __IO uint32_t PINMODE2;
-  __IO uint32_t PINMODE3;
-  __IO uint32_t PINMODE4;
-  __IO uint32_t PINMODE5;
-  __IO uint32_t PINMODE6;
-  __IO uint32_t PINMODE7;
-  __IO uint32_t PINMODE8;
-  __IO uint32_t PINMODE9;*/
-  __IO uint32_t PINMODE_OD0;
-  __IO uint32_t PINMODE_OD1;
-  __IO uint32_t PINMODE_OD2;
-  __IO uint32_t PINMODE_OD3;
-  __IO uint32_t PINMODE_OD4;
+  __IO uint32_t PINMODE_OD[5];
   __IO uint32_t I2CPADCFG;
 } LPC_PINCON_TypeDef;
 
