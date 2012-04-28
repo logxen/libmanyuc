@@ -18,7 +18,7 @@ LANGUAGE = CPP
 PATH := $(PATH):/home/users/marga/facu/6600/download/gcc-arm-none-eabi-4_6-2012q1/bin
 #PATH := $(PATH):/home/marga/facu/tesis/tesisarm/gcc-arm-none-eabi-4_6-2012q1/bin
 #PATH := $(PATH):/home/marga/facu/tesis/tesisarm/arm-2011.09/bin
-LIB_BASE := ../../libsrc
+LIB_BASE := ../../src
 
 # Compiling options
 DEBUG = -g

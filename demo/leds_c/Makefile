@@ -16,7 +16,7 @@ LANGUAGE = C
 
 # Path to the compiler and library
 PATH := $(PATH):/home/users/marga/facu/6600/download/gcc-arm-none-eabi-4_6-2012q1/bin
-LIB_BASE := ../../libsrc
+LIB_BASE := ../../src
 
 # Compiling options
 DEBUG = -g
