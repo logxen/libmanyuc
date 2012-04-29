@@ -27,9 +27,7 @@
 
 /* Convert the pin name to a pin struct. */
 Pin_t Pin_Get (PinName pin_name) {
-	// TODO: improve this
 	uint32_t address = pin_name - LPC_GPIO_BASE;
-	//Pin_t pin = { 0, 1 << (address % 32) };
 	Pin_t pin = { address / 32, address % 32, 1 << (address % 32) };
 	return pin;
 }
@@ -64,6 +62,7 @@ void Pin_Input_Mode(Pin_t pin, PinMode mode) {
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
     }
+	// TODO: opendrain
 }
 
 // Read pin state 
