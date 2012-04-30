@@ -21,6 +21,16 @@
 #include "port.h"
 #include "portmacro.h"
 
+// Internal helper functions
+static __INLINE uint32_t get_half_port(Pin_t pin) {
+	return (2 * pin.port) + pin.address / 16;
+}
+
+static __INLINE uint32_t get_half_mask(Pin_t pin) {
+	return 2 * (pin.address % 16);
+}
+
+
 /*----------------------------------------------------------------------------
   Digital Input / Output 
  *----------------------------------------------------------------------------*/
@@ -43,6 +53,11 @@ __INLINE void Pin_Off (Pin_t pin) {
     LPC_GPIO[pin.port].FIOPIN &= ~(pin.mask);
 }
 
+// Read pin state 
+__INLINE int Pin_Read (Pin_t pin) {
+    return ((LPC_GPIO[pin.port].FIOPIN & pin.mask) ? 1 : 0); 
+}
+
 // Set pin as output 
 __INLINE void Pin_Output(Pin_t pin) {
     LPC_GPIO[pin.port].FIODIR |= pin.mask;
@@ -57,15 +72,20 @@ __INLINE void Pin_Input(Pin_t pin) {
 void Pin_Input_Mode(Pin_t pin, PinMode mode) {
 // TODO: lock for concurrency
     if (mode < 4) {
-		uint32_t port = (2 * pin.port) + pin.address / 16;
-		uint32_t shift = 2 * (pin.address % 16);
+		uint32_t port = get_half_port(pin);
+		uint32_t shift = get_half_mask(pin);
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
-    }
-	// TODO: opendrain
+    } else {
+		LPC_PINCON->PINMODE_OD[pin.port] |= pin.mask;
+	}
 }
 
-// Read pin state 
-__INLINE int Pin_Read (Pin_t pin) {
-    return ((LPC_GPIO[pin.port].FIOPIN & pin.mask) ? 1 : 0); 
+// Set pin function (primary, alt1, alt2, alt3)
+void Pin_Function(Pin_t pin, PinFunction function) {
+	uint32_t port = get_half_port(pin);
+	uint32_t shift = get_half_mask(pin);
+	LPC_PINCON->PINSEL[port] &= ~(3 << shift);
+	LPC_PINCON->PINSEL[port] |= (function << shift);
 }
+

@@ -31,6 +31,7 @@ extern "C" {
 void init();
 
 typedef struct _pin_t Pin_t;
+typedef struct _serial_t Serial_t;
 
 Pin_t Pin_Get(PinName pin_name);
 void Pin_On (Pin_t pin);
@@ -41,6 +42,11 @@ void Pin_Input_Mode (Pin_t pin, PinMode mode);
 int Pin_Read (Pin_t pin);
 
 void Delay (uint32_t dlyTicks);
+
+Serial_t Serial_Get(int number);
+void Serial_Init(Serial_t port, int baudrate);
+uint8_t Serial_Get_Byte(Serial_t port);
+void Serial_Put_Byte(Serial_t port, uint8_t data);
 
 #ifdef __cplusplus
 }

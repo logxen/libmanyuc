@@ -18,7 +18,6 @@
  * MA 02110-1301 USA
  */
 
-
 #ifndef MBED_PORTMACRO_H
 #define MBED_PORTMACRO_H
 
@@ -31,7 +30,7 @@ extern "C" {
 #include "LPC17xx.h"
 
 // Names of the Pins
-enum PinName {
+typedef enum PinName {
 
 	// The ARM pin names
 	ARM_P0_0 = LPC_GPIO_BASE, ARM_P0_1, ARM_P0_2, ARM_P0_3,
@@ -61,6 +60,16 @@ enum PinName {
     ARM_P4_14, ARM_P4_15, ARM_P4_16, ARM_P4_17, ARM_P4_18, ARM_P4_19,
     ARM_P4_20, ARM_P4_21, ARM_P4_22, ARM_P4_23, ARM_P4_24, ARM_P4_25,
     ARM_P4_26, ARM_P4_27, ARM_P4_28, ARM_P4_29, ARM_P4_30, ARM_P4_31,
+
+	// Internal equivalencies
+	TX_0 = ARM_P0_2,
+	RX_0 = ARM_P0_3,
+	TX_1 = ARM_P0_10,
+	RX_1 = ARM_P0_11,
+	TX_2 = ARM_P0_15,
+	RX_2 = ARM_P0_16,
+	TX_3 = ARM_P0_0,
+	RX_3 = ARM_P0_1,
 
 	// mbed DIP -> LPC equivalencies, according to mbed schematics
     P5 = ARM_P0_9,
@@ -104,11 +113,44 @@ enum PinName {
     // Not connected
     NC = (int)0xFFFFFFFF
 
-};
-typedef enum PinName PinName;
+} PinName;
 
-enum PinMode { Output = -1, PullUp = 0, Repeater = 1, PullNone = 2, PullDown = 3, OpenDrain = 4 }; 
-typedef enum PinMode PinMode;
+typedef enum PinMode { 
+	Output = -1, PullUp = 0, 
+	Repeater = 1, PullNone = 2, 
+	PullDown = 3, OpenDrain = 4 
+} PinMode;
+
+// enum to select the different PinFunctions
+typedef enum PinFunction { 
+	Primary = 0, Alt1, Alt2, Alt3 }
+PinFunction;
+
+// For serial ports
+typedef enum SerialPortMode {
+	S0_Mode = Alt1, 
+	S1_Mode = Alt1, 
+	S2_Mode = Alt1,
+	S3_Mode = Alt2 
+} SerialPortMode;
+
+typedef enum UARTNumber {
+    UART_0 = LPC_UART0_BASE, 
+    UART_1 = LPC_UART1_BASE,
+    UART_2 = LPC_UART2_BASE,
+    UART_3 = LPC_UART3_BASE
+} UARTNumber;
+
+typedef enum SerialPowerBit {
+	PCUART0 = 3,
+	PCUART1 = 4,
+	PCUART2 = 24,
+	PCUART3 = 25,
+} SerialPowerBit;
+
+// **********
+// Structures
+// **********
 
 // Pin structure to hold port and address
 struct _pin_t {
@@ -116,6 +158,15 @@ struct _pin_t {
     uint16_t address;
     uint32_t mask;
 };
+
+// Serial port structure to hold all port info
+struct _serial_t {
+	struct _pin_t tx;
+	struct _pin_t rx;
+	LPC_UART_TypeDef *uart;
+	uint32_t number;
+};
+
 
 #ifdef __cplusplus
 }
