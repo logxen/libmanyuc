@@ -243,7 +243,7 @@ __INLINE uint8_t Serial_Get_Byte(Serial_t port) {
 uint32_t Serial_Get_Bytes(Serial_t port, uint8_t* data,
 			uint32_t length, SerialTransferMode mode) {
 
-	uint32_t i=0, c, wait;
+	uint32_t i=0, wait;
 
 	while (i < length) {
 
@@ -320,7 +320,7 @@ void UART2_IRQ_Handler() {
 void UART3_IRQ_Handler() {
 }
 
-void Serial_Attach(Serial_t port, void (*function)(void), IrqType type) {
-	port->IER |= type;	
+void Serial_Attach(Serial_t port, void (*function)(void), SerialIRQType type) {
+	port.uart->IER |= type;	
 }
 
