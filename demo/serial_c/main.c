@@ -34,6 +34,15 @@ void turn_off_all_leds(Pin_t* leds, int n) {
     }	
 }
 
+void show_byte_with_leds(Pin_t* leds, int n, uint8_t byte) {
+	int i;
+	for (i = 0; i < n; i++) {
+		if (byte & (1 << i)) 
+			Pin_On(leds[i]);
+		else
+			Pin_Off(leds[i]);
+	}
+}
 /*
  This example repeats all the characters received from the serial port,
  through the serial port.  It also shows the lower half of the byte
@@ -54,15 +63,12 @@ int main(void) {
 	Serial_Init(port, 9600);
 
 	turn_on_all_leds(leds, 4);
+	Serial_Put_Bytes(port, "Hola que tal, como te va 123456789 123456789\r\n", 46, BLOCKING);
+
+	uint8_t buffer[10];
     while(1) {
-       	uint8_t byte = Serial_Get_Byte(port);
-		int i;
-		for (i = 0; i < 4; i++) {
-			if (byte & (1 << i)) 
-				Pin_On(leds[i]);
-			else
-				Pin_Off(leds[i]);
-		}
-		Serial_Put_Byte(port, byte);
+       	uint8_t byte = Serial_Get_Bytes(port, buffer, 10, BLOCKING);
+		show_byte_with_leds(leds, n, byte);
+		Serial_Put_Bytes(port, buffer, 10, NONBLOCKING);
     }
 }

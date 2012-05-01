@@ -148,6 +148,11 @@ typedef enum SerialPowerBit {
 	PCUART3 = 25,
 } SerialPowerBit;
 
+typedef enum SerialInterrupt {
+	RX_INT = 0,
+	TX_INT = 0,
+}
+
 // **********
 // Structures
 // **********

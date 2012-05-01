@@ -60,6 +60,10 @@ const static int uarts[] = { UART_0, UART_1, UART_2, UART_3 };
 #define UART_LCR_BREAK_EN       ((uint8_t)(1<<6))     // UART Transmission Break enable 
 #define UART_LCR_DLAB_EN        ((uint8_t)(1<<7))     // UART Divisor Latches Access bit enable
 
+#define UART_BLOCK_TIMEOUT      0xFFFFFFFF            // Timeout for blocking 
+
+
+
 #define UART_IER_RBRINT_EN      ((uint32_t)(1<<0))  // RBR Interrupt enable
 #define UART_IER_THREINT_EN     ((uint32_t)(1<<1))  // THR Interrupt enable
 #define UART_IER_RLSINT_EN      ((uint32_t)(1<<2))  // RX line status interrupt enable
@@ -223,13 +227,100 @@ void Serial_Init(Serial_t port, int baudrate) {
 
 }
 
-uint8_t Serial_Get_Byte(Serial_t port) {
-	while (!(port.uart->LSR & UART_LSR_RDR));
+// Returns if there is info available to be read
+__INLINE int Serial_Readable(Serial_t port) {
+	return (port.uart->LSR & UART_LSR_RDR);
+}
+
+// Returns a byte read from the serial port. If there is no byte yet, it
+// blocks until there is.
+__INLINE uint8_t Serial_Get_Byte(Serial_t port) {
 	return port.uart->RBR & UART_BYTE_MASK;
 }
 
-void Serial_Put_Byte(Serial_t port, uint8_t data) {
-	while (!(port.uart->LSR & UART_LSR_THRE));
+// Reads the amount of bytes from the serial port into the buffer.
+// Memory for the buffer must have been allocated first.
+uint32_t Serial_Get_Bytes(Serial_t port, uint8_t* data,
+			uint32_t length, SerialTransferMode mode) {
+
+	uint32_t i=0, c, wait;
+
+	while (i < length) {
+
+		// If non blocking, check if there's something to read 
+		// and if not, bail out.
+		if (!(Serial_Readable(port)) && (mode == NONBLOCKING)) {
+			break;
+		}
+		wait = UART_BLOCK_TIMEOUT;
+		while (!(Serial_Readable(port)) && (mode == BLOCKING || (wait > 0))) {
+			wait--;
+		}
+		if (!wait) break;
+
+		data[i] = Serial_Get_Byte(port);
+		i++;
+
+	}
+	return i;
+}
+
+// Returns if there is space to send a byte
+__INLINE int Serial_Sendable(Serial_t port) {
+	return (port.uart->LSR & UART_LSR_THRE);
+}
+
+// Sends a byte through the serial port. If there is no space, it blocks
+// until there is.
+__INLINE void Serial_Put_Byte(Serial_t port, uint8_t data) {
 	port.uart->THR = data & UART_BYTE_MASK;
+}
+
+
+uint32_t Serial_Put_Bytes(Serial_t port, uint8_t* data, 
+				uint32_t length, SerialTransferMode mode) {
+
+	uint32_t i=0, c, wait;
+
+	while (i < length) {
+
+		// If non blocking, check for space and leave when none.
+		if (!(Serial_Sendable(port)) && (mode == NONBLOCKING)) {
+			break;
+		}
+
+		// Otherwise check for space according to the timeout, or not.
+		wait = UART_BLOCK_TIMEOUT;
+		while (!(Serial_Sendable(port)) && (mode == BLOCKING || (wait > 0))) {
+			wait--;
+		}
+		if (!wait) break;
+
+		// Fill the fifo queue with bytes
+		c = UART_TX_FIFO_SIZE;
+		while ((i < length) && (c > 0)) {
+			Serial_Put_Byte(port, data[i]);
+			i++;
+			c--;
+		}
+	}
+	// Return the amount of bytes that were sent
+	return i;
+}
+
+void UART0_IRQ_Handler() {
+}
+
+void UART1_IRQ_Handler() {
+}
+
+void UART2_IRQ_Handler() {
+}
+
+void UART3_IRQ_Handler() {
+}
+
+void Serial_Attach(Serial_t port, void (*function)(void), IrqType type) {
+	port->IER |= type;	
 }
 
