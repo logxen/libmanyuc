@@ -1,0 +1,22 @@
+Hi!
+
+This is the libmanyuc (library for many microcontrollers) code. You'll
+find the source code of the library in the src/ directory, the
+documentation can be generated using Doxygen, from the doc/ directory
+and there are plenty of examples in the demo/ directory.
+
+In order to compile the library you'll have to choose the target
+architecture (currently only mbed supported, more to come soon), and set
+the PATH where the binaries for the compiler are located. This can be done
+in the config.mk file, or in the Makefile of the demo file.
+
+In order to build your own project, copy one of the demo directories and
+start from there.
+
+You can program either in C or C++, the functions available are the same,
+when using C++ you get a more object oriented experience.  The target
+architecture, the language of choice and other information are set inside
+the Makefile of your project.
+
+Have fun using libmanyuc!
+

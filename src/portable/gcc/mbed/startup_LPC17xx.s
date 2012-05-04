@@ -82,10 +82,17 @@ TIMER0_IRQHandler:
 TIMER1_IRQHandler:
 TIMER2_IRQHandler:
 TIMER3_IRQHandler:
+
+    .weak   UART_IRQ_Handler
+    .type   UART_IRQ_Handler, %function
 UART0_IRQHandler:
 UART1_IRQHandler:
 UART2_IRQHandler:
 UART3_IRQHandler:
+    B       .
+    .size   UART_IRQ_Handler, . - UART_IRQ_Handler
+
+
 PWM1_IRQHandler:
 I2C0_IRQHandler:
 I2C1_IRQHandler:
