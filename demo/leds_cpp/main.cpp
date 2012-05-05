@@ -24,8 +24,16 @@
 
 int main() {
 
-	Pin leds[] = { Pin(LED1, Output), Pin(LED2, Output),
-		Pin(LED3, Output), Pin(LED4, Output) };
+	// Construct all the pins on the given LEDs.
+	// When no parameter is given, they are 
+	// automatically set as Output.
+	Pin leds[] = { 
+		Pin(LED1), Pin(LED2),
+		Pin(LED3), Pin(LED4) 
+	};
+
+	// Go through all the LEDs and turn them on and off.
+	// The leds are on for only 0.2s each.
     while(1) {
 		for (int i = 0; i < 4; i++) {
 			leds[i] = 1;
