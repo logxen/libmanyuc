@@ -82,10 +82,63 @@ void Pin_Off (Pin_t pin);
  */
 int Pin_Read (Pin_t pin);
 
+/** Opaque structure to hold a bus of pins information. 
+ *  The data contained in the structure depends on the
+ *  architecture. It should be created through PinBus_Get. 
+ */
+typedef struct _pinBus_t PinBus_t;
+
+/** Creates a structure for the group of pins according 
+ *  to the pin names. 
+ *  @param pin_names An array of pin_names
+ *  @param npins The number of pins in the array
+ *  @return A structure that represents the group of pins.
+ */
+PinBus_t PinBus_Get(PinName* pin_names, int npins);
+
+/** Marks all the pins in the bus as output pins. 
+ *  @param bus A group of pins created through PinBus_Get.
+ */
+void PinBus_Output (PinBus_t bus);
+
+/** Marks all the pins in the bus as input pins. 
+ *  @param bus A group of pins created through PinBus_Get.
+ */
+void PinBus_Input (PinBus_t bus);
+
+/** Sets the mode for the group of pins.
+ *  The possible input modes or pin functions 
+ *  depend on the architecture.
+ *  @param bus A group of pins created through PinBus_Get.
+ *  @param mode The mode to set for the pins.
+ *  Available modes depend on the architecture.
+ */
+void PinBus_Mode (PinBus_t bus, PinMode mode);
+
+/** Turns all the pins in the bus on. 
+ *  @param bus A group of pins created through PinBus_Get.
+ */
+void PinBus_On (PinBus_t bus);
+
+/** Turns all the pins in the bus off. 
+ *  @param bus A group of pins created through PinBus_Get.
+ */
+void PinBus_Off (PinBus_t bus);
+
+
+
+
+
+
+
+
 /** Wait an amount of seconds.
   * TODO: this shouldn't be here.
   */
 void Delay (uint32_t dlyTicks);
+
+
+
 
 //@}
 

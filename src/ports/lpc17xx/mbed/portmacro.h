@@ -161,6 +161,17 @@ struct _pin_t {
     uint32_t mask;
 };
 
+// Port structure for buses
+typedef struct Port_t {
+    uint32_t mask;
+    uint32_t half_mask[2];
+} Port_t;
+
+// Bus structure
+struct _pinBus_t {
+    Port_t ports[5];
+};
+
 // Serial port structure to hold all port info
 struct _serial_t {
 	struct _pin_t tx;
