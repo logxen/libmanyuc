@@ -1,5 +1,11 @@
 #!/usr/bin/make
 
+# If no LIB_BASE dir defined, define it as .
+LIB_BASE ?= .
+
+# Include user configuration
+include $(LIB_BASE)/config.mk
+
 # Objects compiled for the general use of the library
 COMMON_OBJECTS = timers.o 
 CPP_OBJECTS = cpp/pin.o
@@ -20,7 +26,7 @@ endif
 COMMON_OBJECTS := $(addprefix $(LIB_BASE)/, $(COMMON_OBJECTS))
 
 # Include the appropriate Makefile
-ARCH_DIR = $(LIB_BASE)/portable/$(ARCH)
+ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)
 include $(ARCH_DIR)/Makefile
 
 #########################################################################
