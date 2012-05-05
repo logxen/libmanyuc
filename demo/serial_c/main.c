@@ -53,22 +53,22 @@ int main(void) {
 
     Pin_t leds[] = { Pin_Get(LED1), Pin_Get(LED2),
         Pin_Get(LED3), Pin_Get(LED4) };
+	int nleds = 4, i = 0;
 
-    int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < nleds; i++) {
         Pin_Output(leds[i]);
     }	
 
 	Serial_t port = Serial_Get(0);
 	Serial_Init(port, 9600);
 
-	turn_on_all_leds(leds, 4);
+	turn_on_all_leds(leds, nleds);
 	Serial_Put_Bytes(port, "Hola que tal, como te va 123456789 123456789\r\n", 46, BLOCKING);
 
 	uint8_t buffer[10];
     while(1) {
        	uint8_t byte = Serial_Get_Bytes(port, buffer, 10, BLOCKING);
-		show_byte_with_leds(leds, n, byte);
+		show_byte_with_leds(leds, nleds, buffer[0]);
 		Serial_Put_Bytes(port, buffer, 10, NONBLOCKING);
     }
 }
