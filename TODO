@@ -1,0 +1,16 @@
+
+MBED:
+
+* Completar Digital IO
+* Completar Serial
+* Analog
+* Timers / tickers
+* PWM
+* I2C
+
+Luego:
+
+1) LPCExpresso
+2) Placa Atmel "Plataforma abierta"
+3) Avr32
+4) Xplain
