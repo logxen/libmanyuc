@@ -25,8 +25,7 @@ int main(void) {
 
 	// Access 4 leds predefined as LED1, LED2, LED3, LED4
 	int nleds = 4, i = 0;
-	PinName pins[] = { LED1, LED2, LED3, LED4 };
-	PinBus_t leds = PinBus_Get (pins, nleds);
+	PinBus_t leds = PinBus_Get (nleds, LED1, LED2, LED3, LED4);
 
 	// Set all pins as output
 	PinBus_Output(leds);

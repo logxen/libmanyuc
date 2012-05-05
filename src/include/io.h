@@ -90,11 +90,11 @@ typedef struct _pinBus_t PinBus_t;
 
 /** Creates a structure for the group of pins according 
  *  to the pin names. 
- *  @param pin_names An array of pin_names
- *  @param npins The number of pins in the array
+ *  @param npins The number of pins to be grouped.
+ *  @param ... A variable list of pins, must be exactly npins.
  *  @return A structure that represents the group of pins.
  */
-PinBus_t PinBus_Get(PinName* pin_names, int npins);
+PinBus_t PinBus_Get(int npins, ...);
 
 /** Marks all the pins in the bus as output pins. 
  *  @param bus A group of pins created through PinBus_Get.

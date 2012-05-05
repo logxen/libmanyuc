@@ -113,11 +113,15 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
   Bus Mode Digital Input / Output 
  *----------------------------------------------------------------------------*/
 
-PinBus_t PinBus_Get(PinName* pins, int npins) {
+#include <stdarg.h>
+PinBus_t PinBus_Get(int npins, ...) {
+	va_list pins;
+	va_start (pins, npins);
+
 	int i;
 	PinBus_t bus = { { {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}} } };
 	for (i = 0; i < npins; i++) {
-	    uint32_t address = pins[i] - LPC_GPIO_BASE;
+	    uint32_t address = va_arg(pins, uint32_t) - LPC_GPIO_BASE;
 		uint8_t number = address % 32;
 		// Add the pin to the 32 pin mask
 		bus.ports[address / 32].mask |= 1 << number;
@@ -128,6 +132,7 @@ PinBus_t PinBus_Get(PinName* pins, int npins) {
 			bus.ports[address / 32].half_mask[1] |= 3 << ((number-16)*2);
 		}
 	}
+	va_end(pins);
     return bus;
 }
 
