@@ -203,8 +203,8 @@ void Serial_Init(Serial_t port, int baudrate) {
 	port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;*/
 
 	// 5 - Set the pin function
-	Pin_Function(port.tx, modes[port.number]);
-	Pin_Function(port.rx, modes[port.number]);
+	Pin_Mode(port.tx, modes[port.number]);
+	Pin_Mode(port.rx, modes[port.number]);
 
 	// 6 - Disable Interrupts
 	port.uart->IER = 0;

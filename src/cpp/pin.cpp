@@ -46,7 +46,7 @@ void Pin::mode(PinMode mode) {
 			break;
 		default:
 			Pin_Input(this->pin);
-			Pin_Input_Mode(this->pin, mode);
+			Pin_Mode(this->pin, mode);
 	}
 }
 

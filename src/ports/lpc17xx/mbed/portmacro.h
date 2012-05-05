@@ -118,13 +118,10 @@ typedef enum PinName {
 typedef enum PinMode { 
 	Output = -1, PullUp = 0, 
 	Repeater = 1, PullNone = 2, 
-	PullDown = 3, OpenDrain = 4 
+	PullDown = 3, OpenDrain = 4,
+	// Pin Functions, start at 8
+	Primary = 8, Alt1, Alt2, Alt3, 
 } PinMode;
-
-// enum to select the different PinFunctions
-typedef enum PinFunction { 
-	Primary = 0, Alt1, Alt2, Alt3 }
-PinFunction;
 
 // For serial ports
 typedef enum SerialPortMode {

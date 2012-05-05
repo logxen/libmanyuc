@@ -69,23 +69,23 @@ __INLINE void Pin_Input(Pin_t pin) {
 }
 
 // Set pin input mode
-void Pin_Input_Mode(Pin_t pin, PinMode mode) {
+void Pin_Mode(Pin_t pin, PinMode mode) {
 // TODO: lock for concurrency
-    if (mode < 4) {
-		uint32_t port = get_half_port(pin);
-		uint32_t shift = get_half_mask(pin);
-        LPC_PINCON->PINMODE[port] &= ~(3 << shift);
-        LPC_PINCON->PINMODE[port] |= (mode << shift);
-    } else {
-		LPC_PINCON->PINMODE_OD[pin.port] |= pin.mask;
-	}
-}
-
-// Set pin function (primary, alt1, alt2, alt3)
-void Pin_Function(Pin_t pin, PinFunction function) {
 	uint32_t port = get_half_port(pin);
 	uint32_t shift = get_half_mask(pin);
-	LPC_PINCON->PINSEL[port] &= ~(3 << shift);
-	LPC_PINCON->PINSEL[port] |= (function << shift);
+
+	// Set input type (PullUp, PullDown, PullNone)
+    if (mode < 4) {
+        LPC_PINCON->PINMODE[port] &= ~(3 << shift);
+        LPC_PINCON->PINMODE[port] |= (mode << shift);
+	// Set opendrain
+    } else if (mode == 4) {
+		LPC_PINCON->PINMODE_OD[pin.port] |= pin.mask;
+	// Set pin primary / secondary / etc function.
+	} else {
+		mode -= 8;
+		LPC_PINCON->PINSEL[port] &= ~(3 << shift);
+		LPC_PINCON->PINSEL[port] |= (mode << shift);
+	}
 }
 
