@@ -96,6 +96,13 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 
 }
 
+
+// Used for initializing global variables
+extern unsigned int _start_data;
+extern unsigned int _end_data;
+extern unsigned int _start_datai;
+extern unsigned int _end_datai;
+
 void init(void) {
 	/* Based on CMSIS SystemInit() for LPC17xx */
 	/* Also see chapters 3 and 4 of LPC17xx User Manual, UM10360 */
@@ -165,6 +172,18 @@ void init(void) {
 	//LPC_SC->PCONP = ...;
 	//LPC_SC->CLKOUTCFG = ...;
 	//LPC_SC->FLASHCFG = ...;
+
+	// Initialize Global Variables
+    uint32_t* data_begin  = (uint32_t*) &_start_data;
+    uint32_t* data_end    = (uint32_t*) &_end_data;
+    uint32_t* datai_begin = (uint32_t*) &_start_datai;
+    uint32_t* datai_end   = (uint32_t*) &_end_datai;
+    while(data_begin < data_end)
+    {
+        *data_begin = *datai_begin;
+        data_begin++;
+        datai_begin++;
+    }
 
     SystemCoreClockUpdate();
 

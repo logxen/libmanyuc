@@ -1,7 +1,7 @@
 #!/usr/bin/make
 
 #  List of the objects files to be compiled/assembled
-PORT_OBJECTS = startup_LPC17xx.o port.o io.o serial.o
+PORT_OBJECTS = startup_LPC17xx.o port.o io.o serial.o syscalls.o
 PORT_OBJECTS := $(addprefix $(ARCH_DIR)/, $(PORT_OBJECTS))
 # Unused hack
 #INC_PORT_OBJS = $(addprefix $(ARCH_DIR)/, $(PORT_OBJECTS))
@@ -15,7 +15,7 @@ OPTIMIZATION = 0
 CFLAGS := $(CFLAGS) -fno-common -mcpu=cortex-m3 -mthumb -I./ -I$(ARCH_DIR) $(INCLUDES) -O$(OPTIMIZATION) $(DEBUG) 
 #CFLAGS += -Wcast-align -Wcast-qual -Wimplicit -Wpointer-arith -Wswitch
 #CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
-LDFLAGS = -mcpu=cortex-m3 -mthumb -O$(OPTIMIZATION) -nostartfiles -Wl,-Map=$(PROJECT).map -T$(LSCRIPT) 
+LDFLAGS := $(LDFLAGS) -mcpu=cortex-m3 -mthumb -O$(OPTIMIZATION) -nostartfiles -Wl,-Map=$(PROJECT).map -T$(LSCRIPT) 
 ASFLAGS = $(LISTING) -mcpu=cortex-m3
 
 CPPFLAGS = $(CFLAGS)

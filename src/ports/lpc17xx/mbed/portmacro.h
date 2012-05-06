@@ -156,8 +156,8 @@ typedef enum SerialIRQType {
 
 // Pin structure to hold port and address
 struct _pin_t {
-    uint16_t port;
-    uint16_t address;
+    uint8_t port;
+    uint8_t address;
     uint32_t mask;
 };
 

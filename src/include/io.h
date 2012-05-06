@@ -32,6 +32,8 @@
 extern "C" {
 #endif
 
+#include <stdarg.h>
+
 /** Opaque structure to hold pin information. 
  *  The data contained in the structure depends on the
  *  architecture. It should be created through Pin_Get. 
@@ -82,7 +84,13 @@ void Pin_Off (Pin_t pin);
  */
 int Pin_Read (Pin_t pin);
 
-/** Opaque structure to hold a bus of pins information. 
+/* *********************************************************** */
+
+/** Opaque structure to hold a group of pins information. 
+ *  The PinBus structure is only useful when performing the
+ *  same operation on all of the pins. To read/write 
+ *  different data to a group of pins, use the Bus structure.
+ *
  *  The data contained in the structure depends on the
  *  architecture. It should be created through PinBus_Get. 
  */
@@ -95,6 +103,9 @@ typedef struct _pinBus_t PinBus_t;
  *  @return A structure that represents the group of pins.
  */
 PinBus_t PinBus_Get(int npins, ...);
+
+/** Variadic version of PinBus_Get. */
+PinBus_t vPinBus_Get(int npins, va_list pins);
 
 /** Marks all the pins in the bus as output pins. 
  *  @param bus A group of pins created through PinBus_Get.
@@ -125,12 +136,75 @@ void PinBus_On (PinBus_t bus);
  */
 void PinBus_Off (PinBus_t bus);
 
+/* *********************************************************** */
+
+/** Structure to hold the bus information. 
+ *  The Bus structure allows a user to read and write to 
+ *  up to 32 bytes at the same time.
+ *
+ *  The structure is architecture independent and 
+ *  should be created through Bus_Get. 
+ */
+typedef struct _bus_t {
+	PinBus_t pinBus;
+	uint32_t npins; 
+	Pin_t pins[32];
+} Bus_t;
+
+/** Creates a structure for the bus, according to the pin
+ *  names.  The order of the pins is the one that will be
+ *  used when reading or writing to the bus. The first pin
+ *  will always be the least significant bit. No more than
+ *  32 pins will be taken into account.
+ * 
+ *  @param npins The number of pins to be grouped.
+ *  @param ... A variable list of pins, must be exactly npins.
+ *  @return A structure that represents the group of pins.
+ */
+Bus_t Bus_Get(int npins, ...);
+//void Bus_Get(int npins, ...);
+
+/** Sets the bus as output. 
+ *  @param bus A bus created through Bus_Get.
+ */
+void Bus_Output (Bus_t bus);
+
+/** Sets the bus as input. 
+ *  @param bus A bus created through Bus_Get.
+ */
+void Bus_Input (Bus_t bus);
+
+/** Sets the mode for the bus.
+ *  The possible input modes or pin functions 
+ *  depend on the architecture.
+ *  @param bus A bus created through Bus_Get.
+ *  @param mode The mode to set for the pins.
+ *  Available modes depend on the architecture.
+ */
+void Bus_Mode (Bus_t bus, PinMode mode);
+
+/** Writes data to the bus. Each set bit in data will 
+ *  result in a on pin, each unset bit will result in an
+ *  off pin. The order of the pins is set when 
+ *  constructing the bus.
+ *
+ *  @param bus A bus created through Bus_Get.
+ *  @param data The data to be set to the bits.
+ */
+void Bus_Write (Bus_t bus, uint32_t data);
+
+/** Reads data from the bus. Each pin read as on will result
+ * in a set bit in data, each pin read as off will result in
+ * an unset bit. The order of the pins is set when
+ * constructing the bus.
+ *
+ * @param bus A bus created through Bus_Get.
+ * @return the bits read from the bus.
+ */
+uint32_t Bus_Read (Bus_t bus);
 
 
-
-
-
-
+/* *********************************************************** */
 
 /** Wait an amount of seconds.
   * TODO: this shouldn't be here.

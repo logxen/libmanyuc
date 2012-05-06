@@ -119,14 +119,14 @@ PLL1_IRQHandler:
 Reset_Handler:
 _startup:
 	/* Clear the BSS section */ 
-/*	mov r0, #0
+	mov r0, #0
 	ldr r1, = _start_bss
 	ldr r2, = _end_bss
 	sub r2, #1
 _loop:	cmp r1, r2
 	str r0, [r1, #0]
 	add r1, #4
-	blo _loop */
+	blo _loop 
 
 	/* Jump to init() */
 	ldr r0, =init

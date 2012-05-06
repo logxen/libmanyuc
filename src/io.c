@@ -1,0 +1,113 @@
+/*
+ * libmanyuc - Architecture independent IO functions
+ * Copyright (C) 2012 - Margarita Manterola Rivero
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * MA 02110-1301 USA
+ */
+
+#include "port.h"
+
+/* *********************************************************** */
+PinBus_t PinBus_Get(int npins, ...) {
+    va_list pins;
+    va_start (pins, npins);
+    PinBus_t bus = vPinBus_Get(npins, pins);
+	va_end(pins);
+	return bus;
+}
+
+/* *********************************************************** */
+
+Bus_t Bus_Get(int npins, ...) {
+
+	Bus_t bus;
+	
+	// Get the pinBus
+    va_list pins;
+    va_start (pins, npins);
+	bus.pinBus = vPinBus_Get(npins, pins);
+	bus.npins = npins;
+	va_end(pins);
+
+	// Get all the pins
+    va_start (pins, npins);
+	int i;
+	for (i = 0; i < npins; i++) {
+		bus.pins[i] = Pin_Get(va_arg(pins, uint32_t));
+	} 
+	va_end(pins);
+
+	return bus;
+}
+
+void Bus_Output (Bus_t bus) {
+	PinBus_Output(bus.pinBus);
+}
+
+void Bus_Input (Bus_t bus) {
+	PinBus_Input(bus.pinBus);
+}
+
+void Bus_Mode (Bus_t bus, PinMode mode) {
+	PinBus_Mode(bus.pinBus, mode);
+}
+
+void Bus_Write (Bus_t bus, uint32_t data) {
+	int i;
+	for (i = 0; i < bus.npins; i++) {
+        if (data & (1 << i)) 
+            Pin_On(bus.pins[i]);
+        else
+            Pin_Off(bus.pins[i]);
+	}
+}
+
+uint32_t Bus_Read (Bus_t bus) {
+	uint32_t data = 0;
+	int i;
+	for (i = 0; i < bus.npins; i++) {
+		data |= (Pin_Read(bus.pins[i]) << i);
+	}
+	return data;
+}
+
+/* *********************************************************** */
+
+void Pin_All_On(Pin_t* pins, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        Pin_On(pins[i]);
+    }   
+}
+
+void Pin_All_Off(Pin_t* pins, int n) {
+    int i;
+    for (i = 0; i < n; i++) {
+        Pin_Off(pins[i]);
+    }   
+}
+
+void Pin_Show_Byte(Pin_t* pins, int n, uint8_t byte) {
+    int i;
+    for (i = 0; i < n; i++) {
+        if (byte & (1 << i)) 
+            Pin_On(pins[i]);
+        else
+            Pin_Off(pins[i]);
+    }
+}
+
+

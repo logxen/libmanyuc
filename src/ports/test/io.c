@@ -81,10 +81,7 @@ int Pin_Read (Pin_t pin) {
   Bus Mode Digital Input / Output 
  *----------------------------------------------------------------------------*/
 
-#include <stdarg.h>
-PinBus_t PinBus_Get(int npins, ...) {
-    va_list pins;
-    va_start (pins, npins);
+PinBus_t vPinBus_Get(int npins, va_list pins) {
 
     int i;
     PinBus_t bus = { { {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}} } };
@@ -100,7 +97,6 @@ PinBus_t PinBus_Get(int npins, ...) {
             bus.ports[address / 32].half_mask[1] |= 3 << ((number-16)*2);
         }
     }
-    va_end(pins);
     return bus;
 }
 
@@ -135,3 +131,7 @@ void PinBus_Input (PinBus_t bus) {
     _PinBus_Apply(bus, _set_input);
 }
 
+// Set pin bus input mode
+void PinBus_Mode(PinBus_t bus, PinMode mode) {
+	// Ignored right now.
+}

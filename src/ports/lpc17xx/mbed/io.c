@@ -114,12 +114,10 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
  *----------------------------------------------------------------------------*/
 
 #include <stdarg.h>
-PinBus_t PinBus_Get(int npins, ...) {
-	va_list pins;
-	va_start (pins, npins);
-
+PinBus_t vPinBus_Get(int npins, va_list pins) {
 	int i;
 	PinBus_t bus = { { {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}} } };
+
 	for (i = 0; i < npins; i++) {
 	    uint32_t address = va_arg(pins, uint32_t) - LPC_GPIO_BASE;
 		uint8_t number = address % 32;
@@ -132,7 +130,6 @@ PinBus_t PinBus_Get(int npins, ...) {
 			bus.ports[address / 32].half_mask[1] |= 3 << ((number-16)*2);
 		}
 	}
-	va_end(pins);
     return bus;
 }
 
@@ -147,22 +144,22 @@ __INLINE void _PinBus_Apply (PinBus_t bus, void function (uint32_t, uint32_t) ) 
 }
 
 // Switch PinBus On 
-void PinBus_On (PinBus_t bus) {
+__INLINE void PinBus_On (PinBus_t bus) {
 	_PinBus_Apply(bus, _turn_on);
 }
 
 // Switch PinBus Off 
-void PinBus_Off (PinBus_t bus) {
+__INLINE void PinBus_Off (PinBus_t bus) {
 	_PinBus_Apply(bus, _turn_off);
 }
 
 // Set PinBus as Output
-void PinBus_Output (PinBus_t bus) {
+__INLINE void PinBus_Output (PinBus_t bus) {
 	_PinBus_Apply(bus, _set_output);
 }
 
 // Set PinBus as Input 
-void PinBus_Input (PinBus_t bus) {
+__INLINE void PinBus_Input (PinBus_t bus) {
 	_PinBus_Apply(bus, _set_input);
 }
 

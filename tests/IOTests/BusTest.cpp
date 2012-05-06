@@ -1,5 +1,5 @@
 /*
- * libmanyuc - Turn leds on in C example
+ * libmanyuc - Test for Pin class
  * Copyright (C) 2012 - Margarita Manterola Rivero
  *
  * This library is free software; you can redistribute it and/or
@@ -18,21 +18,50 @@
  * MA 02110-1301 USA
  */
 
+#include "CppUTest/TestHarness.h"
 #include "libmanyuc.h"
+#include <stdio.h>
 
-/* This example counts in binary using the leds */
-int main(void) {
+TEST_GROUP(Bus_t)
+{ 
+	Bus_t bus;
+	Pin_t leds[4];
 
-	// Creates a bus with the 4 leds
-	Bus_t leds = Bus_Get (4, LED4, LED3, LED2, LED1);
-	Bus_Output(leds);
+	void setup()
+	{
+		bus = Bus_Get(4, LED1, LED2, LED3, LED4);
+		leds[0] = Pin_Get(LED1);
+		leds[1] = Pin_Get(LED2);
+		leds[2] = Pin_Get(LED3);
+		leds[3] = Pin_Get(LED4);
 
-	int i = 0;
+ 	}
+	void teardown()
+	{
+	}
+};
 
-	// Show a binary combination of leds
-    while(1) {
-		Bus_Write(leds, i);
-        wait(0.5);
-		i++;
-    }
+TEST(Bus_t, PinBus_Output)
+{
+	Bus_Output(bus);
+	CHECK_EQUAL(GIO->PORT[1].IODIR, 
+		(1 << (LED1 % 32)) | (1 << (LED2 % 32)) |
+		(1 << (LED3 % 32)) | (1 << (LED4 % 32)) );
 }
+
+TEST(Bus_t, Bus_Write)
+{
+	Bus_Write(bus, 0b1010);
+	CHECK_EQUAL(Pin_Read(leds[0]), 0);
+	CHECK_EQUAL(Pin_Read(leds[1]), 1);
+	CHECK_EQUAL(Pin_Read(leds[2]), 0);
+	CHECK_EQUAL(Pin_Read(leds[3]), 1);
+}
+
+TEST(Bus_t, Bus_Read)
+{
+	Bus_Write(bus, 10);
+	uint32_t data = Bus_Read(bus);
+	CHECK_EQUAL(10, data);
+}
+
