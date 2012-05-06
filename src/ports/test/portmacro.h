@@ -29,6 +29,8 @@ extern "C" {
 
 #include <stdint.h>
 
+#define __INLINE inline
+
 typedef struct
 {
     uint32_t IODIR;
@@ -129,6 +131,18 @@ struct _pin_t {
     uint16_t address;
     uint32_t mask;
 };
+
+// Port structure for buses
+typedef struct Port_t {
+    uint32_t mask;
+    uint32_t half_mask[2];
+} Port_t;
+
+// Bus structure
+struct _pinBus_t {
+    Port_t ports[5];
+};
+
 
 #ifdef __cplusplus
 }
