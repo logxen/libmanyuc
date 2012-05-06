@@ -4,7 +4,7 @@
 # Internal info
 
 # Selected compiler/architecture
-ARCH = gcc/test
+ARCH = test
 # Programming language for this project (C for C, CPP for C++)
 LANGUAGE = CPP
 
@@ -16,7 +16,7 @@ DEBUG = -g
 OPTIMIZATION = 0
 
 # Include the appropriate Makefile
-ARCH_DIR = $(LIB_BASE)/portable/$(ARCH)
+ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)
 include $(ARCH_DIR)/Makefile
 
 ########################################################################
