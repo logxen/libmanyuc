@@ -116,7 +116,7 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
 #include <stdarg.h>
 PinBus_t vPinBus_Get(int npins, va_list pins) {
 	int i;
-	PinBus_t bus = { { {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, {0,{0,0}} } };
+	PinBus_t bus = { { {0,{0,0}}, {0,{0,0}}, {0,{0,0}}, } };
 
 	for (i = 0; i < npins; i++) {
 	    uint32_t address = va_arg(pins, uint32_t) - LPC_GPIO_BASE;

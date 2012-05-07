@@ -71,6 +71,15 @@ typedef enum PinName {
 	TX_3 = ARM_P0_0,
 	RX_3 = ARM_P0_1,
 
+	ADC0 = ARM_P0_23,
+	ADC1 = ARM_P0_24,
+	ADC2 = ARM_P0_25,
+	ADC3 = ARM_P0_26,
+	ADC4 = ARM_P1_30,
+	ADC5 = ARM_P1_31,
+	ADC6 = ARM_P0_3,
+	ADC7 = ARM_P0_2,
+
 	// mbed DIP -> LPC equivalencies, according to mbed schematics
     P5 = ARM_P0_9,
     P6 = ARM_P0_8,

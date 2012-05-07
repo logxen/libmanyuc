@@ -552,14 +552,7 @@ typedef struct
   __IO uint32_t ADGDR;
        uint32_t RESERVED0;
   __IO uint32_t ADINTEN;
-  __I  uint32_t ADDR0;
-  __I  uint32_t ADDR1;
-  __I  uint32_t ADDR2;
-  __I  uint32_t ADDR3;
-  __I  uint32_t ADDR4;
-  __I  uint32_t ADDR5;
-  __I  uint32_t ADDR6;
-  __I  uint32_t ADDR7;
+  __I  uint32_t ADDR[8];
   __I  uint32_t ADSTAT;
   __IO uint32_t ADTRM;
 } LPC_ADC_TypeDef;
