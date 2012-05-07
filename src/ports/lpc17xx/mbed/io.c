@@ -19,7 +19,7 @@
  */
 
 #include "port.h"
-#include "portmacro.h"
+#include "board.h"
 
 // Internal helper functions
 static __INLINE uint32_t _get_half_port(Pin_t pin) {

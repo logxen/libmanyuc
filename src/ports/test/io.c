@@ -19,7 +19,7 @@
  */
 
 #include "port.h"
-#include "portmacro.h"
+#include "board.h"
 
 /*----------------------------------------------------------------------------
   Digital Input / Output 

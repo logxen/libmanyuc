@@ -25,7 +25,7 @@
 extern "C" {
 #endif
 
-#include <portmacro.h>
+#include "board.h"
 #include <stdint.h>
 
 void init();

@@ -32,7 +32,6 @@
 extern "C" {
 #endif
 
-#include <portmacro.h>
 #include <stdint.h>
 
 /** Opaque structure to represent the serial port. 

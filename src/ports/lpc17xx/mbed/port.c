@@ -1,7 +1,7 @@
 
 
 #include "LPC17xx.h"
-#include "portmacro.h"
+#include "board.h"
 
 #define CLOCK_SETUP           1
 #define SCS_Val               0x00000020
