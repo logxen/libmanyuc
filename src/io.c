@@ -19,6 +19,7 @@
  */
 
 #include "port.h"
+#include <stdlib.h>
 
 /* *********************************************************** */
 PinBus_t PinBus_Get(int npins, ...) {
@@ -44,6 +45,7 @@ Bus_t Bus_Get(int npins, ...) {
 
 	// Get all the pins
     va_start (pins, npins);
+	bus.pins = malloc(sizeof(Pin_t)*npins);
 	int i;
 	for (i = 0; i < npins; i++) {
 		bus.pins[i] = Pin_Get(va_arg(pins, uint32_t));
@@ -82,6 +84,10 @@ uint32_t Bus_Read (Bus_t bus) {
 		data |= (Pin_Read(bus.pins[i]) << i);
 	}
 	return data;
+}
+
+void Bus_Destroy(Bus_t bus) {
+	free(bus.pins);
 }
 
 /* *********************************************************** */

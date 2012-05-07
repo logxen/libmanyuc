@@ -148,7 +148,7 @@ void PinBus_Off (PinBus_t bus);
 typedef struct _bus_t {
 	PinBus_t pinBus;
 	uint32_t npins; 
-	Pin_t pins[32];
+	Pin_t* pins;
 } Bus_t;
 
 /** Creates a structure for the bus, according to the pin
@@ -203,6 +203,8 @@ void Bus_Write (Bus_t bus, uint32_t data);
  */
 uint32_t Bus_Read (Bus_t bus);
 
+/** Frees the dynamic memory used by the Bus_t structure. */
+void Bus_Destroy(Bus_t bus);
 
 /* *********************************************************** */
 

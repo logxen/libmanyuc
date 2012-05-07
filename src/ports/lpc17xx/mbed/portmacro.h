@@ -160,6 +160,7 @@ struct _pin_t {
     uint8_t address;
     uint32_t mask;
 };
+// TODO: maybe the masks could be in code and use a macro to get them?
 
 // Port structure for buses
 typedef struct Port_t {
@@ -169,7 +170,7 @@ typedef struct Port_t {
 
 // Bus structure
 struct _pinBus_t {
-    Port_t ports[5];
+    Port_t ports[3];
 };
 
 // Serial port structure to hold all port info

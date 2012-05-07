@@ -38,6 +38,7 @@ TEST_GROUP(Bus_t)
  	}
 	void teardown()
 	{
+		Bus_Destroy(bus);
 	}
 };
 
