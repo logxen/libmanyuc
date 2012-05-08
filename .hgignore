@@ -4,3 +4,6 @@
 .*\.bin$
 .*\.map$
 .*\.swp$
+.*\.d$
+.*\.a$
+.*tests/.*_tests$
