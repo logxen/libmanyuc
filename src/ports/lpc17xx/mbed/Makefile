@@ -7,8 +7,8 @@ PORT_OBJECTS := $(addprefix $(ARCH_DIR)/, $(PORT_OBJECTS))
 #INC_PORT_OBJS = $(addprefix $(ARCH_DIR)/, $(PORT_OBJECTS))
 LSCRIPT=$(ARCH_DIR)/LPC17xx.ld
 
-DEBUG = -g
-OPTIMIZATION = 0
+DEBUG ?= -g
+OPTIMIZATION ?= 0
 #LISTING = -ahls
 
 #  Compiler Options

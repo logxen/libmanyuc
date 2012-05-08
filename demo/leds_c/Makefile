@@ -11,6 +11,7 @@ OBJECTS = main.o
 
 # Selected architecture/board
 ARCH = lpc17xx/mbed
+
 # Programming language for this project (C for C, CPP for C++)
 LANGUAGE = C
 
