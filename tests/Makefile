@@ -23,7 +23,7 @@ include $(ARCH_DIR)/Makefile
 # CppUTest info
 
 #Set this to @ to keep the makefile quiet
-SILENCE = 
+SILENCE = @
 
 COMPONENT_NAME = Libmanyuc
 CPPUTEST_HOME = CppUTest
@@ -49,3 +49,10 @@ INCLUDE_DIRS =\
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 ########################################################################
 
+CppUTest/lib/libCppUTest.a:
+	make -C CppUTest
+
+dist-clean: clean
+	make -C CppUTest clean
+	
+.PHONY: dist-clean
