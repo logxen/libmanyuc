@@ -65,8 +65,8 @@ int main(void) {
 		uint16_t s1 = AnalogIn_Read(p);
 
 		// Send the value through the serial port
-		snprintf(cadena, 10, "%d\r\n", s1);
-	    Serial_Put_Bytes(port, cadena, 6, BLOCKING);
+/*		snprintf(cadena, 10, "%d\r\n", s1);
+	    Serial_Put_Bytes(port, cadena, 6, BLOCKING);*/
 
 		// Turn light on
 		if (s1 > 2000) {
@@ -77,8 +77,8 @@ int main(void) {
 
 		uint16_t s2 = AnalogIn_Read(q);
 
-		snprintf(cadena, 10, "%d\r\n", s2);
-	    Serial_Put_Bytes(port, cadena, 6, BLOCKING);
+/*		snprintf(cadena, 10, "%d\r\n", s2);
+	    Serial_Put_Bytes(port, cadena, 6, BLOCKING);*/
 
 		if (s2 > 2000) {
 			Pin_On(light2);
