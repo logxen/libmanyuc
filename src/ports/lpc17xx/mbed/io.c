@@ -21,71 +21,11 @@
 #include "port.h"
 #include "board.h"
 
-// Internal helper functions
-static __INLINE uint32_t _get_half_port(Pin_t pin) {
-	return (2 * pin.port) + pin.address / 16;
-}
-
-static __INLINE uint32_t _get_half_mask(Pin_t pin) {
-	return 2 * (pin.address % 16);
-}
-
-static __INLINE void _turn_on(uint32_t port, uint32_t mask) {
-    LPC_GPIO[port].FIOPIN |= (mask);
-// TODO LPC_GPIO[port].FIOSET = mask;
-}
-
-static __INLINE void _turn_off(uint32_t port, uint32_t mask) {
-    LPC_GPIO[port].FIOPIN &= ~(mask);
-// TODO LPC_GPIO[port].FIOCLR = mask;
-}
-
-static __INLINE void _set_output(uint32_t port, uint32_t mask) {
-    LPC_GPIO[port].FIODIR |= mask;
-}
-
-static __INLINE void _set_input(uint32_t port, uint32_t mask) {
-    LPC_GPIO[port].FIODIR &= ~(mask);
-}
-
-static __INLINE void _set_open_drain(uint32_t port, uint32_t mask) {
-	LPC_PINCON->PINMODE_OD[port] |= mask;
-}
-
-/*----------------------------------------------------------------------------
-  Digital Input / Output 
- *----------------------------------------------------------------------------*/
-
 /* Convert the pin name to a pin struct. */
 Pin_t Pin_Get (PinName pin_name) {
 	uint32_t address = pin_name - LPC_GPIO_BASE;
 	Pin_t pin = { address / 32, address % 32, 1 << (address % 32) };
 	return pin;
-}
-
-// Switch Pin On 
-__INLINE void Pin_On (Pin_t pin) {
-	_turn_on(pin.port, pin.mask);
-}
-
-// Switch Pin Off 
-__INLINE void Pin_Off (Pin_t pin) {
-	_turn_off(pin.port, pin.mask);
-}
-
-// Read pin state 
-__INLINE int Pin_Read (Pin_t pin) {
-    return ((LPC_GPIO[pin.port].FIOPIN & pin.mask) ? 1 : 0); 
-}
-
-// Set pin as output 
-__INLINE void Pin_Output(Pin_t pin) {
-	_set_output(pin.port, pin.mask);
-}
-
-// Set pin as input 
-__INLINE void Pin_Input(Pin_t pin) {
-    _set_input(pin.port, pin.mask);
 }
 
 // Set pin input mode
@@ -109,10 +49,6 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
 	}
 }
 
-/*----------------------------------------------------------------------------
-  Bus Mode Digital Input / Output 
- *----------------------------------------------------------------------------*/
-
 #include <stdarg.h>
 PinBus_t vPinBus_Get(int npins, va_list pins) {
 	int i;
@@ -133,36 +69,6 @@ PinBus_t vPinBus_Get(int npins, va_list pins) {
     return bus;
 }
 
-// Apply a function to all the ports affected in this bus
-__INLINE void _PinBus_Apply (PinBus_t bus, void function (uint32_t, uint32_t) ) {
-	int port;
-	for (port = 0; port < 5; port++) {
-		if (bus.ports[port].mask) {
-			function(port, bus.ports[port].mask);
-		}
-	}
-}
-
-// Switch PinBus On 
-__INLINE void PinBus_On (PinBus_t bus) {
-	_PinBus_Apply(bus, _turn_on);
-}
-
-// Switch PinBus Off 
-__INLINE void PinBus_Off (PinBus_t bus) {
-	_PinBus_Apply(bus, _turn_off);
-}
-
-// Set PinBus as Output
-__INLINE void PinBus_Output (PinBus_t bus) {
-	_PinBus_Apply(bus, _set_output);
-}
-
-// Set PinBus as Input 
-__INLINE void PinBus_Input (PinBus_t bus) {
-	_PinBus_Apply(bus, _set_input);
-}
-
 void PinBus_Mode(PinBus_t bus, PinMode mode) {
 // TODO: lock for concurrency
 	if (mode == OpenDrain) {
@@ -177,7 +83,7 @@ void PinBus_Mode(PinBus_t bus, PinMode mode) {
 	}
 
 	int port;
-	for (port = 0; port < 5; port++) {
+	for (port = 0; port < MAX_PORTS; port++) {
 		for (i = 0; i < 2; i++) {
 
 			uint32_t pin_mask = bus.ports[port].half_mask[i];

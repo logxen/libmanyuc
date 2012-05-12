@@ -178,8 +178,9 @@ typedef struct Port_t {
 } Port_t;
 
 // Bus structure
+#define MAX_PORTS 3
 struct _pinBus_t {
-    Port_t ports[3];
+    Port_t ports[MAX_PORTS];
 };
 
 // Serial port structure to hold all port info
@@ -190,6 +191,7 @@ struct _serial_t {
 	uint32_t number;
 };
 
+#include "inline.c"
 
 #ifdef __cplusplus
 }
