@@ -16,9 +16,9 @@ ARCH = lpc17xx/mbed
 LANGUAGE = C
 
 # Compiling options
-DEBUG = -g
+DEBUG = 
 OPTIMIZATION = 1
-CFLAGS = 
+CFLAGS =
 
 ########################################################################
 

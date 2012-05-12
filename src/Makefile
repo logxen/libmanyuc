@@ -25,6 +25,9 @@ endif
 # Add path to objects
 COMMON_OBJECTS := $(addprefix $(LIB_BASE)/, $(COMMON_OBJECTS))
 
+# List of objects in assembler
+ASSEMBLER_OBJECTS := $(OBJECTS:.o=.s)
+
 # Include the appropriate Makefile
 ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)
 include $(ARCH_DIR)/Makefile
@@ -45,8 +48,11 @@ $(PROJECT).elf: $(PORT_OBJECTS) $(COMMON_OBJECTS) $(OBJECTS)
 stats: $(PROJECT).elf
 	$(SIZE) $(PROJECT).elf
 
+assembler: $(ASSEMBLER_OBJECTS)
+
 clean:
 	$(REMOVE) $(OBJECTS)
+	$(REMOVE) $(ASSEMBLER_OBJECTS)
 	$(REMOVE) $(PORT_OBJECTS)
 	$(REMOVE) $(COMMON_OBJECTS)
 	$(REMOVE) $(PROJECT).hex
@@ -57,7 +63,8 @@ clean:
 
 #########################################################################
 #  Default rules to compile .c and .cpp file to .o
-#  and assemble .s files to .o
+#  assemble .s files to .o
+#  .c or .cpp files to .s
 
 .c.o :
 	$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
@@ -68,5 +75,11 @@ clean:
 .s.o :
 	#$(AS) $(ASFLAGS) -o $(notdir $@) $< > $(notdir $(basename $@)).lst
 	$(AS) $(ASFLAGS) -o $@ $< > $(basename $@).lst
+
+.c.s :
+	$(CC) $(CFLAGS) $< -S 
+
+.cpp.s :
+	$(CXX) $(CPPFLAGS) $< -S 
 
 #########################################################################
