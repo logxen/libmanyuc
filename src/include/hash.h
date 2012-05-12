@@ -23,12 +23,16 @@
 
 #include <stdint.h>
 
+/** The key used to index the hash table */
 typedef uint32_t Hash_Key_t;
 
-typedef void (*Hash_Destroy_t)(void**); 
+/** A function passed to the hash to destroy elements */
+typedef void (*Hash_Destroy_t)(void*); 
 
+/** Opaque structure used to save the hash table */
 typedef struct _hash_t Hash_t;
 
+/** Result codes returned by Hash_Set */
 enum { HASH_OK, HASH_ERROR };
 
 /* Initializes a hash table.
@@ -42,6 +46,7 @@ Hash_t *Hash_Init(Hash_Destroy_t destroy_function);
  * @param hash An initialized hash table.
  * @param key A valid key for the hash table.
  * @param data The data to be stored.
+ * @return HASH_OK if the value could be stored or HASH_ERROR if there was a problem.
  */
 uint8_t Hash_Set(Hash_t* hash, const Hash_Key_t key, void * data);
 

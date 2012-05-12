@@ -90,3 +90,38 @@ TEST(Hash_t, ClashItems)
 	CHECK_EQUAL(Hash_Get(h, 9), (void*) (data+1));
 	CHECK_EQUAL(Hash_Len(h), 2);
 }
+
+TEST_GROUP(Hash_With_Destroy)
+{ 
+	Hash_t *h;
+	int *data1;
+	int *data2;
+
+	void setup()
+	{
+		h = Hash_Init(cpputest_free);
+		data1 = (int*) malloc(sizeof(int));
+		data2 = (int*) malloc(sizeof(int));
+ 	}
+	void teardown()
+	{
+		Hash_Destroy(h);
+	}
+};
+
+TEST(Hash_With_Destroy, ReplaceItem)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data1), HASH_OK);
+	CHECK_EQUAL(Hash_Set(h, 1, data2), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), (void*) (data2));
+	CHECK_EQUAL(Hash_Len(h), 1);
+}
+
+TEST(Hash_With_Destroy, TwoItems)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data1), HASH_OK);
+	CHECK_EQUAL(Hash_Set(h, 2, data2), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), (void*) data1);
+	CHECK_EQUAL(Hash_Get(h, 2), (void*) (data2));
+	CHECK_EQUAL(Hash_Len(h), 2);
+}

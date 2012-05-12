@@ -114,12 +114,14 @@ uint8_t Hash_Set(struct _hash_t *h, const Hash_Key_t k, void *v)
 	}
 
 	// Data is updated
-	h->table[pos].data = v;
 	if (h->table[pos].state != HASH_ACTIVE) {
 		h->table[pos].key = k;
 		h->table[pos].state = HASH_ACTIVE;
 		h->active++;
+	} else if (h->destroy != NULL) {
+		h->destroy(h->table[pos].data);
 	}
+	h->table[pos].data = v;
 
 	return HASH_OK;
 }
@@ -151,7 +153,7 @@ void Hash_Destroy(struct _hash_t *h)
 	if (h->destroy != NULL) {
 		for (i = 0; i < h->size; i++) {
 			if ( h->table[i].state == HASH_ACTIVE ) {
-				h->destroy(&(h->table[i].data));
+				h->destroy(h->table[i].data);
 			}
 		}
 	}
