@@ -16,7 +16,7 @@ LANGUAGE = CPP
 
 # Compiling options
 DEBUG = -g
-OPTIMIZATION = 0
+OPTIMIZATION = 1
 CFLAGS = -Wall
 
 ########################################################################
