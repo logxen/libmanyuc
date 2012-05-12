@@ -29,19 +29,23 @@ typedef uint32_t Hash_Key_t;
 /** A function passed to the hash to destroy elements */
 typedef void (*Hash_Destroy_t)(void*); 
 
-/** Opaque structure used to save the hash table */
+/** Opaque structure used to save the hash table.
+ *  This is a very simple hash table, with no possibility of
+ *  removing elements.  It grows slowly in order to not use
+ *  that much memory.  It stores opaque pointers.
+ */
 typedef struct _hash_t Hash_t;
 
 /** Result codes returned by Hash_Set */
 enum { HASH_OK, HASH_ERROR };
 
-/* Initializes a hash table.
+/** Initializes a hash table.
  * @param destroy_function The function to destroy the data in the hash.
  * @return An initialized hash table.
  */
 Hash_t *Hash_Init(Hash_Destroy_t destroy_function);
 
-/* Stores an element in the hash table. 
+/** Stores an element in the hash table. 
  * If the key is already present, the data is replaced.
  * @param hash An initialized hash table.
  * @param key A valid key for the hash table.
@@ -50,23 +54,23 @@ Hash_t *Hash_Init(Hash_Destroy_t destroy_function);
  */
 uint8_t Hash_Set(Hash_t* hash, const Hash_Key_t key, void * data);
 
-/* Fetchs an element from the hash table identified by the key. If the key
- * is not present returns NULL, in other cases it returns a pointer to the
- * data.
+/** Fetches an element from the hash table identified by the key. If
+ * the key is not present returns NULL, in other cases it returns a
+ * pointer to the data.
  * @param hash An initialized hash table.
  * @param key A valid key for the hash table.
  * @return The data associated to the key, or NULL when not found.
  */
 void *Hash_Get(Hash_t*, const Hash_Key_t);
 
-/* Returns the number of elements contained in the hash table.
+/** Returns the number of elements contained in the hash table.
  * @param hash An initialized hash table.
  * @return The number of elements contained in the hash table.
  */
 size_t Hash_Len(Hash_t*);
 
-/* Destroys the hash table elements. Both the contents and the table get
- * destroyed.
+/** Destroys the hash table elements. Both the contents and the table
+ * get destroyed.
  * @param hash An initialized hash table.
  */
 void Hash_Destroy(Hash_t*);
