@@ -39,6 +39,7 @@ SRC_DIRS = \
 TEST_SRC_DIRS = \
 	. \
 	IOTests \
+	StructTests \
 
 INCLUDE_DIRS =\
   $(LIB_BASE)/include \
