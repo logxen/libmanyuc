@@ -31,7 +31,6 @@ typedef struct _hash_node_t {
 // The hash table itself.
 struct _hash_t {
 	size_t size;        // number of allocated elements
-	size_t used;        // number of elements in use, i.e. active + deleted
 	size_t active;      // number of active elements
 	hash_node_t *table;
 	Hash_Destroy_t destroy;
@@ -40,7 +39,6 @@ struct _hash_t {
 // State and initialization constants
 enum hash_constants { 
 	HASH_EMPTY, HASH_ACTIVE, HASH_DELETED, 
-	HASH_OK, HASH_ERROR, 
 	HASH_INI = 8 };
 
 struct _hash_t *Hash_Init(Hash_Destroy_t destroy)
@@ -55,7 +53,6 @@ struct _hash_t *Hash_Init(Hash_Destroy_t destroy)
 		return NULL;
 	}
 
-	h->used = 0;
 	h->active = 0;
 	h->destroy = destroy;
 
@@ -91,7 +88,6 @@ static int hash_resize(struct _hash_t *h, size_t new_size)
 	free(h->table);
 	h->table = new;
 	h->size = new_size;
-	h->used = h->active;
 	return HASH_OK;
 }
 
@@ -99,7 +95,7 @@ static int hash_resize(struct _hash_t *h, size_t new_size)
 // This hash grows slowly on purpose, not to eat too much memory.
 static inline uint8_t check_resize(struct _hash_t *h) {
 	uint8_t state = HASH_OK;
-	if ( ( h->size * 2 / 3 ) < h->used ) {
+	if ( ( h->size * 2 / 3 ) <= h->active ) {
 		state = hash_resize(h, h->size + HASH_INI);
 	}
 	return state;
@@ -111,33 +107,18 @@ uint8_t Hash_Set(struct _hash_t *h, const Hash_Key_t k, void *v)
 	if (state == HASH_ERROR) return state;
 
 	// Get the position in the hash
-	uint8_t found = 0;
 	size_t pos = hash(k) % h->size;
-	long first_deleted = -1;
-	while ( h->table[pos].state != HASH_EMPTY ) {
-		if 	(h->table[pos].key != k) {
-			found = 1;
-			break;
-		}
-		// If there is a deleted item and we end up not finding k in the hash
-		// we'll better use this.
-		if ( ( h->table[pos].state == HASH_DELETED ) &&
-			 ( first_deleted < 0 ) ) {
-			first_deleted = pos;
-		}
+	while ( ( h->table[pos].state != HASH_EMPTY ) 
+			&& (h->table[pos].key != k) ) {
 		pos = (pos + 1) % h->size;
 	}
 
-	if ( (found == 0) && (first_deleted >= 0) ) {
-		pos = first_deleted;
-	}
 	// Data is updated
 	h->table[pos].data = v;
-	h->table[pos].state = HASH_ACTIVE;
-	if ( found == 0 ) {
+	if (h->table[pos].state != HASH_ACTIVE) {
 		h->table[pos].key = k;
+		h->table[pos].state = HASH_ACTIVE;
 		h->active++;
-		if (first_deleted == -1) h->used++;
 	}
 
 	return HASH_OK;
@@ -167,9 +148,11 @@ size_t Hash_Len(struct _hash_t *h)
 void Hash_Destroy(struct _hash_t *h)
 {
 	size_t i;
-	for (i = 0; i < h->size; i++) {
-		if ( h->table[i].state == HASH_ACTIVE ) {
-			h->destroy(&(h->table[i].data));
+	if (h->destroy != NULL) {
+		for (i = 0; i < h->size; i++) {
+			if ( h->table[i].state == HASH_ACTIVE ) {
+				h->destroy(&(h->table[i].data));
+			}
 		}
 	}
 	free(h->table);

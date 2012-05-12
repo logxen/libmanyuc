@@ -29,6 +29,8 @@ typedef void (*Hash_Destroy_t)(void**);
 
 typedef struct _hash_t Hash_t;
 
+enum { HASH_OK, HASH_ERROR };
+
 /* Initializes a hash table.
  * @param destroy_function The function to destroy the data in the hash.
  * @return An initialized hash table.

@@ -25,21 +25,68 @@
 TEST_GROUP(Hash_t)
 { 
 	Hash_t *h;
+	int *data;
+	int amount;
 
 	void setup()
 	{
+		amount = 30;
 		h = Hash_Init(NULL);
+		data = (int*) malloc(amount*sizeof(int));
  	}
 	void teardown()
 	{
 		Hash_Destroy(h);
+		free(data);
 	}
 };
 
-TEST(Hash_t, Hash_Init)
+TEST(Hash_t, Empty)
 {
-	CHECK(Hash_Get(h, 1) == NULL);
+	CHECK_EQUAL(Hash_Get(h, 1), NULL);
+	CHECK_EQUAL(Hash_Len(h), 0);
 }
 
+TEST(Hash_t, OneItem)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), data);
+	CHECK_EQUAL(Hash_Len(h), 1);
+}
 
+TEST(Hash_t, TwoItems)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data), HASH_OK);
+	CHECK_EQUAL(Hash_Set(h, 2, data+1), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), (void*) data);
+	CHECK_EQUAL(Hash_Get(h, 2), (void*) (data+1));
+	CHECK_EQUAL(Hash_Len(h), 2);
+}
 
+TEST(Hash_t, ReplaceItem)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data), HASH_OK);
+	CHECK_EQUAL(Hash_Set(h, 1, data+1), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), (void*) (data+1));
+	CHECK_EQUAL(Hash_Len(h), 1);
+}
+
+TEST(Hash_t, ManyItems)
+{
+	for (int i=0; i<amount; i++) {
+		CHECK_EQUAL(Hash_Set(h, i, data+i), HASH_OK);
+	}
+	for (int i=0; i<amount; i++) {
+		CHECK_EQUAL(Hash_Get(h, i), (void*) (data+i));
+	}
+	CHECK_EQUAL(amount, Hash_Len(h));
+}
+
+TEST(Hash_t, ClashItems)
+{
+	CHECK_EQUAL(Hash_Set(h, 1, data), HASH_OK);
+	CHECK_EQUAL(Hash_Set(h, 9, data+1), HASH_OK);
+	CHECK_EQUAL(Hash_Get(h, 1), (void*) data);
+	CHECK_EQUAL(Hash_Get(h, 9), (void*) (data+1));
+	CHECK_EQUAL(Hash_Len(h), 2);
+}
