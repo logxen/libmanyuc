@@ -210,7 +210,7 @@ void Bus_Destroy(Bus_t bus);
 
 
 uint32_t AnalogIn_Get(PinName pin_name);
-uint32_t AnalogIn_Read(uint32_t channel);
+uint16_t AnalogIn_Read(uint32_t channel);
 
 
 /** Wait an amount of seconds.

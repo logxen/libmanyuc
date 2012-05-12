@@ -64,7 +64,7 @@ void ADC_Init() {
 	// * all selections to 0
 	// * the clock divider to 1.
 	// * the power bit to 1.
-	LPC_ADC->ADCR = ADC_CR_CLKDIV(4) | ADC_CR_ENABLE;
+	LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
 }
 
 uint32_t AnalogIn_Get(PinName pin_name) {
@@ -92,10 +92,8 @@ uint32_t AnalogIn_Get(PinName pin_name) {
 	return id;
 }
 
-uint32_t AnalogIn_Read(uint32_t channel) {
-	//Serial_t port = Serial_Get(0);
+uint16_t AnalogIn_Read(uint32_t channel) {
 
-	//char cade[10];
 	// Enable the ADC channel in the ADC Control Register
 	LPC_ADC->ADCR &= ~(0xFF);
 	LPC_ADC->ADCR |= ADC_CR_CH_SEL(channel);
@@ -103,15 +101,13 @@ uint32_t AnalogIn_Read(uint32_t channel) {
 	LPC_ADC->ADCR |= ADC_CR_START_NOW;
 	// Wait until the result is here
 	while (! (LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
-	//while (! (LPC_ADC->ADGDR & ADC_DR_DONE_FLAG));
 
-	uint32_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
+	uint16_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
 
 	// Disable the channel
 	LPC_ADC->ADCR &= ~(ADC_CR_CH_SEL(channel));
 	
 	// Return the result
-	//return ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
 	return result;
 }
 

@@ -1,5 +1,5 @@
 /*
- * libmanyuc - main header file
+ * libmanyuc - Test for Pin class
  * Copyright (C) 2012 - Margarita Manterola Rivero
  *
  * This library is free software; you can redistribute it and/or
@@ -18,20 +18,28 @@
  * MA 02110-1301 USA
  */
 
-#ifndef __LIBMANYUC_H
-#define __LIBMANYUC_H
+#include "CppUTest/TestHarness.h"
+#include "libmanyuc.h"
+#include <stdio.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+TEST_GROUP(Hash_t)
+{ 
+	Hash_t *h;
 
-#include "port.h"
-#include "timers.h"
-#include "hash.h"
+	void setup()
+	{
+		h = Hash_Init(NULL);
+ 	}
+	void teardown()
+	{
+		Hash_Destroy(h);
+	}
+};
 
-#ifdef __cplusplus
+TEST(Hash_t, Hash_Init)
+{
+	CHECK(Hash_Get(h, 1) == NULL);
 }
-#include "libmanyuc_cpp.h"
-#endif
 
-#endif
+
+
