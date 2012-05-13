@@ -20,7 +20,7 @@
 
 #include "libmanyuc.h"
 
-int i;
+uint32_t i;
 Bus_t leds;
 
 void count(void) {
@@ -37,8 +37,8 @@ int main(void) {
 	Pin_t in = Pin_Get(P10);
 
 	Bus_Output(leds);
-	//Pin_Input(in);
-	//Pin_Mode(in, PullUp);
+	Pin_Input(in);
+	Pin_Mode(in, PullUp);
 
 	Pin_Int_Attach(in, count, IOIntFall);
 
@@ -46,6 +46,6 @@ int main(void) {
 	// Show a binary combination of leds
     while(1) {
 		// Do nothing
-        wait(1);
+		wait(1);
     }
 }

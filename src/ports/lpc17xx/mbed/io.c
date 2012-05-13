@@ -229,7 +229,7 @@ void EINT3_IRQHandler(void) {
 
 	// If there are less than 16 interrupts registered, 
 	// go through the list and check all of them
-/*	if (Hash_Len(io_interrupt_table) < 16) {
+	/*if (Hash_Len(io_interrupt_table) < 16) {
 		Hash_Iter_t *iter = Hash_Iter_Init(io_interrupt_table);
 		while (Hash_Iter_Has_Next(iter)) {
 			Hash_Key_t key = Hash_Iter_Get_Next(iter);
@@ -248,7 +248,7 @@ void EINT3_IRQHandler(void) {
 	else { */
 		io_interrupt_read_all((uint32_t*) LPC_GPIOINT->IO0IntStat, 0);
 		io_interrupt_read_all((uint32_t*) LPC_GPIOINT->IO2IntStat, 2);
-/*	}*/
+	/*}*/
 }
 
 // Initializes the interrupt table
