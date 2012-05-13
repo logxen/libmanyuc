@@ -22,9 +22,10 @@
 #define _HASH_H       
 
 #include <stdint.h>
+#include <stdlib.h>
 
 /** The key used to index the hash table */
-typedef uint32_t Hash_Key_t;
+typedef uint16_t Hash_Key_t;
 
 /** A function passed to the hash to destroy elements */
 typedef void (*Hash_Destroy_t)(void*); 
@@ -35,6 +36,11 @@ typedef void (*Hash_Destroy_t)(void*);
  *  that much memory.  It stores opaque pointers.
  */
 typedef struct _hash_t Hash_t;
+
+/** Opaque structure used to iterate the hash table. 
+ *  Should be constructed using Hash_Iter_Init.
+ */
+typedef struct _hash_iter_t Hash_Iter_t;
 
 /** Result codes returned by Hash_Set */
 enum { HASH_OK, HASH_ERROR };
@@ -61,18 +67,44 @@ uint8_t Hash_Set(Hash_t* hash, const Hash_Key_t key, void * data);
  * @param key A valid key for the hash table.
  * @return The data associated to the key, or NULL when not found.
  */
-void *Hash_Get(Hash_t*, const Hash_Key_t);
+void *Hash_Get(Hash_t* hash, const Hash_Key_t key);
 
 /** Returns the number of elements contained in the hash table.
  * @param hash An initialized hash table.
  * @return The number of elements contained in the hash table.
  */
-size_t Hash_Len(Hash_t*);
+size_t Hash_Len(Hash_t* hash);
 
 /** Destroys the hash table elements. Both the contents and the table
  * get destroyed.
  * @param hash An initialized hash table.
  */
-void Hash_Destroy(Hash_t*);
+void Hash_Destroy(Hash_t* hash);
+
+/** Creates a new iterator for the hash. 
+ * @param hash An initialized hash table.
+ * @return An initialized iterator.
+ */
+Hash_Iter_t* Hash_Iter_Init(Hash_t* hash);
+
+/** States whether there is a next item or not.
+ * @param iter An initialized hash iterator.
+ * @return 0 if there isn't a next item, 1 if there is.
+ */
+int Hash_Iter_Has_Next(Hash_Iter_t* iter);
+
+/** Returns the next available key in the hash. Once this function is
+ * called, the current pointer will indicate the next element.
+ * @param iter An initialized hash iterator.
+ * @return The next key available in the iterator.
+ */
+Hash_Key_t Hash_Iter_Get_Next(Hash_Iter_t* iter);
+
+/** Destroys the iterator. Should be called once the iterator is not
+ * needed.
+ * @param iter An initialized hash iterator.
+ */
+void Hash_Iter_Destroy(Hash_Iter_t* iter);
+
 
 #endif // _HASH_H

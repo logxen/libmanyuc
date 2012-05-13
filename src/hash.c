@@ -24,16 +24,21 @@
 // A node in the hash table
 typedef struct _hash_node_t {
 	Hash_Key_t key;
+	uint16_t state;
    	void *data;
-	int state;
 } hash_node_t;
 
 // The hash table itself.
 struct _hash_t {
-	size_t size;        // number of allocated elements
-	size_t active;      // number of active elements
+	uint16_t size;        // number of allocated elements
+	uint16_t active;      // number of active elements
 	hash_node_t *table;
 	Hash_Destroy_t destroy;
+};
+
+struct _hash_iter_t {
+	uint32_t index;
+	struct _hash_t *hash;
 };
 
 // State and initialization constants
@@ -160,3 +165,33 @@ void Hash_Destroy(struct _hash_t *h)
 	free(h->table);
 	free(h);
 }
+
+static inline uint16_t _iter_move_index(uint16_t index, struct _hash_t *hash) {
+	while ((index < hash->size) 
+			&& (hash->table[index].state != HASH_ACTIVE)) {
+		index ++;
+	}
+	return index;
+}
+
+Hash_Iter_t* Hash_Iter_Init(Hash_t* hash) {
+	Hash_Iter_t* iter = malloc(sizeof(Hash_Iter_t));
+	iter->hash = hash;
+	iter->index = _iter_move_index(0, hash);
+}
+
+int Hash_Iter_Has_Next(Hash_Iter_t* iter) {
+	return iter->index < iter->hash->size;
+}
+
+Hash_Key_t Hash_Iter_Get_Next(Hash_Iter_t* iter) {
+	Hash_Key_t key = iter->hash->table[iter->index].key;
+	iter->index = _iter_move_index(iter->index+1, iter->hash);
+	return key;
+}
+
+void Hash_Iter_Destroy(Hash_Iter_t* iter) {
+	free(iter);
+}
+
+
