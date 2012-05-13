@@ -167,6 +167,11 @@ void PinBus_On (PinBus_t bus);
  */
 void PinBus_Off (PinBus_t bus);
 
+/** Returns a PinBus with the leds that exist in this arch.
+ *  @return A PinBus that has the leds for this arch.
+ */
+PinBus_t PinBus_Get_Notification();
+
 /* *********************************************************** */
 
 /** Structure to hold the bus information. 
@@ -243,6 +248,11 @@ void Bus_Destroy(Bus_t bus);
 uint32_t AnalogIn_Get(PinName pin_name);
 uint16_t AnalogIn_Read(uint32_t channel);
 
+
+/* *********************************************************** */
+
+/** Display an error with the arch leds.  Show's SOS in morse. */
+void Show_Error();
 
 /** Wait an amount of seconds.
   * TODO: this shouldn't be here.

@@ -19,6 +19,7 @@
  */
 
 #include "port.h"
+#include "timers.h"
 #include <stdlib.h>
 
 /* *********************************************************** */
@@ -88,6 +89,28 @@ uint32_t Bus_Read (Bus_t bus) {
 
 void Bus_Destroy(Bus_t bus) {
 	free(bus.pins);
+}
+
+/* *********************************************************** */
+
+void Show_Error() {
+    PinBus_t leds = PinBus_Get_Notification();
+    PinBus_Output(leds);
+    uint8_t i, j, l;
+    while(1) {
+        // . . . - - - . . . 
+        for (j = 0; j < 3; j++) {
+            l = (j % 2) ? 3 : 1;
+            for (i = 0; i < 3; i++) {
+                PinBus_On(leds);
+                wait(0.15*l);
+                PinBus_Off(leds);
+                wait(0.2);
+            }
+            wait(0.2);
+        }
+        wait(1);
+    }
 }
 
 /* *********************************************************** */

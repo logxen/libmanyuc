@@ -102,6 +102,11 @@ void PinBus_Mode(PinBus_t bus, PinMode mode) {
 	}
 }
 
+// Returns this arch's leds.
+PinBus_t PinBus_Get_Notification() {
+	return PinBus_Get(4, LED1, LED2, LED3, LED4);
+}
+
 /*
 
 All this code is unused, replaced by the hash.
