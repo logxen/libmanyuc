@@ -178,9 +178,10 @@ Hash_Iter_t* Hash_Iter_Init(Hash_t* hash) {
 	Hash_Iter_t* iter = malloc(sizeof(Hash_Iter_t));
 	iter->hash = hash;
 	iter->index = _iter_move_index(0, hash);
+	return iter;
 }
 
-int Hash_Iter_Has_Next(Hash_Iter_t* iter) {
+inline int Hash_Iter_Has_Next(Hash_Iter_t* iter) {
 	return iter->index < iter->hash->size;
 }
 
@@ -190,7 +191,7 @@ Hash_Key_t Hash_Iter_Get_Next(Hash_Iter_t* iter) {
 	return key;
 }
 
-void Hash_Iter_Destroy(Hash_Iter_t* iter) {
+inline void Hash_Iter_Destroy(Hash_Iter_t* iter) {
 	free(iter);
 }
 
