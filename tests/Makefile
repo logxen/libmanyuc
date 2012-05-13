@@ -14,6 +14,7 @@ LIB_BASE := ../src
 # Compiling options
 DEBUG = -g
 OPTIMIZATION = 0
+CFLAGS = -Wall
 
 # Include the appropriate Makefile
 ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)

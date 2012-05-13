@@ -122,8 +122,12 @@ enum PinName {
 };
 typedef enum PinName PinName;
 
-enum PinMode { Output = -1, PullUp = 0, Repeater = 1, PullNone = 2, PullDown = 3, OpenDrain = 4 }; 
-typedef enum PinMode PinMode;
+typedef enum PinMode { Output = -1, PullUp = 0, Repeater = 1, PullNone = 2,
+	PullDown = 3, OpenDrain = 4 } PinMode; 
+
+typedef enum IOIntMode {
+	    IOIntRise = 0, IOIntFall = 1,
+} IOIntMode;
 
 // Pin structure to hold port and address
 struct _pin_t {

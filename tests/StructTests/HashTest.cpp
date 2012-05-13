@@ -118,6 +118,7 @@ TEST(Hash_t, HashIterator_ReplaceItem)
 TEST(Hash_t, HashIterator_GetItem) {
 	Hash_Set(h, 125, data);
 	Hash_Iter_t *iter = Hash_Iter_Init(h);
+	CHECK(Hash_Iter_Has_Next(iter));
 	CHECK_EQUAL(125, Hash_Iter_Get_Next(iter));
 	CHECK_FALSE(Hash_Iter_Has_Next(iter));
 	Hash_Iter_Destroy(iter);
@@ -127,6 +128,7 @@ TEST(Hash_t, HashIterator_GetTwoItems) {
 	Hash_Set(h, 125, data);
 	Hash_Set(h, 126, data+1);
 	Hash_Iter_t *iter = Hash_Iter_Init(h);
+	CHECK(Hash_Iter_Has_Next(iter));
 	CHECK_EQUAL(125, Hash_Iter_Get_Next(iter));
 	CHECK(Hash_Iter_Has_Next(iter));
 	CHECK_EQUAL(126, Hash_Iter_Get_Next(iter));
