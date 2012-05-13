@@ -86,6 +86,37 @@ int Pin_Read (Pin_t pin);
 
 /* *********************************************************** */
 
+/** Attach a function to a pin interrupt. If necessary, this function
+ * enables IO interrupts and enables this particular pin as an
+ * interrupt source. The attached function will be called when the
+ * interrupt is activated.  The available modes for the interrupt
+ * depend on the architecture.
+ *
+ * @param pin Any pin that can generate interrupts.
+ * @param function A function to attach to the pin interrupt.
+ * @param mode The mode for the pin interrupt (architecture
+ * dependent).
+ */
+void Pin_Int_Attach(Pin_t pin, void(*function)(void), IOIntMode mode);
+
+/** Disables a pin interrupt that had been previously
+ * attached/enabled.
+ * @param pin A pin that had an interrupt function attached.
+ * @param mode The mode for the pin interrupt that had been attached.
+ */
+void Pin_Int_Disable(Pin_t pin, IOIntMode mode);
+
+/** Enables the interrupt on a certain pin and mode.  It only makes
+ * sense to call this function when the interrupt had been previously
+ * disabled.
+ * @param pin A pin that had an interrupt function attached that was
+ * disabled.
+ * @param mode The mode for the pin interrupt that had been attached.
+ */
+void Pin_Int_Enable(Pin_t pin, IOIntMode mode);
+
+/* *********************************************************** */
+
 /** Opaque structure to hold a group of pins information. 
  *  The PinBus structure is only useful when performing the
  *  same operation on all of the pins. To read/write 

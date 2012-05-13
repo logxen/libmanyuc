@@ -132,6 +132,10 @@ typedef enum PinMode {
 	Primary = 8, Alt1, Alt2, Alt3, 
 } PinMode;
 
+typedef enum IOIntMode {
+	IOIntRise = 0, IOIntFall = 1,
+} IOIntMode;
+
 // For serial ports
 typedef enum SerialPortMode {
 	S0_Mode = Alt1, 

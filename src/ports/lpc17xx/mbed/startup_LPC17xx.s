@@ -61,6 +61,12 @@ __interrupt_vector_table:
 
 /* Addresses for all of the interrupts handlers above, can be pointed to a
  * real IRQ handler instead of falling through to the startup code. */
+    .weak   EINT3_IRQHandler
+    .type   EINT3_IRQHandler, %function
+EINT3_IRQHandler:
+    B       .
+    .size   EINT3_IRQHandler, . - EINT3_IRQHandler
+
 NMI_Handler:
 HardFault_Handler: 
 MemManage_Handler: 
@@ -75,7 +81,6 @@ PendSV_Handler:
 SysTick_Handler:
     B       .
     .size   SysTick_Handler, . - SysTick_Handler
-
 
 WDT_IRQHandler:
 TIMER0_IRQHandler:
@@ -98,7 +103,7 @@ RTC_IRQHandler:
 EINT0_IRQHandler:
 EINT1_IRQHandler:
 EINT2_IRQHandler:
-EINT3_IRQHandler:
+
 ADC_IRQHandler:
 BOD_IRQHandler:
 USB_IRQHandler:

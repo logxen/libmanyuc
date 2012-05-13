@@ -230,17 +230,13 @@ typedef struct
 typedef struct
 {
   __I  uint32_t IntStatus;
-  __I  uint32_t IO0IntStatR;
-  __I  uint32_t IO0IntStatF;
+  __I  uint32_t IO0IntStat[2];
   __O  uint32_t IO0IntClr;
-  __IO uint32_t IO0IntEnR;
-  __IO uint32_t IO0IntEnF;
+  __IO uint32_t IO0IntEn[2];
        uint32_t RESERVED0[3];
-  __I  uint32_t IO2IntStatR;
-  __I  uint32_t IO2IntStatF;
+  __I  uint32_t IO2IntStat[2];
   __O  uint32_t IO2IntClr;
-  __IO uint32_t IO2IntEnR;
-  __IO uint32_t IO2IntEnF;
+  __IO uint32_t IO2IntEn[2];
 } LPC_GPIOINT_TypeDef;
 
 /*------------- Timer (TIM) --------------------------------------------------*/

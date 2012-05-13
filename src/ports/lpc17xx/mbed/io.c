@@ -102,3 +102,195 @@ void PinBus_Mode(PinBus_t bus, PinMode mode) {
 	}
 }
 
+/*
+
+All this code is unused, replaced by the hash.
+
+typedef struct _io_function {
+	void (*rise)(void);
+	void (*fall)(void);
+} io_function;
+uint8_t *io_interrupt_table = NULL;
+io_function *io_interrupt_functions = NULL;
+uint8_t io_interrupt_amount = 0;
+// mask to enable/disable an interrupt.
+#define IO_ENABLE_RISE_MASK  (1<<7)
+#define IO_ENABLE_FALL_MASK  (1<<6)
+	io_interrupt_table = calloc(NUM_IO_PINS*sizeof(uint8_t));
+
+	// Increase the space for the functions
+	io_function * aux = realloc(io_interrupt_functions, 
+		(io_interrupt_amount + 1) * sizeof(io_function));
+	if (aux == NULL) return;
+	io_interrupt_functions = aux;
+
+	// Store the new function
+	if (mode == RISE) {
+		io_interrupt_functions[io_interrupt_amount].rise = f;
+		io_interrupt_functions[io_interrupt_amount].fall = NULL;
+		io_interrupt_table[pos] = io_interrupt_amount | IO_ENABLE_RISE_MASK;
+	} else {
+		io_interrupt_functions[io_interrupt_amount].rise = NULL;
+		io_interrupt_functions[io_interrupt_amount].fall = f;
+		io_interrupt_table[pos] = io_interrupt_amount | IO_ENABLE_FALL_MASK;
+	}
+	
+static void io_interrupt_set(uint8_t pos, void(*function)(void)) {
+	
+	// Store the new function
+	if (mode == RISE) {
+		io_interrupt_functions[io_interrupt_amount].rise = f;
+		io_interrupt_functions[io_interrupt_amount].fall = NULL;
+		io_interrupt_table[pos] = io_interrupt_amount | IO_ENABLE_RISE_MASK;
+	} else {
+		io_interrupt_functions[io_interrupt_amount].rise = NULL;
+		io_interrupt_functions[io_interrupt_amount].fall = f;
+		io_interrupt_table[pos] = io_interrupt_amount | IO_ENABLE_FALL_MASK;
+	}
+	
+	// Increase the amount of stored functions
+	io_interrupt_amount++;
+}
+
+static void io_interrupt_replace(uint8_t pos, void(*function)(void), IOIntMode mode) {
+	uint8_t index = io_interrupt_table[pos] & IO_INT_POS_MASK;
+	if (mode == RISE) {
+		io_interrupt_table[pos] |= IO_ENABLE_RISE_MASK;
+		io_interrupt_functions[index].rise = f;
+	} else {
+		io_interrupt_table[pos] |= IO_ENABLE_FALL_MASK;
+		io_interrupt_functions[index].fall = f;
+	}
+void Pin_Int_Disable(struct _pin_t pin, IOIntMode mode) {
+	if (mode == RISE) {
+		io_interrupt_table[pos] &= ~(IO_ENABLE_RISE_MASK);
+	} else {
+		io_interrupt_table[pos] &= ~(IO_ENABLE_FALL_MASK);
+	}
+}}	
+uint32_t io_interrupt_enable[4];
+// Amount of pins that allow io interrupts.
+#define IO_NUM_PINS     2*32
+#define IO_INT_POS_MASK    (0x3F)
+	
+	*/
+#include "hash.h"
+
+Hash_t *io_interrupt_table = NULL;
+typedef void (*io_int_func)(void);
+
+// Returns the corresponding byte identification for the pin 
+// address, port, and interrupt mode
+static inline uint8_t io_interrupt_get_byte(uint32_t address, 
+		uint8_t port, uint8_t mode) {
+	uint8_t pos = address;
+	pos += 32 * (port/2);
+	pos += 64 * (mode);
+	return pos;
+}
+
+// Call both handlers (if apropriate) and clear the interrupts
+static inline void io_interrupt_call_handlers(uint32_t *states, uint8_t id, uint8_t port_mask) {
+	uint32_t mask = (1 << id);
+	io_int_func f = NULL;
+	if (states[0] & mask) {
+		f = (io_int_func) Hash_Get(io_interrupt_table, id + port_mask);
+		if (f != NULL) f();
+	} 
+	if (states[1] & mask) {
+		f = (io_int_func) Hash_Get(io_interrupt_table, id + port_mask + 64);
+		if (f != NULL) f();
+	}
+	states[2] |= mask;
+}
+
+// Iterate over a register of interrupts, calling the functions
+static void io_interrupt_read_all(uint32_t *states,  uint8_t port) {
+
+	uint32_t ints = states[0] | states[1];
+	uint8_t j = 0; 
+
+	while (ints != 0) {
+		if (ints & 0x1) {
+			io_interrupt_call_handlers(states, j, port*16);
+		}
+		ints >>= 1;
+		j++;
+	}
+}
+
+void EINT3_IRQHandler(void) {
+
+	// TODO: this could probably be done better.  Some strategies:
+	// 1 - if the amount of interrupts is small, iterate the hash items and check them.
+	// 2 - go through the 32bit register as if it were a tree, using pre-codified masks.
+	// 3 - OR the 4 words, shift the result and when finding a 1 check the 4 registers.
+	if (io_interrupt_table == NULL) return;
+
+	// If there are less than 16 interrupts registered, 
+	// go through the list and check all of them
+/*	if (Hash_Len(io_interrupt_table) < 16) {
+		Hash_Iter_t *iter = Hash_Iter_Init(io_interrupt_table);
+		while (Hash_Iter_Has_Next(iter)) {
+			Hash_Key_t key = Hash_Iter_Get_Next(iter);
+			uint8_t port = (key & 0x20);
+			uint8_t pos  = (key & 0x1F);
+			if (port == 0) {
+				io_interrupt_call_handlers((uint32_t*) LPC_GPIOINT->IO0IntStat, pos, 0);
+			} else {
+				io_interrupt_call_handlers((uint32_t*) LPC_GPIOINT->IO2IntStat, pos, 32);
+			}
+		}
+		Hash_Iter_Destroy(iter);
+	} 
+	// If there are more than 16 interrupts registered, 
+	// go through the interrupt state vectors.
+	else { */
+		io_interrupt_read_all((uint32_t*) LPC_GPIOINT->IO0IntStat, 0);
+		io_interrupt_read_all((uint32_t*) LPC_GPIOINT->IO2IntStat, 2);
+/*	}*/
+}
+
+// Initializes the interrupt table
+static void io_interrupt_init() {
+	io_interrupt_table = Hash_Init(NULL);
+	NVIC->ISER[0] |= (1 << EINT3_IRQn);
+}
+
+void Pin_Int_Enable(struct _pin_t pin, IOIntMode mode) {
+	// Enable the interrupt in the microcontroller
+	if (pin.port == 0) {
+		LPC_GPIOINT->IO0IntEn[mode] |= pin.mask;
+	} else {
+		LPC_GPIOINT->IO2IntEn[mode] |= pin.mask;
+	}
+}
+
+void Pin_Int_Disable(struct _pin_t pin, IOIntMode mode) {
+	// Disable the interrupt in the microcontroller
+	if (pin.port == 0) {
+		LPC_GPIOINT->IO0IntEn[mode] &= ~(pin.mask);
+	} else {
+		LPC_GPIOINT->IO2IntEn[mode] &= ~(pin.mask);
+	}
+}
+
+void Pin_Int_Attach(struct _pin_t pin, void(*function)(void), IOIntMode mode) {
+
+	// Only allow ports 0 and 2 in the LPC arch.
+	if ((pin.port != 0)	&& (pin.port != 2)) return;
+		
+	// Initialize the table if necessary
+	if (io_interrupt_table == NULL) {
+		io_interrupt_init();
+	}
+
+	// Get the byte for the hash
+	uint8_t pos = io_interrupt_get_byte(pin.address, pin.port, mode);
+	// Store the function pointer
+	Hash_Set(io_interrupt_table, pos, (void*) function);
+
+	Pin_Int_Enable(pin, mode);
+}
+
+
