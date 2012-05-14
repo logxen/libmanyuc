@@ -78,6 +78,12 @@ void Pin_On (Pin_t pin);
  */
 void Pin_Off (Pin_t pin);
 
+/** Toggles the pin state.
+ *  @param pin A pin created through Pin_Get.
+ */
+void Pin_Toggle (Pin_t pin);
+
+
 /** Reads the state of the pin.
  *  @param pin A pin created through Pin_Get.
  *  @return The state of the pin (0 or 1).

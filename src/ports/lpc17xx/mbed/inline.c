@@ -35,6 +35,10 @@ static inline void _turn_off(uint32_t port, uint32_t mask) {
 	LPC_GPIO[port].FIOCLR = mask;
 }
 
+static inline void _toggle(uint32_t port, uint32_t mask) {
+	LPC_GPIO[port].FIOPIN ^= mask;
+}
+
 static inline void _set_output(uint32_t port, uint32_t mask) {
     LPC_GPIO[port].FIODIR |= mask;
 }
@@ -55,6 +59,11 @@ static inline void Pin_On (struct _pin_t pin) {
 // Switch Pin Off 
 static inline void Pin_Off (struct _pin_t pin) {
 	_turn_off(pin.port, pin.mask);
+}
+
+// Toggle Pin State
+static inline void Pin_Toggle (struct _pin_t pin) {
+	_toggle(pin.port, pin.mask);
 }
 
 // Read pin state 
