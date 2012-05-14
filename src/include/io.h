@@ -257,6 +257,17 @@ uint16_t AnalogIn_Read(uint32_t channel);
 
 /* *********************************************************** */
 
+typedef struct _pwm_pin_t PWMPin_t;
+PWMPin_t PWMPin_Get(PinName pin_name);
+void PWMPin_Set_Period_s(PWMPin_t pin, float s);
+void PWMPin_Set_Period_ms(PWMPin_t pin, float ms);
+void PWMPin_Set_Period_us(PWMPin_t pin, float us);
+void PWMPin_Set_Duty_Cycle(PWMPin_t pin, float duty);
+void PWMPin_Set_Cycle_Count(PWMPin_t pin, uint32_t count);
+float PWMPin_Get_Duty_Cycle(PWMPin_t pin);
+
+/* *********************************************************** */
+
 /** Display an error with the arch leds.  Show's SOS in morse. */
 void Show_Error();
 

@@ -52,7 +52,9 @@
   Clock Variable definitions
  *----------------------------------------------------------------------------*/
 
-uint32_t SystemCoreClock;/*!< System Clock Frequency (Core Clock)*/
+uint32_t SystemCoreClock; /* System Clock Frequency (Core Clock)*/
+uint32_t PeripheralClock; /* Peripheral Clock value */
+
 void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 {
   SystemCoreClock = __CORE_CLK;
@@ -185,7 +187,11 @@ void init(void) {
         datai_begin++;
     }
 
+	// Update the SystemCoreClock value
     SystemCoreClockUpdate();
+
+	// Store PeripheralClock value
+	PeripheralClock = SystemCoreClock / 4;
 
     if (SysTick_Config(SystemCoreClock / 1000)) {   /* Setup SysTick Timer for 1 msec interrupts  */
         while (1);              /* Capture error */

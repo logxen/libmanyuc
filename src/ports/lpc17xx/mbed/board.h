@@ -195,6 +195,12 @@ struct _serial_t {
 	uint32_t number;
 };
 
+// PWM structure
+struct _pwm_pin_t {
+	    uint32_t id;
+};
+
+
 #include "inline.c"
 
 #ifdef __cplusplus
