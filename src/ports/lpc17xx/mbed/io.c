@@ -39,8 +39,10 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
 	// Set opendrain
-    } else if (mode == 4) {
+    } else if (mode == OpenDrain) {
 		_set_open_drain(pin.port, pin.mask);
+    } else if (mode == NormalMode) {
+		_set_normal_mode(pin.port, pin.mask);
 	// Set pin primary / secondary / etc function.
 	} else {
 		mode -= 8;
@@ -73,6 +75,8 @@ void PinBus_Mode(PinBus_t bus, PinMode mode) {
 // TODO: lock for concurrency
 	if (mode == OpenDrain) {
 		return _PinBus_Apply(bus, _set_open_drain);
+	} else if (mode == NormalMode) {
+		return _PinBus_Apply(bus, _set_normal_mode);
 	}
 
 	int i;

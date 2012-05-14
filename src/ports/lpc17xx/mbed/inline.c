@@ -51,6 +51,10 @@ static __INLINE void _set_open_drain(uint32_t port, uint32_t mask) {
 	LPC_PINCON->PINMODE_OD[port] |= mask;
 }
 
+static __INLINE void _set_normal_mode(uint32_t port, uint32_t mask) {
+	LPC_PINCON->PINMODE_OD[port] &= ~(mask);
+}
+
 // Extern inline
 static inline void Pin_On (struct _pin_t pin) {
 	_turn_on(pin.port, pin.mask);
