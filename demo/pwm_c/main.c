@@ -33,7 +33,7 @@ int main(void) {
 	uint8_t nleds = 4;
 	uint8_t i = 0;
 	// One period set is enough
-	PWMPin_Set_Period_ms(pwm_leds[0], 10);
+	PWMPin_Set_Period_ms(pwm_leds[0], 1);
 
 	// Starting duty cycles and change rates
 	float duty[4] = {0.75, 0.5, 0.25, 0};
