@@ -65,6 +65,7 @@ extern uint32_t PeripheralClock;
 // internal function to set the period
 inline void _pwm_set_period(uint32_t period) {
 	LPC_PWM1->MR0 = period;
+	LPC_PWM1->LER |= 1;
 }
 
 // static variable to know if the pwm was initialized or not
