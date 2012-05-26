@@ -16,7 +16,7 @@ LANGUAGE = C
 
 # Compiling options
 DEBUG = 
-OPTIMIZATION = 1
+OPTIMIZATION = 2
 CFLAGS = 
 LDFLAGS = 
 
