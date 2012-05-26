@@ -44,7 +44,7 @@ struct _hash_iter_t {
 // State and initialization constants
 enum hash_constants { 
 	HASH_EMPTY, HASH_ACTIVE, HASH_DELETED, 
-	HASH_INI = 8 };
+	HASH_INI = 7 };
 
 struct _hash_t *Hash_Init(Hash_Destroy_t destroy)
 {
@@ -100,7 +100,7 @@ static int hash_resize(struct _hash_t *h, size_t new_size)
 // This hash grows slowly on purpose, not to eat too much memory.
 static inline uint8_t check_resize(struct _hash_t *h) {
 	uint8_t state = HASH_OK;
-	if ( ( h->size * 2 / 3 ) <= h->active ) {
+	if ( ( h->size * 2 / 3 ) <= (h->active + 1)) {
 		state = hash_resize(h, h->size + HASH_INI);
 	}
 	return state;
