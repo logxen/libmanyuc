@@ -32,6 +32,7 @@ void init();
 
 #include "io.h"
 #include "serial.h"
+#include "timers.h"
 
 #ifdef __cplusplus
 }

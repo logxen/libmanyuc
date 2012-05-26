@@ -25,6 +25,12 @@
 extern "C" {
 #endif
 
+typedef void (*timer_int_func)(void);
+
+typedef struct _scheduler_t Scheduler_t;
+
+Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t repeat);
+
 void wait(float s);
 void wait_ms(int ms);
 void wait_us(int us);

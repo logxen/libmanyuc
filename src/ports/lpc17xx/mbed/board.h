@@ -200,6 +200,13 @@ struct _pwm_pin_t {
 	    uint32_t id;
 };
 
+// Scheduler structure
+struct _scheduler_t {
+	uint8_t timer_id;
+	uint8_t mr_id;
+};
+
+
 
 #include "inline.c"
 

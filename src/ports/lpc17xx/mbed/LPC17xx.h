@@ -248,10 +248,7 @@ typedef struct
   __IO uint32_t PR;
   __IO uint32_t PC;
   __IO uint32_t MCR;
-  __IO uint32_t MR0;
-  __IO uint32_t MR1;
-  __IO uint32_t MR2;
-  __IO uint32_t MR3;
+  __IO uint32_t MR[4];
   __IO uint32_t CCR;
   __I  uint32_t CR0;
   __I  uint32_t CR1;
