@@ -116,10 +116,17 @@ Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t rep
 }
 
 static inline void timer_scheduler_handle_int(uint8_t timer_id) {
+	
+	// Get the current TC and the int vector for this timer
 	uint32_t current_tc = _timers[timer_id]->TC;
+	uint32_t ints = (0xF) & _timers[timer_id]->IR;
+	
+	// Clear current interrupts and timer interrupt
+	_timers[timer_id]->IR = 0xF;
+	NVIC->ICPR[0] = (uint32_t) (1<<(timer_id+1));
+
 	uint8_t scheduler_id = timer_id - HW_TIMER_OFFSET;
 	uint8_t mr_id = 0;
-	uint32_t ints = (0xF) & _timers[timer_id]->IR;
 	while (ints) {
 		if (ints & 0x1) {
 			_timers[timer_id]->IR |= (1 << mr_id);
@@ -132,11 +139,11 @@ static inline void timer_scheduler_handle_int(uint8_t timer_id) {
 		// Check to avoid missing interrupts - NOT WORKING
 		if (!ints) {
 			ints = (0xF) & _timers[timer_id]->IR;
+			_timers[timer_id]->IR = 0xF;
+			NVIC->ICPR[0] = (uint32_t) (1<<(timer_id+1));
 			mr_id = 0;
 		}
 	}
-	// Clear timer interrupt
-	NVIC->ICPR[0] = (uint32_t) (1<<(timer_id+1));
 }
 
 
