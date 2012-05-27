@@ -30,7 +30,7 @@ ASSEMBLER_OBJECTS := $(OBJECTS:.o=.s)
 
 # Include the appropriate Makefile
 ARCH_DIR := $(LIB_BASE)/ports/$(ARCH)
-ifneq "$(wildcard $(ARCH_DIR))" "" 
+ifneq "$(ARCH)" "" 
 include $(ARCH_DIR)/Makefile
 endif
 
@@ -91,9 +91,10 @@ indent:
 		--pad-oper --pad-header --unpad-paren --convert-tabs \
 		--keep-one-line-statements --indent=spaces=4 --brackets=attach \
 		--align-pointer=name --mode=c --lineend=linux --suffix=none \
-		--recursive '*.c' --recursive '*.cpp' 
+		--recursive '*.c' --recursive '*.cpp' \
+		--recursive '../demo/*.c' --recursive '../demo/*.cpp' 
 	astyle --pad-oper --pad-header --unpad-paren --convert-tabs \
-		--indent=spaces=4 --align-pointer=name --mode=c \
-		--lineend=linux --suffix=none --recursive '*.h'
+		--indent=spaces=4 --align-pointer=name --mode=c --lineend=linux \
+		--suffix=none --recursive '*.h' --recursive '../demo/*.h'
 
 .PHONY: indent

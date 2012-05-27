@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -24,28 +24,28 @@ uint32_t i;
 Bus_t leds;
 
 void count(void) {
-	i++;
-	Bus_Write(leds, i);
+    i++;
+    Bus_Write(leds, i);
 }
 
 /* This example counts the number of interrupts received on pin 10, showing the
  * number in binary using the leds. */
 int main(void) {
 
-	// Creates a bus with the 4 leds
-	leds = Bus_Get (4, LED4, LED3, LED2, LED1);
-	Pin_t in = Pin_Get(P10);
+    // Creates a bus with the 4 leds
+    leds = Bus_Get(4, LED4, LED3, LED2, LED1);
+    Pin_t in = Pin_Get(P10);
 
-	Bus_Output(leds);
-	Pin_Input(in);
-	Pin_Mode(in, PullUp);
+    Bus_Output(leds);
+    Pin_Input(in);
+    Pin_Mode(in, PullUp);
 
-	Pin_Int_Attach(in, count, IOIntFall);
+    Pin_Int_Attach(in, count, IOIntFall);
 
-	int i = 0;
-	// Show a binary combination of leds
-    while(1) {
-		// Do nothing
-		wait(1);
+    int i = 0;
+    // Show a binary combination of leds
+    while (1) {
+        // Do nothing
+        wait(1);
     }
 }

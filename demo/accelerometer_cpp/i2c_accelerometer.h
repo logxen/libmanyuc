@@ -23,14 +23,14 @@ public:
     float getXAxis10();
     float getYAxis10();
     float getZAxis10();
-    
+
 private:
     void calibrate();
     void setup();
     uint8_t check();
     //float _x8,  _y8,  _z8;
     //float _x10, _y10, _z10;
-    int readAccel10(uint8_t,uint8_t);
+    int readAccel10(uint8_t, uint8_t);
     uint8_t readAccel8(uint8_t);
     float calculate10Bit(int);
     float calculate8Bit(uint8_t);

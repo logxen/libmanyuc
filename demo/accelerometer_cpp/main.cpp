@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -32,7 +32,7 @@ void show_angle(float x) {
 
     LA = LB = LC = LD = 0;
 
-    int vel = (int)(x*10);
+    int vel = (int)(x * 10);
 
     if ((vel > 0) && (vel < 6))    LC = 1;
     if ((vel > 5) && (vel < 10))   LD = 1;
@@ -43,12 +43,12 @@ void show_angle(float x) {
 
 int main() {
 
-	Accelerometer acer;
-	float vect[3];
+    Accelerometer acer;
+    float vect[3];
 
-    while(1) {
-		acer.get10BitVector(vect);
-		show_angle(vect[1]);
-		wait(0.3);
+    while (1) {
+        acer.get10BitVector(vect);
+        show_angle(vect[1]);
+        wait(0.3);
     }
 }

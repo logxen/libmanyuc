@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -26,13 +26,14 @@
 
 int main() {
 
-    Pin leds[] = { 
-		Pin(LED1), Pin(LED2),
-        Pin(LED3), Pin(LED4) };
+    Pin leds[] = {
+        Pin(LED1), Pin(LED2),
+        Pin(LED3), Pin(LED4)
+    };
 
     Pin buttons[] = { Pin(P20, PullUp), Pin(P19, PullUp) };
 
-    while(1) {
+    while (1) {
         for (int i = 0; i < 2; i++) {
             if (buttons[i] == 0) {
                 leds[i] = 1;

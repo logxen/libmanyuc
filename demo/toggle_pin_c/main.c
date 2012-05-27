@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -23,12 +23,12 @@
 /* This examples toggles pin 11 on and off as fast as possible. */
 int main(void) {
 
-	Pin_t my_pin = Pin_Get(P11);
-	Pin_Output(my_pin);
+    Pin_t my_pin = Pin_Get(P11);
+    Pin_Output(my_pin);
 
-	// Turn a led on and off indefinitely.
-    while(1) {
-		Pin_On(my_pin);
-		Pin_Off(my_pin);
+    // Turn a led on and off indefinitely.
+    while (1) {
+        Pin_On(my_pin);
+        Pin_Off(my_pin);
     }
 }

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -24,21 +24,21 @@
 
 int main() {
 
-	// Construct all the pins on the given LEDs.
-	// When no parameter is given, they are 
-	// automatically set as Output.
-	Pin leds[] = { 
-		Pin(LED1), Pin(LED2),
-		Pin(LED3), Pin(LED4) 
-	};
+    // Construct all the pins on the given LEDs.
+    // When no parameter is given, they are
+    // automatically set as Output.
+    Pin leds[] = {
+        Pin(LED1), Pin(LED2),
+        Pin(LED3), Pin(LED4)
+    };
 
-	// Go through all the LEDs and turn them on and off.
-	// The leds are on for only 0.2s each.
-    while(1) {
-		for (int i = 0; i < 4; i++) {
-			leds[i] = 1;
-			wait(0.2);
-			leds[i] = 0;
-		}
+    // Go through all the LEDs and turn them on and off.
+    // The leds are on for only 0.2s each.
+    while (1) {
+        for (int i = 0; i < 4; i++) {
+            leds[i] = 1;
+            wait(0.2);
+            leds[i] = 0;
+        }
     }
 }
