@@ -60,8 +60,7 @@ int main(void) {
         Pin_Output(leds[i]);
     }
 
-    Serial_t port = Serial_Get(0);
-    Serial_Init(port, 9600);
+    Serial_t port = Serial_Init(0, 9600);
 
     turn_on_all_leds(leds, nleds);
     Serial_Put_Bytes(port, "Hola que tal, como te va 123456789 123456789\r\n", 46, BLOCKING);

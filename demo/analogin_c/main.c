@@ -40,8 +40,7 @@ void number_to_char(uint32_t number, char *string) {
    pins P20 and P30 are turned on or off according to the value. */
 int main(void) {
 
-    Serial_t port = Serial_Get(0);
-    Serial_Init(port, 9600);
+    Serial_t port = Serial_Init(0, 9600);
 
     char cadena[10];
     uint32_t p = AnalogIn_Get(ADC3);

@@ -37,13 +37,23 @@ extern "C" {
     /** Opaque structure to represent the serial port.
      *  The data contained in the structure depends on the
      *  architecture. It should always be created through
-     *  Serial_Get.
+     *  Serial_Init or Serial_Get.
      */
     typedef struct _serial_t Serial_t;
 
     /** Available transfer modes for the serial ports */
     typedef enum { BLOCKING, NONBLOCKING, BLOCK_WITH_TIMEOUT }
     SerialTransferMode;
+
+    /** Initializes the serial port.  Each port must be initialized
+     *  only once in order to be used. Subsequent access to the port
+     *  should be done using Serial_Get.
+     *
+     *  @param number The serial port number in the microcontroller.
+     *  @param baudrate The intended baudrate for the serial port.
+     *  @return An initialized serial port structure. 
+     */
+    Serial_t Serial_Init(int number, int baudrate);
 
     /** Returns the serial port structure corresponding to the
      *  serial port number.  The pins corresponding to each serial
@@ -55,31 +65,23 @@ extern "C" {
      */
     Serial_t Serial_Get(int number);
 
-    /** Initializes the serial port.  Each port must be initialized
-     *  once in order to be used.
-     *
-     *  @param port The serial port obtained through Serial_Get.
-     *  @param baudrate The intended baudrate for the serial port.
-     */
-    void Serial_Init(Serial_t port, int baudrate);
-
     /** Returns one byte received through the serial port.
      *
-     *  @param port The serial port obtained through Serial_Get.
+     *  @param port An initialized serial port structure.
      *  @return The byte received through the serial port.
      */
     uint8_t Serial_Get_Byte(Serial_t port);
 
     /** Transmits one byte through the serial port.
      *
-     *  @param port The serial port obtained through Serial_Get.
+     *  @param port An initialized serial port structure.
      *  @param data The byte to be sent through the serial port.
      */
     void Serial_Put_Byte(Serial_t port, uint8_t data);
 
     /** Transmits a byte buffer through the serial port.
      *
-     *  @param port The serial port obtained through Serial_Get.
+     *  @param port An initialized serial port structure.
      *  @param data The bytes to be sent through the serial port.
      *  @param length The amount of bytes to be sent. This value
      *  must be less or equal to the length of the buffer.

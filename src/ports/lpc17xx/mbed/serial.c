@@ -155,9 +155,10 @@ control signal on the RTS (or DTR) pin. The direction control pin
 #define UART_FIFOLVL_TXFIFOLVL(n)   ((uint32_t)((n>>8)&0x0F))   /**< Reflects the current level of the UART transmitter FIFO */
 #define UART_FIFOLVL_BITMASK        ((uint32_t)(0x0F0F))        /**< UART FIFO Level Register bit mask */
 
+static uint8_t serial_initialized[] = { 0, 0, 0, 0 };
 
-    /* Convert the serial port number to a serial port struct. */
-    Serial_t Serial_Get(int number) {
+/* Convert the serial port number to a serial port struct. */
+Serial_t Serial_Get(int number) {
     if (number < 0 || number > 4) number = 0;
     Serial_t port = {
         Pin_Get(txs[number]),
@@ -168,7 +169,14 @@ control signal on the RTS (or DTR) pin. The direction control pin
     return port;
 }
 
-void Serial_Init(Serial_t port, int baudrate) {
+Serial_t Serial_Init(int number, int baudrate) {
+
+    Serial_t port = Serial_Get(number);
+    if (serial_initialized[number]) {
+        return port;
+    }
+    serial_initialized[number] = 1;
+
     // 1 - Power up the serial port
     uint32_t power_bit_mask = 1 << power_bits[port.number];
     LPC_SC->PCONP |= power_bit_mask;

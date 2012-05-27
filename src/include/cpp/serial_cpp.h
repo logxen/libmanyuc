@@ -40,8 +40,7 @@ public:
      *  with this function.
      */
     Serial(int number, int baudrate=9600) {
-        this->port = Serial_Get(number);
-        Serial_Init(this->port, baudrate);
+        this->port = Serial_Init(number, baudrate);
     }
 
     /** Returns one byte received through the serial port.
