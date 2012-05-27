@@ -112,3 +112,4 @@ uint16_t AnalogIn_Read(uint32_t channel) {
 }
 
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

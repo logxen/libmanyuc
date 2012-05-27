@@ -112,3 +112,4 @@ int _wait(int *status) {
 int _write(int file, char *ptr, int len) {
     return 0;
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

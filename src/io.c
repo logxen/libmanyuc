@@ -140,3 +140,4 @@ void Pin_Show_Byte(Pin_t *pins, int n, uint8_t byte) {
 }
 
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

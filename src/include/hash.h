@@ -108,3 +108,4 @@ void Hash_Iter_Destroy(Hash_Iter_t *iter);
 
 
 #endif // _HASH_H
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

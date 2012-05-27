@@ -214,3 +214,4 @@ __INLINE void Delay(uint32_t dlyTicks) {
     while ((msTicks - curTicks) < dlyTicks);
 }
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -990,3 +990,4 @@ typedef struct
 #define LPC_USB               ((LPC_USB_TypeDef       *) LPC_USB_BASE      )
 
 #endif  // __LPC17xx_H__
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

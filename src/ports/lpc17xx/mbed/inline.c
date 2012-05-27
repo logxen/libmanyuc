@@ -116,3 +116,4 @@ static inline void PinBus_Input(struct _pinBus_t bus) {
 }
 
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

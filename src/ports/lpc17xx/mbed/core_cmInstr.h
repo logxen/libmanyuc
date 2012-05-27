@@ -773,3 +773,4 @@ __ASM volatile("clz %0, %1" : "=r"(result) : "r"(value));
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
 #endif /* __CORE_CMINSTR_H__ */
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

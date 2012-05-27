@@ -842,3 +842,4 @@ __ASM volatile("MSR fpscr, %0" : : "r"(fpscr));
 
 
 #endif /* __CORE_CMFUNC_H__ */
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

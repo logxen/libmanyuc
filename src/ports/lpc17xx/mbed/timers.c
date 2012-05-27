@@ -169,3 +169,4 @@ void TIMER2_IRQHandler() {
 void TIMER3_IRQHandler() {
     timer_scheduler_handle_int(3);
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -71,3 +71,4 @@ void I2C::address(uint8_t address) {
 void I2C::frequency(uint32_t hz) {
     I2C_Frequency(this->device, hz);
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

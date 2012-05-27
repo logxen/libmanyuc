@@ -303,3 +303,4 @@ void Pin_Int_Attach(struct _pin_t pin, void(*function)(void), IOIntMode mode) {
 }
 
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

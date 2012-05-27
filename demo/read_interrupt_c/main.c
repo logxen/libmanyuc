@@ -49,3 +49,4 @@ int main(void) {
         wait(1);
     }
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

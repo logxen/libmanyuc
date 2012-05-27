@@ -73,3 +73,4 @@ int main(void) {
         Serial_Put_Bytes(port, buffer, 10, NONBLOCKING);
     }
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -135,3 +135,4 @@ void PinBus_Input(PinBus_t bus) {
 void PinBus_Mode(PinBus_t bus, PinMode mode) {
     // Ignored right now.
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

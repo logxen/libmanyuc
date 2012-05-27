@@ -162,3 +162,4 @@ float PWMPin_Get_Duty_Cycle(PWMPin_t pin) {
         return LPC_PWM1->MRH[pin.id - 4] / LPC_PWM1->MR0;
     }
 }
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

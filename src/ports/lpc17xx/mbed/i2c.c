@@ -185,3 +185,4 @@ void I2C_Frequency(I2C_t device, uint32_t hz) {
     _set_clock(device.port, hz);
 }
 
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

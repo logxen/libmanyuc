@@ -25,3 +25,4 @@
 #include "i2c_cpp.h"
 
 #endif
+// vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
