@@ -29,9 +29,9 @@ COMMON_OBJECTS := $(addprefix $(LIB_BASE)/, $(COMMON_OBJECTS))
 ASSEMBLER_OBJECTS := $(OBJECTS:.o=.s)
 
 # Include the appropriate Makefile
-ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)
-ifeq ($(wildcard $(ARCH_DIR)),) 
-	include $(ARCH_DIR)/Makefile
+ARCH_DIR := $(LIB_BASE)/ports/$(ARCH)
+ifneq "$(wildcard $(ARCH_DIR))" "" 
+include $(ARCH_DIR)/Makefile
 endif
 
 #########################################################################
