@@ -48,7 +48,7 @@ static uint8_t _next_ts = 0;
 static timer_scheduler_t *_timer_scheduler[2] = { NULL, NULL };
 static LPC_TIM_TypeDef *_timers[4] = { LPC_TIM0, LPC_TIM1, LPC_TIM2, LPC_TIM3};
 
-static inline _timer_init(uint8_t timer_id) {
+static inline void _timer_init(uint8_t timer_id) {
 
 	LPC_SC->PCONP |= TIMER_POWER_BITMASK(timer_id); // enable power
 	_timers[timer_id]->TCR = TIMER_TCR_RESET;       // reset the timer
@@ -66,13 +66,13 @@ static inline _timer_init(uint8_t timer_id) {
 	}
 
 	// Release reset
-	_timers[timer_id]->TCR = 1; TIMER_TCR_ENABLE; // enable the timer
+	_timers[timer_id]->TCR = TIMER_TCR_ENABLE; // enable the timer
 
 	// Enable timer interrupts
 	NVIC->ISER[0] = (uint32_t) (1<<(timer_id+1));
 }
 
-static inline _timer_set_mr(uint8_t timer_id, uint8_t mr_id, uint32_t time_delay) {
+static inline void _timer_set_mr(uint8_t timer_id, uint8_t mr_id, uint32_t time_delay) {
 	_timers[timer_id]->MR[mr_id] = _timers[timer_id]->TC + time_delay;
 	_timers[timer_id]->MCR |= TIMER_MCR_INTERRUPT(mr_id);
 }
@@ -89,6 +89,8 @@ static void _timer_scheduler_init(uint8_t timer_id) {
 
 
 Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t repeat) {
+
+	Scheduler_t scheduler = { 0, 0 };
 
 	if (_next_ts < MR_AMOUNT * HW_TIMER_AMOUNT) {
 		uint8_t timer_id = _next_ts / MR_AMOUNT;
@@ -109,10 +111,13 @@ Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t rep
 		_timer_set_mr(timer_id + HW_TIMER_OFFSET, mr_id, time_delay);
 		_next_ts++;	
 		
+		scheduler.timer_id = timer_id;
+		scheduler.mr_id = mr_id;
 	} else {
-		// Software controlled timer
-
+		// TODO: Software controlled timer
 	}
+	return scheduler;
+
 }
 
 static inline void timer_scheduler_handle_int(uint8_t timer_id) {
