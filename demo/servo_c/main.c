@@ -30,7 +30,7 @@ const float stop_left = 0.10;    // Maximum value for the duty cycle
 const float stop_right = 0.05;   // Minimum value for the duty cycle
 const float pause_ms = 65;       // Pause between changes of the duty cycle.
 
-float turn_left(Pin_t servo, float duty) {
+float turn_left(PWMPin_t servo, float duty) {
     while (duty < stop_left) {
         PWMPin_Set_Duty_Cycle(servo, duty);
         duty += change_rate;
@@ -39,7 +39,7 @@ float turn_left(Pin_t servo, float duty) {
     return duty;
 }
 
-float turn_right(Pin_t servo, float duty) {
+float turn_right(PWMPin_t servo, float duty) {
     while (duty > stop_right) {
         PWMPin_Set_Duty_Cycle(servo, duty);
         duty -= change_rate;

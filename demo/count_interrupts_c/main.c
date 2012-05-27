@@ -20,7 +20,7 @@
 
 #include "libmanyuc.h"
 
-uint32_t i;
+uint32_t i,j;
 Pin_t debug;
 
 // Interrupt counter, toggles debug pin when 100k interrupts happen.
@@ -37,7 +37,7 @@ void count(void) {
  * 100k interrupts. */
 int main(void) {
 
-    debug1 = Pin_Get(P5);
+    debug = Pin_Get(P5);
 
     // This indexes indicate how many interrupts are configured
     // And how many are going to be activated in the program code.
