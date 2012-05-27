@@ -172,7 +172,7 @@ Serial_t Serial_Get(int number) {
 Serial_t Serial_Init(int number, int baudrate) {
 
     Serial_t port = Serial_Get(number);
-    if (serial_initialized[number]) {
+    if (serial_initialized[number] != 0) {
         return port;
     }
     serial_initialized[number] = 1;
@@ -233,6 +233,7 @@ Serial_t Serial_Init(int number, int baudrate) {
     // Enable transmission
     port.uart->TER = UART_TER_TXEN;
 
+    return port;
 }
 
 // Returns if there is info available to be read

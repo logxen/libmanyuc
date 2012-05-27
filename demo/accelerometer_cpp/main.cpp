@@ -1,5 +1,5 @@
 /*
- * libmanyuc - read buttons example
+ * libmanyuc - Example of accelerometer use
  * Copyright (C) 2012 - Margarita Manterola Rivero
  *
  * This library is free software; you can redistribute it and/or
@@ -20,35 +20,45 @@
 
 #include "libmanyuc.h"
 #include "i2c_accelerometer.h"
+#include <stdio.h>
 
-/* This example  */
+/* This example shows the current angle by reading 
+ * an accelorometer, and lighting up the leds*/
 
-Pin LA(LED1);
-Pin LB(LED2);
-Pin LC(LED3);
-Pin LD(LED4);
 
-void show_angle(float x) {
 
-    LA = LB = LC = LD = 0;
+void show_angle(Pin* pins, float x) {
+
+    pins[0] = 0;
+    pins[1] = 0;
+    pins[2] = 0;
+    pins[3] = 0;
 
     int vel = (int)(x * 10);
-
-    if ((vel > 0) && (vel < 6))    LC = 1;
-    if ((vel > 5) && (vel < 10))   LD = 1;
-    if ((vel > -6) && (vel < 0))   LB = 1;
-    if ((vel > -10) && (vel < -5)) LA = 1;
+    if (vel == 0) {
+        pins[1] = 1;
+        pins[2] = 1;
+    } 
+    if ((vel > -10) && (vel < -5)) pins[0] = 1;
+    if ((vel > -6) && (vel < 0))   pins[1] = 1;
+    if ((vel > 0) && (vel < 6))    pins[2] = 1;
+    if ((vel > 5) && (vel < 10))   pins[3] = 1;
 
 }
 
 int main() {
 
-    Accelerometer acer;
+    Pin leds[] = {
+        Pin(LED1), Pin(LED2),
+        Pin(LED3), Pin(LED4)
+    };
+
+    Accelerometer acer(2);
     float vect[3];
 
     while (1) {
         acer.get10BitVector(vect);
-        show_angle(vect[1]);
+        show_angle(leds, vect[1]);
         wait(0.3);
     }
 }
