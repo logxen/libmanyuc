@@ -80,6 +80,13 @@ typedef enum PinName {
 	ADC6 = ARM_P0_3,
 	ADC7 = ARM_P0_2,
 
+	SDA0 = ARM_P0_27,
+	SCL0 = ARM_P0_28,
+	SDA1 = ARM_P0_19,
+	SCL1 = ARM_P0_20,
+	SDA2 = ARM_P0_10,
+	SCL2 = ARM_P0_11,
+
 	// mbed DIP -> LPC equivalencies, according to mbed schematics
     P5 = ARM_P0_9,
     P6 = ARM_P0_8,
@@ -206,7 +213,11 @@ struct _scheduler_t {
 	uint8_t mr_id;
 };
 
-
+struct _i2c_t {
+	uint8_t port;
+	uint8_t address;
+	uint8_t mode;
+};
 
 #include "inline.c"
 

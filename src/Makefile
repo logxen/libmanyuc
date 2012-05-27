@@ -8,7 +8,7 @@ include $(LIB_BASE)/config.mk
 
 # Objects compiled for the general use of the library
 COMMON_OBJECTS = timers.o io.o hash.o
-CPP_OBJECTS = cpp/pin.o
+CPP_OBJECTS = cpp/pin.o cpp/i2c.o
 
 INCLUDES = -I $(LIB_BASE)/include
 INCLUDES_CPP = -I $(LIB_BASE)/include/cpp

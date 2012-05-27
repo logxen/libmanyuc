@@ -22,5 +22,6 @@
 #define __LIBMANYUC_CPP_H
 
 #include "pin_cpp.h"
+#include "i2c_cpp.h"
 
 #endif

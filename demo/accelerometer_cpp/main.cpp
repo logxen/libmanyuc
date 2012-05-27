@@ -1,5 +1,5 @@
 /*
- * libmanyuc - port header file
+ * libmanyuc - read buttons example
  * Copyright (C) 2012 - Margarita Manterola Rivero
  *
  * This library is free software; you can redistribute it and/or
@@ -18,25 +18,37 @@
  * MA 02110-1301 USA
  */
 
-#ifndef PORT_H
-#define PORT_H
+#include "libmanyuc.h"
+#include "i2c_accelerometer.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* This example  */
 
-#include "board.h"
-#include <stdint.h>
+Pin LA(LED1);
+Pin LB(LED2);
+Pin LC(LED3);
+Pin LD(LED4);
 
-void init();
+void show_angle(float x) {
 
-#include "io.h"
-#include "serial.h"
-#include "timers.h"
-#include "i2c.h"
+    LA = LB = LC = LD = 0;
 
-#ifdef __cplusplus
+    int vel = (int)(x*10);
+
+    if ((vel > 0) && (vel < 6))    LC = 1;
+    if ((vel > 5) && (vel < 10))   LD = 1;
+    if ((vel > -6) && (vel < 0))   LB = 1;
+    if ((vel > -10) && (vel < -5)) LA = 1;
+
 }
-#endif
 
-#endif
+int main() {
+
+	Accelerometer acer;
+	float vect[3];
+
+    while(1) {
+		acer.get10BitVector(vect);
+		show_angle(vect[1]);
+		wait(0.3);
+    }
+}
