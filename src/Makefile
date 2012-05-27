@@ -30,7 +30,9 @@ ASSEMBLER_OBJECTS := $(OBJECTS:.o=.s)
 
 # Include the appropriate Makefile
 ARCH_DIR = $(LIB_BASE)/ports/$(ARCH)
-include $(ARCH_DIR)/Makefile
+ifeq ($(wildcard $(ARCH_DIR)),) 
+	include $(ARCH_DIR)/Makefile
+endif
 
 #########################################################################
 
@@ -83,3 +85,12 @@ clean:
 	$(CXX) $(CPPFLAGS) $< -S 
 
 #########################################################################
+
+indent:
+	astyle --indent-classes --indent-cases --indent-preprocessor \
+		--pad-oper --pad-header --unpad-paren --keep-one-line-statements \
+		--convert-tabs --indent=spaces=4 --brackets=attach \
+		--align-pointer=name --mode=c --lineend=linux --suffix=none \
+		--recursive '*.c' --recursive '*.cpp' --recursive '*.h'
+
+.PHONY: indent
