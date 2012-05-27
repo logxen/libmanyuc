@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -135,15 +135,15 @@ const static int uarts[] = { UART_0, UART_1, UART_2, UART_3 };
 #define UART_TER_BITMASK        ((uint8_t)(0x80))       /**< UART Transmit Enable Register bit mask */
 
 #define UART1_RS485CTRL_NMM_EN      ((uint32_t)(1<<0))  /*!< RS-485/EIA-485 Normal Multi-drop Mode (NMM)
-                                                        is disabled */
+is disabled */
 #define UART1_RS485CTRL_RX_DIS      ((uint32_t)(1<<1))  /*!< The receiver is disabled */
 #define UART1_RS485CTRL_AADEN       ((uint32_t)(1<<2))  /*!< Auto Address Detect (AAD) is enabled */
 #define UART1_RS485CTRL_SEL_DTR     ((uint32_t)(1<<3))  /*!< If direction control is enabled
-                                                        (bit DCTRL = 1), pin DTR is used for direction control */
+(bit DCTRL = 1), pin DTR is used for direction control */
 #define UART1_RS485CTRL_DCTRL_EN    ((uint32_t)(1<<4))  /*!< Enable Auto Direction Control */
 #define UART1_RS485CTRL_OINV_1      ((uint32_t)(1<<5))  /*!< This bit reverses the polarity of the direction
-                                                        control signal on the RTS (or DTR) pin. The direction control pin
-                                                        will be driven to logic "1" when the transmitter has data to be sent */
+control signal on the RTS (or DTR) pin. The direction control pin
+    will be driven to logic "1" when the transmitter has data to be sent */
 
 #define UART1_RS485CTRL_BITMASK     ((uint32_t)(0x3F))  /**< RS485 control bit-mask value */
 
@@ -156,156 +156,156 @@ const static int uarts[] = { UART_0, UART_1, UART_2, UART_3 };
 #define UART_FIFOLVL_BITMASK        ((uint32_t)(0x0F0F))        /**< UART FIFO Level Register bit mask */
 
 
-/* Convert the serial port number to a serial port struct. */
-Serial_t Serial_Get(int number) {
-	if (number < 0 || number > 4) number = 0;
-	Serial_t port = { 
-		Pin_Get(txs[number]),
-		Pin_Get(rxs[number]),
-		(LPC_UART_TypeDef *) uarts[number], 
-		number
-	}; 
-	return port;
+    /* Convert the serial port number to a serial port struct. */
+    Serial_t Serial_Get(int number) {
+    if (number < 0 || number > 4) number = 0;
+    Serial_t port = {
+        Pin_Get(txs[number]),
+        Pin_Get(rxs[number]),
+        (LPC_UART_TypeDef *) uarts[number],
+        number
+    };
+    return port;
 }
 
 void Serial_Init(Serial_t port, int baudrate) {
-	// 1 - Power up the serial port
-	uint32_t power_bit_mask = 1 << power_bits[port.number];
-	LPC_SC->PCONP |= power_bit_mask;
+    // 1 - Power up the serial port
+    uint32_t power_bit_mask = 1 << power_bits[port.number];
+    LPC_SC->PCONP |= power_bit_mask;
 
-	// 3 - Set the baudrate
-	uint32_t SystemCoreClock = 100000000;
-	uint16_t rate = SystemCoreClock / (16 * 4 * baudrate);
+    // 3 - Set the baudrate
+    uint32_t SystemCoreClock = 100000000;
+    uint16_t rate = SystemCoreClock / (16 * 4 * baudrate);
 
-	// Enable divisor latches and set the rate
-	port.uart->LCR |= UART_LCR_DLAB_EN;
-	port.uart->DLL = UART_LSB(rate);
-	port.uart->DLM = UART_MSB(rate);
+    // Enable divisor latches and set the rate
+    port.uart->LCR |= UART_LCR_DLAB_EN;
+    port.uart->DLL = UART_LSB(rate);
+    port.uart->DLM = UART_MSB(rate);
 
-	// 4 - Empty FIFOs and Disable FIFO
-	port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;
-	port.uart->FCR = 0; 
-/*
-	// Read what was already on the buffers
-	uint8_t aux;
-	while (port.uart->LSR & UART_LSR_RDR) {
-		aux = port.uart->RBR;
-	}
+    // 4 - Empty FIFOs and Disable FIFO
+    port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;
+    port.uart->FCR = 0;
+    /*
+        // Read what was already on the buffers
+        uint8_t aux;
+        while (port.uart->LSR & UART_LSR_RDR) {
+            aux = port.uart->RBR;
+        }
 
-	// Enable transmission
-	port.uart->TER = UART_TER_TXEN;
-	// Transmit what was already on the buffer
-	while (!(port.uart->LSR & UART_LSR_THRE));
-	// Disable transmission
-	port.uart->TER = 0;
+        // Enable transmission
+        port.uart->TER = UART_TER_TXEN;
+        // Transmit what was already on the buffer
+        while (!(port.uart->LSR & UART_LSR_THRE));
+        // Disable transmission
+        port.uart->TER = 0;
 
-	// Enable FIFO
-	port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;*/
+        // Enable FIFO
+        port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;*/
 
-	// 5 - Set the pin function
-	Pin_Mode(port.tx, modes[port.number]);
-	Pin_Mode(port.rx, modes[port.number]);
+    // 5 - Set the pin function
+    Pin_Mode(port.tx, modes[port.number]);
+    Pin_Mode(port.rx, modes[port.number]);
 
-	// 6 - Disable Interrupts
-	port.uart->IER = 0;
+    // 6 - Disable Interrupts
+    port.uart->IER = 0;
 
-	// Reset LCR / ACR
-	port.uart->LCR = 0;
-/*	port.uart->ACR = 0;
+    // Reset LCR / ACR
+    port.uart->LCR = 0;
+    /*  port.uart->ACR = 0;
 
-	// Read anything still on the buffers
-	aux = port.uart->LSR;*/
+        // Read anything still on the buffers
+        aux = port.uart->LSR;*/
 
-	// Set configuration for transmission (8N1)
-	/*port.uart->LCR = UART_LCR_WLEN8 | UART_LCR_BREAK_EN;*/
-	port.uart->LCR = UART_LCR_WLEN8;
+    // Set configuration for transmission (8N1)
+    /*port.uart->LCR = UART_LCR_WLEN8 | UART_LCR_BREAK_EN;*/
+    port.uart->LCR = UART_LCR_WLEN8;
 
-	port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;
+    port.uart->FCR = UART_FCR_FIFO_EN | UART_FCR_RX_RS | UART_FCR_TX_RS;
 
-	// Enable transmission
-	port.uart->TER = UART_TER_TXEN;
+    // Enable transmission
+    port.uart->TER = UART_TER_TXEN;
 
 }
 
 // Returns if there is info available to be read
 __INLINE int Serial_Readable(Serial_t port) {
-	return (port.uart->LSR & UART_LSR_RDR);
+    return (port.uart->LSR & UART_LSR_RDR);
 }
 
 // Returns a byte read from the serial port. If there is no byte yet, it
 // blocks until there is.
 __INLINE uint8_t Serial_Get_Byte(Serial_t port) {
-	return port.uart->RBR & UART_BYTE_MASK;
+    return port.uart->RBR & UART_BYTE_MASK;
 }
 
 // Reads the amount of bytes from the serial port into the buffer.
 // Memory for the buffer must have been allocated first.
-uint32_t Serial_Get_Bytes(Serial_t port, uint8_t* data,
-			uint32_t length, SerialTransferMode mode) {
+uint32_t Serial_Get_Bytes(Serial_t port, uint8_t *data,
+                          uint32_t length, SerialTransferMode mode) {
 
-	uint32_t i=0, wait;
+    uint32_t i = 0, wait;
 
-	while (i < length) {
+    while (i < length) {
 
-		// If non blocking, check if there's something to read 
-		// and if not, bail out.
-		if (!(Serial_Readable(port)) && (mode == NONBLOCKING)) {
-			break;
-		}
-		wait = UART_BLOCK_TIMEOUT;
-		while (!(Serial_Readable(port)) && (mode == BLOCKING || (wait > 0))) {
-			wait--;
-		}
-		if (!wait) break;
+        // If non blocking, check if there's something to read
+        // and if not, bail out.
+        if (!(Serial_Readable(port)) && (mode == NONBLOCKING)) {
+            break;
+        }
+        wait = UART_BLOCK_TIMEOUT;
+        while (!(Serial_Readable(port)) && (mode == BLOCKING || (wait > 0))) {
+            wait--;
+        }
+        if (!wait) break;
 
-		data[i] = Serial_Get_Byte(port);
-		i++;
+        data[i] = Serial_Get_Byte(port);
+        i++;
 
-	}
-	return i;
+    }
+    return i;
 }
 
 // Returns if there is space to send a byte
 __INLINE int Serial_Sendable(Serial_t port) {
-	return (port.uart->LSR & UART_LSR_THRE);
+    return (port.uart->LSR & UART_LSR_THRE);
 }
 
 // Sends a byte through the serial port. If there is no space, it blocks
 // until there is.
 __INLINE void Serial_Put_Byte(Serial_t port, uint8_t data) {
-	port.uart->THR = data & UART_BYTE_MASK;
+    port.uart->THR = data & UART_BYTE_MASK;
 }
 
 
-uint32_t Serial_Put_Bytes(Serial_t port, uint8_t* data, 
-				uint32_t length, SerialTransferMode mode) {
+uint32_t Serial_Put_Bytes(Serial_t port, uint8_t *data,
+                          uint32_t length, SerialTransferMode mode) {
 
-	uint32_t i=0, c, wait;
+    uint32_t i = 0, c, wait;
 
-	while (i < length) {
+    while (i < length) {
 
-		// If non blocking, check for space and leave when none.
-		if (!(Serial_Sendable(port)) && (mode == NONBLOCKING)) {
-			break;
-		}
+        // If non blocking, check for space and leave when none.
+        if (!(Serial_Sendable(port)) && (mode == NONBLOCKING)) {
+            break;
+        }
 
-		// Otherwise check for space according to the timeout, or not.
-		wait = UART_BLOCK_TIMEOUT;
-		while (!(Serial_Sendable(port)) && (mode == BLOCKING || (wait > 0))) {
-			wait--;
-		}
-		if (!wait) break;
+        // Otherwise check for space according to the timeout, or not.
+        wait = UART_BLOCK_TIMEOUT;
+        while (!(Serial_Sendable(port)) && (mode == BLOCKING || (wait > 0))) {
+            wait--;
+        }
+        if (!wait) break;
 
-		// Fill the fifo queue with bytes
-		c = UART_TX_FIFO_SIZE;
-		while ((i < length) && (c > 0)) {
-			Serial_Put_Byte(port, data[i]);
-			i++;
-			c--;
-		}
-	}
-	// Return the amount of bytes that were sent
-	return i;
+        // Fill the fifo queue with bytes
+        c = UART_TX_FIFO_SIZE;
+        while ((i < length) && (c > 0)) {
+            Serial_Put_Byte(port, data[i]);
+            i++;
+            c--;
+        }
+    }
+    // Return the amount of bytes that were sent
+    return i;
 }
 
 void UART0_IRQ_Handler() {
@@ -321,6 +321,6 @@ void UART3_IRQ_Handler() {
 }
 
 void Serial_Attach(Serial_t port, void (*function)(void), SerialIRQType type) {
-	port.uart->IER |= type;	
+    port.uart->IER |= type;
 }
 

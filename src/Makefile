@@ -88,9 +88,12 @@ clean:
 
 indent:
 	astyle --indent-classes --indent-cases --indent-preprocessor \
-		--pad-oper --pad-header --unpad-paren --keep-one-line-statements \
-		--convert-tabs --indent=spaces=4 --brackets=attach \
+		--pad-oper --pad-header --unpad-paren --convert-tabs \
+		--keep-one-line-statements --indent=spaces=4 --brackets=attach \
 		--align-pointer=name --mode=c --lineend=linux --suffix=none \
-		--recursive '*.c' --recursive '*.cpp' --recursive '*.h'
+		--recursive '*.c' --recursive '*.cpp' 
+	astyle --pad-oper --pad-header --unpad-paren --convert-tabs \
+		--indent=spaces=4 --align-pointer=name --mode=c \
+		--lineend=linux --suffix=none --recursive '*.h'
 
 .PHONY: indent

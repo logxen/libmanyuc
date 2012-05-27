@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -25,37 +25,37 @@
 
 /** The pin class represents an extenal pin in the board,
  *  it can be used as input or output.
- * 
+ *
  *  @author Margarita Manterola
  *  @date May 2012
  */
 
 class Pin {
-	private:
-		Pin_t pin;
-	public:
-		/** Pin Constructor.
-		 *  @param pin_name the board name for the pin.
-         *  @param mode the mode to use for the pin. 
-		 *         Output is the default mode. 
-         *         Other modes depend on the microcontroller.
-         */
-		Pin(PinName pin_name, PinMode mode=Output);
+private:
+    Pin_t pin;
+public:
+    /** Pin Constructor.
+     *  @param pin_name the board name for the pin.
+     *  @param mode the mode to use for the pin.
+     *         Output is the default mode.
+     *         Other modes depend on the microcontroller.
+     */
+    Pin(PinName pin_name, PinMode mode = Output);
 
-		/** Returns the current value set in the pin. */
-		int read();
+    /** Returns the current value set in the pin. */
+    int read();
 
-		/** Writes a value for the pin. */
-		void write(int value);
+    /** Writes a value for the pin. */
+    void write(int value);
 
-		/** Sets the operation mode for the pin. */
-		void mode(PinMode mode);
+    /** Sets the operation mode for the pin. */
+    void mode(PinMode mode);
 
-		/** Shorthand for write, sets the value to the pin. */
-		Pin& operator= (int value);
+    /** Shorthand for write, sets the value to the pin. */
+    Pin &operator= (int value);
 
-		/** Shorthand for read, returns the value of the pin. */
-		operator int();
+    /** Shorthand for read, returns the value of the pin. */
+    operator int();
 };
 
 #endif

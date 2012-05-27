@@ -14,48 +14,48 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
 #include "libmanyuc.h"
 
 Pin::Pin(PinName pin_name, PinMode mode) {
-	this->pin = Pin_Get(pin_name);
-	this->mode(mode);
+    this->pin = Pin_Get(pin_name);
+    this->mode(mode);
 }
 
 // TODO: ver tema de inlines
 
-int Pin::read(){
-	return Pin_Read(this->pin);	
+int Pin::read() {
+    return Pin_Read(this->pin);
 }
 
 void Pin::write(int value) {
-	if (value) {
-		Pin_On(this->pin);
-	} else {
-		Pin_Off(this->pin);
-	}
+    if (value) {
+        Pin_On(this->pin);
+    } else {
+        Pin_Off(this->pin);
+    }
 }
 
 void Pin::mode(PinMode mode) {
-	switch (mode) {
-		case Output:
-			Pin_Output(this->pin);
-			break;
-		default:
-			Pin_Input(this->pin);
-			Pin_Mode(this->pin, mode);
-	}
+    switch (mode) {
+    case Output:
+        Pin_Output(this->pin);
+        break;
+    default:
+        Pin_Input(this->pin);
+        Pin_Mode(this->pin, mode);
+    }
 }
 
-Pin& Pin::operator= (int value) {
-	this->write(value);
-	return *this;
+Pin &Pin::operator= (int value) {
+    this->write(value);
+    return *this;
 }
 
 Pin::operator int() {
-	return this->read();
+    return this->read();
 }
 

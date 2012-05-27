@@ -1,11 +1,11 @@
 
 #include "board.h"
 
-IO_TypeDef* GIO;
+IO_TypeDef *GIO;
 
 void init() {
 
-	GIO = malloc(sizeof(IO_TypeDef));
+    GIO = malloc(sizeof(IO_TypeDef));
 }
 
 void Delay(uint32_t ms) {

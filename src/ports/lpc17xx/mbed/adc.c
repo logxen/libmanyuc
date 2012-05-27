@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -28,7 +28,7 @@ const static uint32_t names[] = { ADC0, ADC1, ADC2, ADC3, ADC4, ADC5, ADC6, ADC7
 #define ADC_AMOUNT          8
 
 // Power Register
-#define ADC_POWER_BITMASK  ((uint32_t) 1 << 12) 
+#define ADC_POWER_BITMASK  ((uint32_t) 1 << 12)
 
 // Control Register
 #define ADC_CR_CH_SEL(n)    ((1 << n))  // Selects each channel
@@ -56,59 +56,59 @@ const static uint32_t names[] = { ADC0, ADC1, ADC2, ADC3, ADC4, ADC5, ADC6, ADC7
 // Initializes de ADC.  To be used only once.
 void ADC_Init() {
 
-	// Power up ADC
-	LPC_SC->PCONP |= ADC_POWER_BITMASK;
+    // Power up ADC
+    LPC_SC->PCONP |= ADC_POWER_BITMASK;
 
-	// Reset the Control Register
+    // Reset the Control Register
     // This sets:
-	// * all selections to 0
-	// * the clock divider to 1.
-	// * the power bit to 1.
-	LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
+    // * all selections to 0
+    // * the clock divider to 1.
+    // * the power bit to 1.
+    LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
 }
 
 uint32_t AnalogIn_Get(PinName pin_name) {
 
-	Serial_t port = Serial_Get(0);
+    Serial_t port = Serial_Get(0);
 
-	// Check if the global initialization is needed.
-	if (! ( LPC_SC->PCONP & ADC_POWER_BITMASK) ) {
-		ADC_Init();
-	}
+    // Check if the global initialization is needed.
+    if (!(LPC_SC->PCONP & ADC_POWER_BITMASK)) {
+        ADC_Init();
+    }
 
-	// Find out the id number of the pin.
-	// TODO: is there a better way of doing this?
-	int id = 0;
-	for (; id < ADC_AMOUNT; id++) {
-		if (names[id] == pin_name) break;
-	}	
-	
-	// Set the pin bit function
-	Pin_t pin = Pin_Get(pin_name);
-	Pin_Input(pin);
-	Pin_Mode(pin, PullNone);
-	Pin_Mode(pin, modes[id]);
+    // Find out the id number of the pin.
+    // TODO: is there a better way of doing this?
+    int id = 0;
+    for (; id < ADC_AMOUNT; id++) {
+        if (names[id] == pin_name) break;
+    }
 
-	return id;
+    // Set the pin bit function
+    Pin_t pin = Pin_Get(pin_name);
+    Pin_Input(pin);
+    Pin_Mode(pin, PullNone);
+    Pin_Mode(pin, modes[id]);
+
+    return id;
 }
 
 uint16_t AnalogIn_Read(uint32_t channel) {
 
-	// Enable the ADC channel in the ADC Control Register
-	LPC_ADC->ADCR &= ~(0xFF);
-	LPC_ADC->ADCR |= ADC_CR_CH_SEL(channel);
+    // Enable the ADC channel in the ADC Control Register
+    LPC_ADC->ADCR &= ~(0xFF);
+    LPC_ADC->ADCR |= ADC_CR_CH_SEL(channel);
 
-	LPC_ADC->ADCR |= ADC_CR_START_NOW;
-	// Wait until the result is here
-	while (! (LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
+    LPC_ADC->ADCR |= ADC_CR_START_NOW;
+    // Wait until the result is here
+    while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
 
-	uint16_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
+    uint16_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
 
-	// Disable the channel
-	LPC_ADC->ADCR &= ~(ADC_CR_CH_SEL(channel));
-	
-	// Return the result
-	return result;
+    // Disable the channel
+    LPC_ADC->ADCR &= ~(ADC_CR_CH_SEL(channel));
+
+    // Return the result
+    return result;
 }
 
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 
@@ -25,15 +25,15 @@
 extern "C" {
 #endif
 
-typedef void (*timer_int_func)(void);
+    typedef void (*timer_int_func)(void);
 
-typedef struct _scheduler_t Scheduler_t;
+    typedef struct _scheduler_t Scheduler_t;
 
-Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t repeat);
+    Scheduler_t Scheduler_Init(timer_int_func func, uint32_t time_delay, uint8_t repeat);
 
-void wait(float s);
-void wait_ms(int ms);
-void wait_us(int us);
+    void wait(float s);
+    void wait_ms(int ms);
+    void wait_us(int us);
 
 #ifdef __cplusplus
 }

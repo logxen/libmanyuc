@@ -14,24 +14,24 @@
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301 USA
  */
 #include "port.h"
 #include "timers.h"
 
 void wait(float s) {
-	//Delay(200);
-	Delay(s*1000);
+    //Delay(200);
+    Delay(s * 1000);
 }
 
 void wait_ms(int ms) {
-	Delay(ms);
+    Delay(ms);
 }
 
 void wait_us(int us) {
 // TODO: can't do it with delay
-	Delay(0);
+    Delay(0);
 }
 
 
