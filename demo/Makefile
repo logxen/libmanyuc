@@ -1,6 +1,6 @@
 
 # This Makefile builds or cleans all the demos together.
-DEMOS = leds_c leds_cpp buttons_cpp serial_c analogin_c
+DEMOS = ${sort ${dir ${wildcard */}}}
 DEMOCLEAN = $(addsuffix .clean,$(DEMOS))
 
 all: $(DEMOS)
