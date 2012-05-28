@@ -38,7 +38,7 @@
 
 const static uint8_t modes[] = { 0, Alt2, Alt1, Alt3 };
 
-static uint8_t pwm_get_id(PinName pin) {
+static uint8_t pwm_get_id(InternalPinName pin) {
 
     if ((pin == ARM_P1_18) || (pin == ARM_P2_0)) {
         return 1;
@@ -106,7 +106,7 @@ inline void pwm_init() {
 
 PWMPin_t PWMPin_Get(PinName pin_name) {
 
-    PWMPin_t pwm_pin = { pwm_get_id(pin_name) };
+    PWMPin_t pwm_pin = { pwm_get_id( (InternalPinName) pin_name) };
     Pin_t pin = Pin_Get(pin_name);
 
     // Check if pwm has been initialized
