@@ -18,6 +18,8 @@
  * MA 02110-1301 USA
  */
 
+static const uint8_t port_ids[] = { 11, 12, 13 };
+
 // Static inline - Used by other functions
 static inline void _turn_on(uint32_t port, uint32_t mask) {
     PIO[port].PIO_SODR = mask;
@@ -38,6 +40,10 @@ static inline void _set_output(uint32_t port, uint32_t mask) {
 
 static inline void _set_input(uint32_t port, uint32_t mask) {
     PIO[port].PIO_ODR = mask;
+    //PIO[port].PIO_PER = mask;
+    //PIO[port].PIO_IFDR = mask;
+    // TODO: put in a different function
+    PMC->PMC_PCER0 = ( 1 << port_ids[port]);
 }
 
 static __INLINE void _set_input_mode(uint32_t port, 

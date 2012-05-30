@@ -29,6 +29,11 @@ extern "C" {
 
 #include "common.h"
 
+#define LED_ON 0
+#define LED_OFF 1
+#define SW_ON 0
+#define SW_OFF 1
+
 // Names of the Pins
     typedef enum PinName {
 
@@ -74,10 +79,10 @@ extern "C" {
         PA31 = ARM_PA_31,
 
         // Extra pins
-        LED1 = ARM_PA_24,
-        LED2 = ARM_PA_13,
-        LED3 = ARM_PA_14,
-        LED4 = ARM_PA_15,
+        LED1 = ARM_PA_15,
+        LED2 = ARM_PA_14,
+        LED3 = ARM_PA_13,
+        LED4 = ARM_PA_24,
 
         SW1 = ARM_PA_27,
         SW2 = ARM_PA_28,

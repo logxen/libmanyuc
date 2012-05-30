@@ -29,7 +29,6 @@ Pin_t Pin_Get(PinName pin_name) {
 
 // Set pin input mode
 void Pin_Mode(Pin_t pin, PinMode mode) {
-// TODO: lock for concurrency
     _set_input_mode(pin.port, pin.mask, mode);
 }
 

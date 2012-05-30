@@ -31,14 +31,15 @@ int main() {
         Pin(LED3), Pin(LED4)
     };
 
-    Pin buttons[] = { Pin(P20, PullUp), Pin(P19, PullUp) };
+    Pin buttons[] = { Pin(SW1, PullUp), Pin(SW2, PullUp), 
+                        Pin(SW3, PullUp), Pin(SW4,PullUp) };
 
     while (1) {
-        for (int i = 0; i < 2; i++) {
-            if (buttons[i] == 0) {
-                leds[i] = 1;
+        for (int i = 0; i < 4; i++) {
+            if (buttons[i] == SW_ON) {
+                leds[i] = LED_ON;
             } else {
-                leds[i] = 0;
+                leds[i] = LED_OFF;
             }
         }
     }

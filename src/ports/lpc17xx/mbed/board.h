@@ -29,6 +29,12 @@ extern "C" {
 
 #include "common.h"
 
+#define LED_ON 1
+#define LED_OFF 0
+#define SW_ON 0
+#define SW_OFF 1
+
+
 // Names of the Pins
     typedef enum PinName {
 
