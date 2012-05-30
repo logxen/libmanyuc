@@ -168,6 +168,9 @@ void ResetException( void )
     /* Initialize the C library */
     __libc_init_array() ;
 
+    /* Startup systick */
+    SysTick_Config(BOARD_MCK / 1000);
+
     /* Branch to main function */
     main() ;
 

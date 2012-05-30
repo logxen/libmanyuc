@@ -3,7 +3,7 @@
 #  List of the objects files to be compiled/assembled
 PORT_OBJECTS = io.o syscalls.o timers.o board_cstartup_gnu.o board_lowlevel.o ints.o
 PORT_OBJECTS := $(addprefix $(ARCH_COMMON_DIR)/, $(PORT_OBJECTS))
-LSCRIPT=$(ARCH_COMMON_DIR)/sram.ld
+LSCRIPT=$(ARCH_COMMON_DIR)/flash.ld
 
 DEBUG ?= -g
 OPTIMIZATION ?= 0
