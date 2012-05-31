@@ -62,14 +62,12 @@ void ADC_Init() {
     // Reset the Control Register
     // This sets:
     // * all selections to 0
-    // * the clock divider to 1.
+    // * the clock divider to 2 (12.5 MHz).
     // * the power bit to 1.
     LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
 }
 
 uint32_t AnalogIn_Get(PinName pin_name) {
-
-    Serial_t port = Serial_Get(0);
 
     // Check if the global initialization is needed.
     if (!(LPC_SC->PCONP & ADC_POWER_BITMASK)) {
@@ -98,17 +96,29 @@ uint16_t AnalogIn_Read(uint32_t channel) {
     LPC_ADC->ADCR &= ~(0xFF);
     LPC_ADC->ADCR |= ADC_CR_CH_SEL(channel);
 
-    LPC_ADC->ADCR |= ADC_CR_START_NOW;
-    // Wait until the result is here
-    while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
-
-    uint16_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
+    // Get 3 values
+    uint16_t results[3];
+    int i = 0;
+    for (; i < 3; i++) {
+        LPC_ADC->ADCR |= ADC_CR_START_NOW;
+        // Wait until the result is here
+        while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
+        results[i] = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
+    }
 
     // Disable the channel
     LPC_ADC->ADCR &= ~(ADC_CR_CH_SEL(channel));
 
-    // Return the result
-    return result;
+    // Return the median value of the result
+    if (((results[0] > results[1]) && (results[0] < results[2])) || 
+       ((results[0] < results[1]) && (results[0] > results[2]))) {
+        return results[0];
+    } else if (((results[1] > results[0]) && (results[1] < results[2])) ||
+        ((results[1] < results[0]) && (results[1] > results[2]))) {
+        return results[1];
+    } else {
+        return results[2];
+    }
 }
 
 
