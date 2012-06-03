@@ -27,6 +27,7 @@ extern "C" {
 
 #include "port.h"
 #include "hash.h"
+#include "swtimer.h"
 
 #ifdef __cplusplus
 }
