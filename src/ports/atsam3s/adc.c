@@ -63,10 +63,13 @@ const static uint32_t names[] = {
 #define ADC_CDR_GET_RESULT(n)   ((0xFFF & n))
 
 // Initializes de ADC.  To be used only once.
-void ADC_Init() {
+static void ADC_Init() {
 
     // Power up ADC
     PMC->PMC_PCER0 |= ADC_POWER_BITMASK;
+
+    // Reset the controller
+    ADC->ADC_CR = ADC_CR_SWRST;
 
     // Reset the Control Register
     // This sets:
@@ -77,7 +80,8 @@ void ADC_Init() {
     // * The clock divider to 4 (12 MHz).
     // * No analog change
     // * No sequence
-    ADC->ADC_MR = ADC_MR_PRESCAL(1);
+    ADC->ADC_MR = ADC_MR_PRESCAL(1) | ADC_MR_STARTUP(8) | 
+        ADC_MR_TRANSFER(1) | ADC_MR_TRACKTIM(0) | ADC_MR_SETTLING(3);
 }
 
 uint32_t AnalogIn_Get(PinName pin_name) {
@@ -109,12 +113,14 @@ uint16_t AnalogIn_Read(uint32_t channel) {
 
     // Enable the ADC channel in the ADC Control Register
     ADC->ADC_CHER = channel_mask;
+    ADC->ADC_IER = channel_mask;
 
     // Start conversion
     ADC->ADC_CR |= ADC_CR_START;
 
     // Wait until the result is here
     while (!(ADC->ADC_ISR & channel_mask));
+    wait(0.01);
     uint16_t result = ADC_CDR_GET_RESULT(ADC->ADC_CDR[channel]);
 
     // Disable the ADC channel in the ADC Control Register
