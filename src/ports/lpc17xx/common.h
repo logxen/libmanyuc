@@ -168,6 +168,7 @@ extern "C" {
     struct _scheduler_t {
         uint8_t timer_id;
         uint8_t mr_id;
+        uint8_t sw_mr_id;
     };
 
     struct _i2c_t {
