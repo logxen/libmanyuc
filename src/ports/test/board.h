@@ -148,6 +148,11 @@ extern "C" {
         Port_t ports[5];
     };
 
+    struct _i2c_t {
+        uint8_t port;
+        uint8_t address;
+        uint8_t mode;
+    };
 
 #ifdef __cplusplus
 }
