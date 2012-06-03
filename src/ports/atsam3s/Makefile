@@ -1,7 +1,8 @@
 #!/usr/bin/make
 
 #  List of the objects files to be compiled/assembled
-PORT_OBJECTS = io.o syscalls.o timers.o board_cstartup_gnu.o board_lowlevel.o ints.o
+PORT_OBJECTS  = board_lowlevel.o timers.o board_cstartup_gnu.o ints.o
+PORT_OBJECTS += syscalls.o io.o adc.o
 PORT_OBJECTS := $(addprefix $(ARCH_COMMON_DIR)/, $(PORT_OBJECTS))
 LSCRIPT=$(ARCH_COMMON_DIR)/flash.ld
 

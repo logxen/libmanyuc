@@ -52,6 +52,22 @@ extern "C" {
         ARM_PC_26, ARM_PC_27, ARM_PC_28, ARM_PC_29, ARM_PC_30, ARM_PC_31, 
 
         // Internal equivalencies
+        ARM_AD0 = ARM_PA_17,
+        ARM_AD1 = ARM_PA_18,
+        ARM_AD2 = ARM_PA_19,
+        ARM_AD3 = ARM_PA_20,
+        ARM_AD4 = ARM_PB_0,
+        ARM_AD5 = ARM_PB_1,
+        ARM_AD6 = ARM_PB_2,
+        ARM_AD7 = ARM_PB_3,
+        ARM_AD8 = ARM_PA_21,
+        ARM_AD9 = ARM_PA_22,
+        ARM_AD10 = ARM_PC_13,
+        ARM_AD11 = ARM_PC_15,
+        ARM_AD12 = ARM_PC_12,
+        ARM_AD13 = ARM_PC_29,
+        ARM_AD14 = ARM_PC_30,
+
         /*TX_0 = ARM_P0_2,
         RX_0 = ARM_P0_3,
         TX_1 = ARM_P0_10,

@@ -120,31 +120,31 @@ typedef struct {
 
 /** ADC hardware registers */
 typedef struct {
-  __O uint32_t ADC_CR;        /**< (Adc Offset: 0x00) Control Register */
+  __O  uint32_t ADC_CR;        /**< (Adc Offset: 0x00) Control Register */
   __IO uint32_t ADC_MR;        /**< (Adc Offset: 0x04) Mode Register */
   __IO uint32_t ADC_SEQR1;     /**< (Adc Offset: 0x08) Channel Sequence Register 1 */
   __IO uint32_t ADC_SEQR2;     /**< (Adc Offset: 0x0C) Channel Sequence Register 2 */
-  __O uint32_t ADC_CHER;      /**< (Adc Offset: 0x10) Channel Enable Register */
-  __O uint32_t ADC_CHDR;      /**< (Adc Offset: 0x14) Channel Disable Register */
-  __I uint32_t ADC_CHSR;      /**< (Adc Offset: 0x18) Channel Status Register */
+  __O  uint32_t ADC_CHER;      /**< (Adc Offset: 0x10) Channel Enable Register */
+  __O  uint32_t ADC_CHDR;      /**< (Adc Offset: 0x14) Channel Disable Register */
+  __I  uint32_t ADC_CHSR;      /**< (Adc Offset: 0x18) Channel Status Register */
   __IO uint32_t Reserved1[1];
-  __I uint32_t ADC_LCDR;      /**< (Adc Offset: 0x20) Last Converted Data Register */
-  __O uint32_t ADC_IER;       /**< (Adc Offset: 0x24) Interrupt Enable Register */
-  __O uint32_t ADC_IDR;       /**< (Adc Offset: 0x28) Interrupt Disable Register */
-  __I uint32_t ADC_IMR;       /**< (Adc Offset: 0x2C) Interrupt Mask Register */
-  __I uint32_t ADC_ISR;       /**< (Adc Offset: 0x30) Interrupt Status Register */
+  __I  uint32_t ADC_LCDR;      /**< (Adc Offset: 0x20) Last Converted Data Register */
+  __O  uint32_t ADC_IER;       /**< (Adc Offset: 0x24) Interrupt Enable Register */
+  __O  uint32_t ADC_IDR;       /**< (Adc Offset: 0x28) Interrupt Disable Register */
+  __I  uint32_t ADC_IMR;       /**< (Adc Offset: 0x2C) Interrupt Mask Register */
+  __I  uint32_t ADC_ISR;       /**< (Adc Offset: 0x30) Interrupt Status Register */
   __IO uint32_t Reserved2[2];
-  __I uint32_t ADC_OVER;      /**< (Adc Offset: 0x3C) Overrun Status Register */
+  __I  uint32_t ADC_OVER;      /**< (Adc Offset: 0x3C) Overrun Status Register */
   __IO uint32_t ADC_EMR;       /**< (Adc Offset: 0x40) Extended Mode Register */
   __IO uint32_t ADC_CWR;       /**< (Adc Offset: 0x44) Compare Window Register */
   __IO uint32_t ADC_CGR;       /**< (Adc Offset: 0x48) Channel Gain Register */
   __IO uint32_t ADC_COR;       /**< (Adc Offset: 0x4C) Channel Offset Register */
-  __I uint32_t ADC_CDR[16];   /**< (Adc Offset: 0x50) Channel Data Register */
+  __I  uint32_t ADC_CDR[16];   /**< (Adc Offset: 0x50) Channel Data Register */
   __IO uint32_t Reserved3[1];
   __IO uint32_t ADC_ACR;       /**< (Adc Offset: 0x94) Analog Control Register */
   __IO uint32_t Reserved4[19];
   __IO uint32_t ADC_WPMR;      /**< (Adc Offset: 0xE4) Write Protect Mode Register */
-  __I uint32_t ADC_WPSR;      /**< (Adc Offset: 0xE8) Write Protect Status Register */
+  __I  uint32_t ADC_WPSR;      /**< (Adc Offset: 0xE8) Write Protect Status Register */
   __IO uint32_t Reserved5[5];
   __IO uint32_t ADC_RPR;       /**< (Adc Offset: 0x100) Receive Pointer Register */
   __IO uint32_t ADC_RCR;       /**< (Adc Offset: 0x104) Receive Counter Register */
@@ -154,9 +154,9 @@ typedef struct {
   __IO uint32_t ADC_RNCR;      /**< (Adc Offset: 0x114) Receive Next Counter Register */
   __IO uint32_t ADC_TNPR;      /**< (Adc Offset: 0x118) Transmit Next Pointer Register */
   __IO uint32_t ADC_TNCR;      /**< (Adc Offset: 0x11C) Transmit Next Counter Register */
-  __O uint32_t ADC_PTCR;      /**< (Adc Offset: 0x120) Transfer Control Register */
-  __I uint32_t ADC_PTSR;      /**< (Adc Offset: 0x124) Transfer Status Register */
-} ADC;
+  __O  uint32_t ADC_PTCR;      /**< (Adc Offset: 0x120) Transfer Control Register */
+  __I  uint32_t ADC_PTSR;      /**< (Adc Offset: 0x124) Transfer Status Register */
+} Adc;
 
 /** Chipid hardware registers */
 typedef struct {

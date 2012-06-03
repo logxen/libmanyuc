@@ -71,10 +71,10 @@ extern "C" {
         PA18 = ARM_PA_18,
         PA17 = ARM_PA_17,
         
-        AD7 = ARM_PB_3,
-        AD6 = ARM_PB_2,
-        AD5 = ARM_PB_1,
-        AD4 = ARM_PB_0,
+        AD7 = ARM_AD7,
+        AD6 = ARM_AD6,
+        AD5 = ARM_AD5,
+        AD4 = ARM_AD4,
 
         PA31 = ARM_PA_31,
 
