@@ -24,6 +24,11 @@
 
 #define SLOTS 3
 
+uint32_t counter;
+void _inc_counter() {
+	counter++;
+}
+
 TEST_GROUP(SWTimer_t)
 { 
 	SWTimer_t *t;
@@ -31,6 +36,7 @@ TEST_GROUP(SWTimer_t)
 	void setup()
 	{
 		t = SWTimer_Init(SLOTS);
+		counter = 0;
  	}
 	void teardown()
 	{
@@ -125,3 +131,15 @@ TEST(SWTimer_t, TickEach)
 	}
 }
 
+TEST(SWTimer_t, CallHandler)
+{
+	SWTimer_Store(t, _inc_counter, 2, 1);
+	SWTimer_Tick(t, 0);
+	CHECK_EQUAL(1, counter);
+	SWTimer_Tick(t, 0);
+	CHECK_EQUAL(2, counter);
+	SWTimer_Tick(t, 0);
+	CHECK_EQUAL(3, counter);
+	SWTimer_Tick(t, 0);
+	CHECK_EQUAL(4, counter);
+}

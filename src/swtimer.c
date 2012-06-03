@@ -19,6 +19,7 @@
  */
 
 #include "swtimer.h"
+#include "port.h"
 #include <stdlib.h>
 
 struct _scheduled_t {
@@ -148,7 +149,7 @@ uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
     return slot;
 }
 
-void _handle_interrupt(SWTimer_t *timer, uint32_t slot, uint32_t id) {
+static inline void _handle_interrupt(SWTimer_t *timer, uint32_t slot, uint32_t id) {
     if (timer->slots[slot].sch[id].func) {
         timer->slots[slot].sch[id].func();
     }

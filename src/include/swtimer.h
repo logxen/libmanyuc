@@ -49,7 +49,8 @@ SWTimer_t *SWTimer_Init(uint32_t slots);
 uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
                 uint32_t time_delay, uint8_t repeat);
 
-/** Increments the internal time counter.
+/** Increments the internal time counter.  The frequency of calling this
+ * ticker is determined by the the Reload value of the slot.
  * @param timer An initialized software timer.
  * @param slot The slot that has to be incremented.
  */
