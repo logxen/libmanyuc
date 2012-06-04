@@ -44,10 +44,12 @@ SWTimer_t *SWTimer_Init(uint32_t slots);
  * @param func The callback function to call when the time comes.
  * @param time_delay The amount of time to wait until the function is called
  * @param repeat Whether to keep calling or not. 0 means no repeat.
+ * @param mr_id A pointer to an integer where the id of the scheduled task
+ * will be stored.  If NULL is received, no information is stored.
  * @return The slot number where the callback was stored.
  */
 uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
-                uint32_t time_delay, uint8_t repeat);
+                uint32_t time_delay, uint8_t repeat, uint32_t *mr_id);
 
 /** Increments the internal time counter.  The frequency of calling this
  * ticker is determined by the the Reload value of the slot.
@@ -55,6 +57,14 @@ uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
  * @param slot The slot that has to be incremented.
  */
 void SWTimer_Tick(SWTimer_t *timer, uint32_t slot);
+
+/** Increments the internal time counter by value N.  
+ * Useful to call it when modifying the frequency.
+ * @param timer An initialized software timer.
+ * @param slot The slot that has to be incremented.
+ * @param n The amount of ticks to make at the same time.
+ */
+void SWTimer_TickMany(SWTimer_t *timer, uint32_t slot, uint32_t n);
 
 /** Returns the current time counter for the selected slot. 
  * @param timer An initialized software timer.
@@ -83,64 +93,6 @@ uint32_t SWTimer_Get_Length(SWTimer_t *timer, uint32_t slot);
  */
 void SWTimer_Destroy(SWTimer_t *timer);
 
-#ifdef PEPE
-
-/** Stores an element in the timer table.
- * If the key is already present, the data is replaced.
- * @param timer An initialized timer table.
- * @param key A valid key for the timer table.
- * @param data The data to be stored.
- * @return HASH_OK if the value could be stored or HASH_ERROR if there was a problem.
- */
-uint8_t SWTimer_Set(SWTimer_t *timer, const SWTimer_Key_t key, void *data);
-
-/** Fetches an element from the timer table identified by the key. If
- * the key is not present returns NULL, in other cases it returns a
- * pointer to the data.
- * @param timer An initialized timer table.
- * @param key A valid key for the timer table.
- * @return The data associated to the key, or NULL when not found.
- */
-void *SWTimer_Get(SWTimer_t *timer, const SWTimer_Key_t key);
-
-/** Returns the number of elements contained in the timer table.
- * @param timer An initialized timer table.
- * @return The number of elements contained in the timer table.
- */
-size_t SWTimer_Len(SWTimer_t *timer);
-
-/** Destroys the timer table elements. Both the contents and the table
- * get destroyed.
- * @param timer An initialized timer table.
- */
-void SWTimer_Destroy(SWTimer_t *timer);
-
-/** Creates a new iterator for the timer.
- * @param timer An initialized timer table.
- * @return An initialized iterator.
- */
-SWTimer_Iter_t *SWTimer_Iter_Init(SWTimer_t *timer);
-
-/** States whether there is a next item or not.
- * @param iter An initialized timer iterator.
- * @return 0 if there isn't a next item, 1 if there is.
- */
-int SWTimer_Iter_Has_Next(SWTimer_Iter_t *iter);
-
-/** Returns the next available key in the timer. Once this function is
- * called, the current pointer will indicate the next element.
- * @param iter An initialized timer iterator.
- * @return The next key available in the iterator.
- */
-SWTimer_Key_t SWTimer_Iter_Get_Next(SWTimer_Iter_t *iter);
-
-/** Destroys the iterator. Should be called once the iterator is not
- * needed.
- * @param iter An initialized timer iterator.
- */
-void SWTimer_Iter_Destroy(SWTimer_Iter_t *iter);
-
-#endif
 
 #endif 
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

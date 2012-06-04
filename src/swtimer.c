@@ -38,7 +38,7 @@ struct _sw_timer_slot_t {
 };
 
 struct _sw_timer_t {
-    uint32_t  length;
+    uint32_t length;
     struct _sw_timer_slot_t* slots;
 };
 
@@ -115,7 +115,7 @@ static inline void _sch_store (struct _scheduled_t *sch, Timer_Int_Func func,
 
 
 uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
-            uint32_t time_delay, uint8_t repeat) {
+            uint32_t time_delay, uint8_t repeat, uint32_t *mr_id) {
 
     if (time_delay == 0) Show_Error();
 
@@ -146,6 +146,8 @@ uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
     time_delay = time_delay / timer->slots[slot].reload;
     _sch_store(&(timer->slots[slot].sch[id]), func, time_delay, 
         timer->slots[slot].tc, repeat);
+
+    if (mr_id != NULL) *mr_id = id;
     return slot;
 }
 
@@ -159,16 +161,25 @@ static inline void _handle_interrupt(SWTimer_t *timer, uint32_t slot, uint32_t i
     }
 }
 
-void SWTimer_Tick(SWTimer_t *timer, uint32_t slot) {
-    timer->slots[slot].tc++;
+static inline void _check_interrupts(SWTimer_t *timer, uint32_t slot) {
     uint32_t i;
     for (i = 0; i < timer->slots[slot].length; i++) {
-        if (timer->slots[slot].tc == timer->slots[slot].sch[i].expect) {
+        if (timer->slots[slot].tc >= timer->slots[slot].sch[i].expect) {
             _handle_interrupt(timer, slot, i);
         }
     }
 }
 
+void SWTimer_Tick(SWTimer_t *timer, uint32_t slot) {
+    timer->slots[slot].tc++;
+    _check_interrupts(timer, slot);
+}
+
+void SWTimer_TickMany(SWTimer_t *timer, uint32_t slot, uint32_t n) {
+    timer->slots[slot].tc+=n;
+    _check_interrupts(timer, slot);
+}
+ 
 uint32_t SWTimer_Get_TC(SWTimer_t *timer, uint32_t slot) {
     return timer->slots[slot].tc;
 }
