@@ -33,6 +33,8 @@ extern "C" {
 #endif
 
 #include <stdarg.h>
+#include <stdint.h>
+#include "board.h"
 
     /** Opaque structure to hold I2C device
      *  The data contained in the structure depends on the

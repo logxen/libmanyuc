@@ -21,17 +21,15 @@
 #include "timers.h"
 
 void wait(float s) {
-    //Delay(200);
     Delay(s * 1000);
 }
 
-void wait_ms(int ms) {
+void wait_ms(uint32_t ms) {
     Delay(ms);
 }
 
-void wait_us(int us) {
-// TODO: can't do it with delay
-    Delay(0);
+void wait_us(uint32_t us) {
+    Delay_us(us);
 }
 
 

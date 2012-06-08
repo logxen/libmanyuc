@@ -18,7 +18,8 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
+#include "i2c.h"
+#include "io.h"
 
 #define I2C_I2CONSET_AA             ((0x04)) // Assert acknowledge flag
 #define I2C_I2CONSET_SI             ((0x08)) // I2C interrupt flag
@@ -101,7 +102,6 @@ static inline void _send_address(uint8_t port, uint8_t address, uint8_t read) {
 }
 
 I2C_t I2C_Init(uint8_t port, uint8_t address, I2CMode mode) {
-    Serial_t p = Serial_Get(0);
     if (port > 2) Show_Error();
 
     Pin_t sda = Pin_Get(sdas[port]);

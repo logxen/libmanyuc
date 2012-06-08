@@ -33,6 +33,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "board.h"
 
     /** Opaque structure to represent the serial port.
      *  The data contained in the structure depends on the

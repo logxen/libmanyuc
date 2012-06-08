@@ -171,6 +171,7 @@ extern "C" {
         uint32_t sw_mr_id;
     };
 
+// I2C structure
     struct _i2c_t {
         uint8_t port;
         uint8_t address;

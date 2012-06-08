@@ -18,7 +18,8 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
+#include "timers.h"
+#include "board.h"
 #include "swtimer.h"
 #include <stdlib.h>
 
@@ -41,7 +42,7 @@
 
 // Scheduled function prototype
 typedef struct _timer_sch_t {
-    Timer_Int_Func func;
+    Int_Func func;
     uint32_t reload;
     uint8_t active;
     uint8_t used;
@@ -115,7 +116,7 @@ static inline void _sch_timers_init(uint8_t timer_id) {
     _timer_init(timer_id);
 }
 
-void _timer_sch_store (timer_sch_t *timer_sch, Timer_Int_Func func, 
+void _timer_sch_store (timer_sch_t *timer_sch, Int_Func func, 
     uint32_t time_delay, uint8_t repeat) {
     timer_sch->func = func;
     timer_sch->active = 1;
@@ -124,7 +125,7 @@ void _timer_sch_store (timer_sch_t *timer_sch, Timer_Int_Func func,
 }
 
 // Create a scheduler
-Scheduler_t Scheduler_Init(Timer_Int_Func func, uint32_t time_delay, 
+Scheduler_t Scheduler_Init(Int_Func func, uint32_t time_delay, 
         uint8_t repeat) {
 
     uint32_t timer_id = 0;
@@ -195,12 +196,12 @@ static inline void timer_sch_handle_int(uint8_t timer_id, uint8_t sw) {
         mr_id++;
     
         // Check to avoid missing interrupts - NOT WORKING
-        if (!ints) {
+/*        if (!ints) {
             ints = (0xF) & _timers[timer_id]->IR;
             _timers[timer_id]->IR = 0xF;
             NVIC->ICPR[0] = (uint32_t)(1 << (timer_id + 1));
             mr_id = 0;
-        }
+        }*/
     }
 }
 
@@ -261,4 +262,26 @@ void TIMER2_IRQHandler() {
 void TIMER3_IRQHandler() {
     hw_timer_sch_handle_int(3);
 }
+
+
+// SysTick Handler
+volatile uint32_t msTicks;      /* counts 1ms timeTicks */
+void SysTick_Handler(void) {
+    msTicks++;          /* increment counter necessary in Delay() */
+}
+
+// Delays number of tick Systicks (happens every 1 ms)
+__INLINE void Delay(uint32_t dlyTicks) {
+    uint32_t curTicks;
+    curTicks = msTicks;
+    while ((msTicks - curTicks) < dlyTicks);
+}
+
+// Delays in microseconds using timer 3.
+__INLINE void Delay_us(uint32_t dly_us) {
+    uint32_t cur_us = _timers[3]->TC;
+    while ((_timers[3]->TC - cur_us) < dly_us);
+}
+
+
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

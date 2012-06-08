@@ -21,6 +21,7 @@
 #ifndef _SWTIMER_H
 #define _SWTIMER_H
 
+#include "port.h"
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -29,9 +30,6 @@ typedef struct _sw_timer_t SWTimer_t;
 
 /** Opaque structure used to store scheduled tasks.  */
 typedef struct _scheduled_t Scheduled_t;
-
-/** Interrupt function prototype */
-typedef void (*Timer_Int_Func)(void);
 
 /** Initializes the software controlled timer.
  * @param slots the number of slots into which the timer should be divided.
@@ -48,7 +46,7 @@ SWTimer_t *SWTimer_Init(uint32_t slots);
  * will be stored.  If NULL is received, no information is stored.
  * @return The slot number where the callback was stored.
  */
-uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
+uint32_t SWTimer_Store(SWTimer_t *timer, Int_Func func,
                 uint32_t time_delay, uint8_t repeat, uint32_t *mr_id);
 
 /** Increments the internal time counter.  The frequency of calling this

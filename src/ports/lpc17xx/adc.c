@@ -18,7 +18,8 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
+#include "adc.h"
+#include "io.h"
 
 // To select the ADC Modes
 const static int modes[] = { Alt1, Alt1, Alt1, Alt1, Alt3, Alt3, Alt2, Alt2 };
@@ -46,12 +47,10 @@ const static uint32_t names[] = { ADC0, ADC1, ADC2, ADC3, ADC4, ADC5, ADC6, ADC7
 #define ADC_CR_START_MAT11  ((7 <<24))
 #define ADC_CR_EDGE         ((1 <<27))  // Selects the start edge
 
-
 // ADC Data Registers
 #define ADC_DR_GET_RESULT(n)    (((n>>4)&0xFFF)) // Returns the result
 #define ADC_DR_OVERRUN_FLAG     ((1 <<30))       // overrun flag
 #define ADC_DR_DONE_FLAG        ((1 <<31))       // done flag
-
 
 // Initializes de ADC.  To be used only once.
 void ADC_Init() {

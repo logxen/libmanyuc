@@ -18,9 +18,7 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
-#include "board.h"
-
+#include "serial.h"
 
 // Port tables
 

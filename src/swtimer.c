@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 struct _scheduled_t {
-    Timer_Int_Func func;
+    Int_Func func;
     uint32_t expect;
     uint32_t reload;
     uint8_t active;
@@ -104,7 +104,7 @@ static inline uint32_t _gcd(uint32_t a, uint32_t b) {
     return a;
 }
 
-static inline void _sch_store (struct _scheduled_t *sch, Timer_Int_Func func,
+static inline void _sch_store (struct _scheduled_t *sch, Int_Func func,
     uint32_t time_delay, uint32_t tc, uint8_t repeat) {
     sch->func = func;
     sch->active = 1;
@@ -114,7 +114,7 @@ static inline void _sch_store (struct _scheduled_t *sch, Timer_Int_Func func,
 }
 
 
-uint32_t SWTimer_Store(SWTimer_t *timer, Timer_Int_Func func,
+uint32_t SWTimer_Store(SWTimer_t *timer, Int_Func func,
             uint32_t time_delay, uint8_t repeat, uint32_t *mr_id) {
 
     if (time_delay == 0) Show_Error();

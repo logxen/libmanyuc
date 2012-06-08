@@ -18,7 +18,8 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
+#include "pwm.h"
+#include "io.h"
 
 // Power register
 #define PWM_POWER_BITMASK  ((uint32_t) 1 << 1)

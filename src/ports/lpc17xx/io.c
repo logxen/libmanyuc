@@ -18,8 +18,7 @@
  * MA 02110-1301 USA
  */
 
-#include "port.h"
-#include "board.h"
+#include "io.h"
 
 /* Convert the pin name to a pin struct. */
 Pin_t Pin_Get(PinName pin_name) {
@@ -186,7 +185,6 @@ uint32_t io_interrupt_enable[4];
 #include "hash.h"
 
 Hash_t *io_interrupt_table = NULL;
-typedef void (*io_int_func)(void);
 
 // Returns the corresponding byte identification for the pin
 // address, port, and interrupt mode
@@ -201,13 +199,13 @@ uint8_t port, uint8_t mode) {
 // Call both handlers (if apropriate) and clear the interrupts
 static inline void io_interrupt_call_handlers(uint32_t *states, uint8_t id, uint8_t port_mask) {
     uint32_t mask = (1 << id);
-    io_int_func f = NULL;
+    Int_Func f = NULL;
     if (states[0] & mask) {
-        f = (io_int_func) Hash_Get(io_interrupt_table, id + port_mask);
+        f = (Int_Func) Hash_Get(io_interrupt_table, id + port_mask);
         if (f != NULL) f();
     }
     if (states[1] & mask) {
-        f = (io_int_func) Hash_Get(io_interrupt_table, id + port_mask + 64);
+        f = (Int_Func) Hash_Get(io_interrupt_table, id + port_mask + 64);
         if (f != NULL) f();
     }
     states[2] |= mask;

@@ -25,15 +25,8 @@
 extern "C" {
 #endif
 
-#include "board.h"
-#include <stdint.h>
-
+    typedef void (*Int_Func)(void);
     void init();
-
-#include "io.h"
-#include "serial.h"
-#include "timers.h"
-#include "i2c.h"
 
 #ifdef __cplusplus
 }

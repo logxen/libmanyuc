@@ -25,7 +25,20 @@
 extern "C" {
 #endif
 
+// Definitions
+//#include <stdint.h>
+//#include "board.h"
 #include "port.h"
+
+// Port specific functions
+#include "io.h"
+#include "adc.h"
+#include "pwm.h"
+#include "serial.h"
+#include "timers.h"
+#include "i2c.h"
+
+// Arch independent functions
 #include "hash.h"
 #include "swtimer.h"
 
