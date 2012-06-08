@@ -209,6 +209,7 @@ static inline void hw_timer_sch_handle_int(uint8_t timer_id) {
 
     // Get the current TC and the int vector for this timer
     uint32_t current_tc = _timers[timer_id]->TC;
+    uint32_t ints = (0xF) & _timers[timer_id]->IR;
 
     // Clear current interrupts and timer interrupt
     _timers[timer_id]->IR = 0xF;
@@ -217,7 +218,8 @@ static inline void hw_timer_sch_handle_int(uint8_t timer_id) {
     uint8_t mr_id = 0;
     for (mr_id = 0; mr_id < HW_TIMER_MR_AMOUNT; mr_id++) {
         timer_sch_t sch = _sch_timers[timer_id][mr_id];
-        if (sch.active && _timers[timer_id]->MR[mr_id] <= current_tc) {
+        if ((ints & 1 << mr_id) || 
+            (sch.active && _timers[timer_id]->MR[mr_id] <= current_tc)) {
             if (sch.reload) {
                 _timers[timer_id]->MR[mr_id] = current_tc + sch.reload;
             } else {
