@@ -120,7 +120,6 @@ uint16_t AnalogIn_Read(uint32_t channel) {
 
     // Wait until the result is here
     while (!(ADC->ADC_ISR & channel_mask));
-    wait(0.01);
     uint16_t result = ADC_CDR_GET_RESULT(ADC->ADC_CDR[channel]);
 
     // Disable the ADC channel in the ADC Control Register
