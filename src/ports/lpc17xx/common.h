@@ -127,6 +127,11 @@ extern "C" {
         TX_INT = 1,
     } SerialIRQType;
 
+    typedef enum AnalogInMode {
+        ADC_NORMAL = 0,
+        ADC_MEDIAN = 1,
+    } AnalogInMode;
+
 // **********
 // Structures
 // **********
@@ -176,6 +181,11 @@ extern "C" {
         uint8_t port;
         uint8_t address;
         uint8_t mode;
+    };
+
+// AnalogIn structure
+    struct _analog_in_t {
+        uint8_t channel;
     };
 
 #include "inline.c"

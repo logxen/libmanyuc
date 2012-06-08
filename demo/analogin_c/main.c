@@ -34,8 +34,8 @@ int main(void) {
     char cadena[10];
 #endif
 
-    uint32_t p = AnalogIn_Get(ADC4);
-    uint32_t q = AnalogIn_Get(ADC3);
+    AnalogIn_t p = AnalogIn_Init(ADC4);
+    AnalogIn_t q = AnalogIn_Init(ADC3);
 
     Pin_t sensor1 = Pin_Get(P9);
     Pin_t sensor2 = Pin_Get(P10);
@@ -52,13 +52,7 @@ int main(void) {
     Pin_On(sensor2);
 
     while (1) {
-        uint16_t s1 = AnalogIn_Read(p);
-
-#ifdef DEBUG
-        // Send the value through the serial port
-        snprintf(cadena, 10, "%d\r\n", s1);
-        Serial_Put_Bytes(port, cadena, 6, BLOCKING);
-#endif
+        uint32_t s1 = AnalogIn_Read(p, ADC_NORMAL);
 
         // Turn light on
         if (s1 < 2000) {
@@ -67,13 +61,16 @@ int main(void) {
             Pin_Off(light1);
         }
 
-        wait(0.001);
-        uint16_t s2 = AnalogIn_Read(q);
+        //wait(0.001);
+        uint32_t s2 = AnalogIn_Read(q, ADC_NORMAL);
 
 #ifdef DEBUG
         // Send the value through the serial port
-        snprintf(cadena, 10, "%d\r\n", s2);
-        Serial_Put_Bytes(port, cadena, 6, BLOCKING);
+        snprintf(cadena, 10, "1: %d\r\n", s1);
+        Serial_Put_Bytes(port, cadena, 9, BLOCKING);
+        // Send the value through the serial port
+        snprintf(cadena, 10, "2: %d\r\n", s2);
+        Serial_Put_Bytes(port, cadena, 9, BLOCKING);
 #endif
 
         if (s2 < 2000) {

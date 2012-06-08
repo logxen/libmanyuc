@@ -66,35 +66,52 @@ void ADC_Init() {
     LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
 }
 
-uint32_t AnalogIn_Get(PinName pin_name) {
+AnalogIn_t AnalogIn_Init(PinName pin_name) {
 
     // Check if the global initialization is needed.
     if (!(LPC_SC->PCONP & ADC_POWER_BITMASK)) {
         ADC_Init();
     }
 
+    AnalogIn_t analog_in = AnalogIn_Get(pin_name);
+ 
+    // Set the pin bit function
+    Pin_t pin = Pin_Get(pin_name);
+    Pin_Input(pin);
+    Pin_Mode(pin, PullNone);
+    Pin_Mode(pin, modes[analog_in.channel]);
+
+    return analog_in;
+}
+
+AnalogIn_t AnalogIn_Get(PinName pin_name) {
     // Find out the id number of the pin.
     // TODO: is there a better way of doing this?
     int id = 0;
     for (; id < ADC_AMOUNT; id++) {
         if (names[id] == pin_name) break;
     }
-
-    // Set the pin bit function
-    Pin_t pin = Pin_Get(pin_name);
-    Pin_Input(pin);
-    Pin_Mode(pin, PullNone);
-    Pin_Mode(pin, modes[id]);
-
-    return id;
+    AnalogIn_t analog_in = { id };
+    return analog_in;
 }
 
-uint16_t AnalogIn_Read(uint32_t channel) {
 
+void static inline _analog_in_enable_channel(uint8_t channel) {
     // Enable the ADC channel in the ADC Control Register
     LPC_ADC->ADCR &= ~(0xFF);
     LPC_ADC->ADCR |= ADC_CR_CH_SEL(channel);
+}
 
+// Read one value and return it
+uint32_t static inline _analog_in_read_one(uint8_t channel) {
+    uint16_t result;
+    LPC_ADC->ADCR |= ADC_CR_START_NOW;
+    while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
+    return ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
+}
+
+// Read three values and return the median
+uint32_t static inline _analog_in_read_three(uint8_t channel) {
     // Get 3 values
     uint16_t results[3];
     int i = 0;
@@ -104,10 +121,6 @@ uint16_t AnalogIn_Read(uint32_t channel) {
         while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
         results[i] = ADC_DR_GET_RESULT(LPC_ADC->ADDR[channel]);
     }
-
-    // Disable the channel
-    LPC_ADC->ADCR &= ~(ADC_CR_CH_SEL(channel));
-
     // Return the median value of the result
     if (((results[0] > results[1]) && (results[0] < results[2])) || 
        ((results[0] < results[1]) && (results[0] > results[2]))) {
@@ -118,6 +131,37 @@ uint16_t AnalogIn_Read(uint32_t channel) {
     } else {
         return results[2];
     }
+}
+
+uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
+    _analog_in_enable_channel(pin.channel);
+    if (mode == ADC_NORMAL) {
+        return _analog_in_read_one(pin.channel);
+    } else {
+        return _analog_in_read_three(pin.channel);
+    }
+}
+
+static ADC_Int_Func _analog_in_func = 0;
+static uint8_t _analog_in_channel;
+void AnalogIn_Attach(AnalogIn_t pin, AnalogInMode mode, ADC_Int_Func func) {
+    // Store function
+    _analog_in_func = func;
+    _analog_in_channel = pin.channel;
+    // Enable channel
+    _analog_in_enable_channel(pin.channel);
+    // Enable channel interrupt
+    LPC_ADC->ADINTEN = ADC_CR_CH_SEL(pin.channel);
+    // Start reading
+    LPC_ADC->ADCR |= ADC_CR_START_NOW;
+}
+
+void ADC_IRQHandler(void) {
+    uint32_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[_analog_in_channel]);
+    if (_analog_in_func) {
+        _analog_in_func(result);
+    }
+    _analog_in_func = 0;
 }
 
 
