@@ -60,8 +60,9 @@ void ADC_Init() {
     // * the power bit to 1.
     LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
 
-    // Enable ADC interrupts
+    // Enable ADC interrupts, but disable all done flags
     NVIC->ISER[0] = ADC_NVIC_BITMASK;
+    LPC_ADC->ADINTEN = 0;
 
 }
 
