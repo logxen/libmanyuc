@@ -25,8 +25,9 @@
 extern "C" {
 #endif
 
-#include "port.h"
 #include <stdint.h>
+#include "port.h"
+#include "board.h"
 
     typedef struct _scheduler_t Scheduler_t;
 
@@ -35,9 +36,22 @@ extern "C" {
     void Delay(uint32_t dlyTicks);
     void Delay_us(uint32_t dlyTicks);
 
-    void wait(float s);
-    void wait_ms(uint32_t ms);
-    void wait_us(uint32_t us);
+    /** Does nothing, for the amount of microseconds specified. 
+     *  @param us amount of microseconds to wait.
+     */
+    void Delay_us(uint32_t us);
+
+    /** Does nothing, for the amount of milliseconds specified. 
+     *  @param ms amount of milliseconds to wait.
+     */
+    void Delay_ms(uint32_t ms);
+
+    /** Does nothing, for the amount of seconds specified. 
+     *  @param s amount of seconds to wait.
+     */
+    static inline void Delay(float s) {
+        Delay_ms(s * 1000);
+    }
 
 #ifdef __cplusplus
 }

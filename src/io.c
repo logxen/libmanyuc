@@ -119,13 +119,13 @@ void Show_Error() {
             l = (j % 2) ? 3 : 1;
             for (i = 0; i < 3; i++) {
                 PinBus_On(leds);
-                wait(0.15 * l);
+                Delay(0.15 * l);
                 PinBus_Off(leds);
-                wait(0.2);
+                Delay(0.2);
             }
-            wait(0.2);
+            Delay(0.2);
         }
-        wait(1);
+        Delay(1);
     }
 }
 

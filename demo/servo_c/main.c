@@ -34,7 +34,7 @@ float turn_left(PWMPin_t servo, float duty) {
     while (duty < stop_left) {
         PWMPin_Set_Duty_Cycle(servo, duty);
         duty += change_rate;
-        wait_ms(pause_ms);
+        Delay_ms(pause_ms);
     }
     return duty;
 }
@@ -43,7 +43,7 @@ float turn_right(PWMPin_t servo, float duty) {
     while (duty > stop_right) {
         PWMPin_Set_Duty_Cycle(servo, duty);
         duty -= change_rate;
-        wait_ms(pause_ms);
+        Delay_ms(pause_ms);
     }
     return duty;
 }

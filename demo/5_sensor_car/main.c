@@ -96,11 +96,11 @@ int main(void) {
 
 /*      for (i = 0; i < nleds; i++) {
             Pin_On(leds[i]);
-            wait(0.2);
+            Delay(0.2);
         }
         for (i = 0; i < nleds; i++) {
             Pin_Off(leds[i]);
-            wait(0.2);
+            Delay(0.2);
         }*/
     }
 }

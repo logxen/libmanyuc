@@ -59,7 +59,7 @@ int main() {
     while (1) {
         acer.get10BitVector(vect);
         show_angle(leds, vect[1]);
-        wait(0.3);
+        Delay(0.3);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

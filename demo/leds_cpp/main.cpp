@@ -37,7 +37,7 @@ int main() {
     while (1) {
         for (int i = 0; i < 4; i++) {
             leds[i] = 1;
-            wait(0.2);
+            Delay(0.2);
             leds[i] = 0;
         }
     }

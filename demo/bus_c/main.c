@@ -32,7 +32,7 @@ int main(void) {
     // Show a binary combination of leds
     while (1) {
         Bus_Write(leds, i);
-        wait(0.5);
+        Delay(0.5);
         i++;
     }
 }

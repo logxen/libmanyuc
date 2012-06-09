@@ -117,7 +117,7 @@ int main(void) {
     s = Scheduler_Init(toggle_pin_15, 25, 1);
 
     // Small pause to sync.
-    wait(0.001);
+    Delay_ms(1);
 
     // Blink at different rates
     Scheduler_t s1 = Scheduler_Init(count0, 1000000, 1);

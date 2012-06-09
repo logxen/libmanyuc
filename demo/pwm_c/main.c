@@ -49,7 +49,7 @@ int main(void) {
             duty[i] += change[i];
             PWMPin_Set_Duty_Cycle(pwm_leds[i], duty[i]);
         }
-        wait(0.0625);
+        Delay(0.0625);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

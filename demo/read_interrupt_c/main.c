@@ -46,7 +46,7 @@ int main(void) {
     // Show a binary combination of leds
     while (1) {
         // Do nothing
-        wait(1);
+        Delay(1);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

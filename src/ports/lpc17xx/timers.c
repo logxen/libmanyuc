@@ -273,16 +273,16 @@ void SysTick_Handler(void) {
 }
 
 // Delays number of tick Systicks (happens every 1 ms)
-__INLINE void Delay(uint32_t dlyTicks) {
+void Delay_ms(uint32_t ms) {
     uint32_t curTicks;
     curTicks = msTicks;
-    while ((msTicks - curTicks) < dlyTicks);
+    while ((msTicks - curTicks) < ms);
 }
 
 // Delays in microseconds using timer 3.
-__INLINE void Delay_us(uint32_t dly_us) {
+void Delay_us(uint32_t us) {
     uint32_t cur_us = _timers[3]->TC;
-    while ((_timers[3]->TC - cur_us) < dly_us);
+    while ((_timers[3]->TC - cur_us) < us);
 }
 
 

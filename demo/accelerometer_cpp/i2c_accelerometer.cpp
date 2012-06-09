@@ -68,7 +68,7 @@ Pin led1(LED2);
         this->i2c.write(addr, reg, 3);
         reg[0] = 0x14; reg[1] = Zcal_L; reg[2] = Zcal_H;
         this->i2c.write(addr, reg, 3);
-        wait(0.008);
+        Delay(0.008);
         led1 = !led1;
     }
     //t.stop();
@@ -91,7 +91,7 @@ uint8_t Accelerometer::check() {
     uint8_t data, reg;
     reg = 0x16;
     this->i2c.write(addr, reg);
-    wait(0.01);
+    Delay(0.01);
     return this->i2c.read(addr);
 }
 
@@ -99,13 +99,13 @@ Accelerometer::Accelerometer(uint8_t port): i2c(port) {
 Pin led1(LED2);
     led1 = 1;
     this->i2c.frequency(100000); //freq de i2c 100KHz
-    wait(0.02); // El acelerometro tarda 20ms en arrancar
+    Delay(0.02); // El acelerometro tarda 20ms en arrancar
     setup(); // se inicializa el acelerometro
     int respuesta = check(); // Para ver si se configuro hay que leer el registro 16.
     if (respuesta != 0x05) {
         while (1) {
             led1 = !led1;
-            wait(0.5); // Si falla se queda blinkeando el led
+            Delay(0.5); // Si falla se queda blinkeando el led
         }
     }
     calibrate();
@@ -116,7 +116,7 @@ uint8_t Accelerometer::readAccel8(uint8_t registro) {
     uint8_t data, reg;
     reg = registro;
     this->i2c.write(addr, &reg, 1);
-    wait(0.004);
+    Delay(0.004);
     this->i2c.read(addr, &data, 1);
     return data;
 }
@@ -125,7 +125,7 @@ int Accelerometer::readAccel10(uint8_t lowReg, uint8_t highReg) {
     uint8_t result[2];
     uint8_t reg = lowReg;
     this->i2c.write(addr, reg);
-    wait(0.004);
+    Delay(0.004);
     this->i2c.read(addr, result, 2);
     int salida = (((int)result[1]) << 8) | ((int)result[0]);
     return salida;
