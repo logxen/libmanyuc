@@ -23,9 +23,7 @@
 #include <stdio.h>
 
 /* This example shows the current angle by reading 
- * an accelorometer, and lighting up the leds*/
-
-
+ * an accelorometer, and lighting up the leds. */
 
 void show_angle(Pin* pins, float x) {
 

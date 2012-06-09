@@ -95,8 +95,8 @@ extern "C" {
         OpenDrain = 4, NormalMode = 5,
         // Pin Functions, start at 8
         Primary = 8, Alt1, Alt2, Alt3,
-        // Output Modes
-        Output = 16,
+        // Input/Output Modes
+        Output = 16, Input,
     } PinMode;
 
     typedef enum IOIntMode {

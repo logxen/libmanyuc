@@ -33,19 +33,21 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
     uint32_t port = _get_half_port(pin);
     uint32_t shift = _get_half_mask(pin);
 
-    // Set input type (PullUp, PullDown, PullNone)
     if (mode == Output) {
         Pin_Output(pin);
+    } else if (mode == Input) {
+        Pin_Input(pin);
     } else if (mode < 4) {
+        // Set input type (PullUp, PullDown, PullNone)
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
-        // Set opendrain
     } else if (mode == OpenDrain) {
+        // Set opendrain
         _set_open_drain(pin.port, pin.mask);
     } else if (mode == NormalMode) {
         _set_normal_mode(pin.port, pin.mask);
-        // Set pin primary / secondary / etc function.
     } else {
+        // Set pin primary / secondary / etc function.
         mode -= 8;
         LPC_PINCON->PINSEL[port] &= ~(3 << shift);
         LPC_PINCON->PINSEL[port] |= (mode << shift);

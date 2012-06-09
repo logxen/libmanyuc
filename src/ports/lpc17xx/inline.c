@@ -47,11 +47,11 @@ static inline void _set_input(uint32_t port, uint32_t mask) {
     LPC_GPIO[port].FIODIR &= ~(mask);
 }
 
-static __INLINE void _set_open_drain(uint32_t port, uint32_t mask) {
+static inline void _set_open_drain(uint32_t port, uint32_t mask) {
     LPC_PINCON->PINMODE_OD[port] |= mask;
 }
 
-static __INLINE void _set_normal_mode(uint32_t port, uint32_t mask) {
+static inline void _set_normal_mode(uint32_t port, uint32_t mask) {
     LPC_PINCON->PINMODE_OD[port] &= ~(mask);
 }
 

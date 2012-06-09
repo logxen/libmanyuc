@@ -26,8 +26,6 @@ extern "C" {
 #endif
 
 // Definitions
-//#include <stdint.h>
-//#include "board.h"
 #include "port.h"
 
 // Port specific functions
