@@ -63,35 +63,28 @@ void toggle_pin_15(void) { Pin_Toggle(pins[15]); }
 int main(void) {
 
     // Get all the leds
-    leds[0] = Pin_Get(LED1);
-    leds[1] = Pin_Get(LED2);
-    leds[2] = Pin_Get(LED3);
-    leds[3] = Pin_Get(LED4);
+    leds[0] = Pin_Init(LED1, 1, Output);
+    leds[1] = Pin_Init(LED2, 1, Output);
+    leds[2] = Pin_Init(LED3, 1, Output);
+    leds[3] = Pin_Init(LED4, 1, Output);
 
-    pins[0] = Pin_Get(P5);
-    pins[1] = Pin_Get(P6);
-    pins[2] = Pin_Get(P7);
-    pins[3] = Pin_Get(P8);
-    pins[4] = Pin_Get(P9);
-    pins[5] = Pin_Get(P10);
-    pins[6] = Pin_Get(P11);
-    pins[7] = Pin_Get(P12);
-    pins[8] = Pin_Get(P13);
-    pins[9] = Pin_Get(P14);
-    pins[10] = Pin_Get(P15);
-    pins[11] = Pin_Get(P16);
-    pins[12] = Pin_Get(P17);
-    pins[13] = Pin_Get(P18);
-    pins[14] = Pin_Get(P19);
-    pins[15] = Pin_Get(P20);
-
-    uint32_t i;
-    for (i = 0; i < 4; i++) {
-        Pin_Output(leds[i]);
-    }
-    for (i = 0; i < 16; i++) {
-        Pin_Output(pins[i]);
-    }
+    // Get other pins to toggle.
+    pins[0] = Pin_Init(P5, 1, Output);
+    pins[1] = Pin_Init(P6, 1, Output);
+    pins[2] = Pin_Init(P7, 1, Output);
+    pins[3] = Pin_Init(P8, 1, Output);
+    pins[4] = Pin_Init(P9, 1, Output);
+    pins[5] = Pin_Init(P10, 1, Output);
+    pins[6] = Pin_Init(P11, 1, Output);
+    pins[7] = Pin_Init(P12, 1, Output);
+    pins[8] = Pin_Init(P13, 1, Output);
+    pins[9] = Pin_Init(P14, 1, Output);
+    pins[10] = Pin_Init(P15, 1, Output);
+    pins[11] = Pin_Init(P16, 1, Output);
+    pins[12] = Pin_Init(P17, 1, Output);
+    pins[13] = Pin_Init(P18, 1, Output);
+    pins[14] = Pin_Init(P19, 1, Output);
+    pins[15] = Pin_Init(P20, 1, Output);
 
     // Many different schedulers, 
     // going as fast as possible
@@ -120,7 +113,7 @@ int main(void) {
 
     // Blink at different rates
     Scheduler_t s1 = Scheduler_Init(count0, 1, 1);
-    Scheduler_t s2 = Scheduler_Init(count1, 0.5, 1);
+    Scheduler_t s2 = Scheduler_Init_us(count1, 500000, 1);
     Scheduler_t s3 = Scheduler_Init(count2, 0.25, 1);
     Scheduler_t s4 = Scheduler_Init(count3, 0.125, 1);
 

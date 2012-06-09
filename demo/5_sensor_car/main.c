@@ -51,24 +51,18 @@ int main(void) {
 
     // Access 4 leds predefined as LED1, LED2, LED3, LED4
     Pin_t leds[] = {
-        Pin_Get(LED1),
-        Pin_Get(LED2),
-        Pin_Get(LED3),
+        Pin_Init(LED1, 1, Output),
+        Pin_Init(LED2, 1, Output),
+        Pin_Init(LED3, 1, Output),
     };
-    int nleds = 3, i = 0;
+    int nleds = 3;
 
-    // Set all pins as output
-    for (i = 0; i < nleds; i++) {
-        Pin_Output(leds[i]);
-        Pin_On(leds[i]);
-    }
-
-    Pin_t button = Pin_Get(SW1);
+    Pin_t button = Pin_Init(SW1, 1, Output);
     Pin_Input(button),
     Pin_Mode(button, PullUp);
 
     // Get the sensor enabler
-    Pin_t enabler = Pin_Get(LED_EN);
+    Pin_t enabler = Pin_Init(LED_EN, 1, Output);
     Pin_Output(enabler),
     Pin_On(enabler);
 

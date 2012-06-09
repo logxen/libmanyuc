@@ -20,29 +20,6 @@
 
 #include "libmanyuc.h"
 
-void turn_on_all_leds(Pin_t *leds, int n) {
-    int i;
-    for (i = 0; i < n; i++) {
-        Pin_On(leds[i]);
-    }
-}
-
-void turn_off_all_leds(Pin_t *leds, int n) {
-    int i;
-    for (i = 0; i < n; i++) {
-        Pin_Off(leds[i]);
-    }
-}
-
-void show_byte_with_leds(Pin_t *leds, int n, uint8_t byte) {
-    int i;
-    for (i = 0; i < n; i++) {
-        if (byte & (1 << i))
-            Pin_On(leds[i]);
-        else
-            Pin_Off(leds[i]);
-    }
-}
 /*
  This example repeats all the characters received from the serial port,
  through the serial port.  It also shows the lower half of the byte
@@ -51,25 +28,24 @@ void show_byte_with_leds(Pin_t *leds, int n, uint8_t byte) {
 
 int main(void) {
 
-    Pin_t leds[] = { Pin_Get(LED1), Pin_Get(LED2),
-                     Pin_Get(LED3), Pin_Get(LED4)
-                   };
+    Pin_t leds[] = { 
+        Pin_Init(LED4, 1, Output), 
+        Pin_Init(LED3, 1, Output),
+        Pin_Init(LED2, 1, Output), 
+        Pin_Init(LED1, 1, Output)
+    };
     int nleds = 4, i = 0;
-
-    for (i = 0; i < nleds; i++) {
-        Pin_Output(leds[i]);
-    }
 
     Serial_t port = Serial_Init(0, 9600);
 
-    turn_on_all_leds(leds, nleds);
+    Pin_All_On(leds, nleds);
     Serial_Put_Bytes(port, "Hola que tal, como te va 123456789 123456789\r\n", 46, BLOCKING);
 
-    uint8_t buffer[10];
+    uint8_t buffer[1];
     while (1) {
-        uint8_t byte = Serial_Get_Bytes(port, buffer, 10, BLOCKING);
-        show_byte_with_leds(leds, nleds, buffer[0]);
-        Serial_Put_Bytes(port, buffer, 10, NONBLOCKING);
+        Serial_Get_Bytes(port, buffer, 1, BLOCKING);
+        Pin_Show_Byte(leds, nleds, buffer[0]);
+        Serial_Put_Bytes(port, buffer, 1, BLOCKING);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

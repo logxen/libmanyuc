@@ -23,8 +23,7 @@
 /* This examples toggles pin 11 on and off as fast as possible. */
 int main(void) {
 
-    Pin_t my_pin = Pin_Get(P11);
-    Pin_Output(my_pin);
+    Pin_t my_pin = Pin_Init(P11, 1, Output);
 
     // Turn a led on and off indefinitely.
     while (1) {

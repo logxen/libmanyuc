@@ -37,7 +37,7 @@ void count(void) {
  * 100k interrupts. */
 int main(void) {
 
-    debug = Pin_Get(P5);
+    debug = Pin_Init(P5, 1, Output);
 
     // This indexes indicate how many interrupts are configured
     // And how many are going to be activated in the program code.
@@ -49,26 +49,24 @@ int main(void) {
     // Pins used for interrupts
     Pin_t ins[16];
 
-    ins[0] = Pin_Get(ARM_P0_0);
-    ins[1] = Pin_Get(ARM_P0_1);
-    ins[2] = Pin_Get(ARM_P0_4);
-    ins[3] = Pin_Get(ARM_P0_5);
-    ins[4] = Pin_Get(ARM_P0_23);
-    ins[5] = Pin_Get(ARM_P0_24);
-    ins[6] = Pin_Get(ARM_P0_25);
-    ins[7] = Pin_Get(ARM_P0_26);
-    ins[8] = Pin_Get(ARM_P2_0);
-    ins[9] = Pin_Get(ARM_P2_1);
-    ins[10] = Pin_Get(ARM_P2_2);
-    ins[11] = Pin_Get(ARM_P2_3);
-    ins[12] = Pin_Get(ARM_P2_4);
-    ins[13] = Pin_Get(ARM_P2_5);
-    ins[14] = Pin_Get(ARM_P0_16);
-    ins[15] = Pin_Get(ARM_P0_15);
+    ins[0] = Pin_Init(ARM_P0_0, 1, Output);
+    ins[1] = Pin_Init(ARM_P0_1, 1, Output);
+    ins[2] = Pin_Init(ARM_P0_4, 1, Output);
+    ins[3] = Pin_Init(ARM_P0_5, 1, Output);
+    ins[4] = Pin_Init(ARM_P0_23, 1, Output);
+    ins[5] = Pin_Init(ARM_P0_24, 1, Output);
+    ins[6] = Pin_Init(ARM_P0_25, 1, Output);
+    ins[7] = Pin_Init(ARM_P0_26, 1, Output);
+    ins[8] = Pin_Init(ARM_P2_0, 1, Output);
+    ins[9] = Pin_Init(ARM_P2_1, 1, Output);
+    ins[10] = Pin_Init(ARM_P2_2, 1, Output);
+    ins[11] = Pin_Init(ARM_P2_3, 1, Output);
+    ins[12] = Pin_Init(ARM_P2_4, 1, Output);
+    ins[13] = Pin_Init(ARM_P2_5, 1, Output);
+    ins[14] = Pin_Init(ARM_P0_16, 1, Output);
+    ins[15] = Pin_Init(ARM_P0_15, 1, Output);
 
-    Pin_Output(debug);
     for (j = start_config; j < config_ints; j++) {
-        Pin_Output(ins[j]);
         Pin_Int_Attach(ins[j], count, IOIntFall);
     }
 
