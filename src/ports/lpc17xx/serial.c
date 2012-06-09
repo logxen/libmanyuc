@@ -19,6 +19,7 @@
  */
 
 #include "serial.h"
+#include "io.h"
 
 // Port tables
 

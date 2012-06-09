@@ -30,6 +30,8 @@ const static uint32_t names[] = { ADC0, ADC1, ADC2, ADC3, ADC4, ADC5, ADC6, ADC7
 
 // Power Register
 #define ADC_POWER_BITMASK  ((uint32_t) 1 << 12)
+// NVIC
+#define ADC_NVIC_BITMASK   ((uint32_t) 1 << 22)
 
 // Control Register
 #define ADC_CR_CH_SEL(n)    ((1 << n))  // Selects each channel
@@ -64,6 +66,10 @@ void ADC_Init() {
     // * the clock divider to 2 (12.5 MHz).
     // * the power bit to 1.
     LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
+
+    // Enable ADC interrupts
+    NVIC->ISER[0] = ADC_NVIC_BITMASK;
+
 }
 
 AnalogIn_t AnalogIn_Init(PinName pin_name) {
@@ -161,7 +167,8 @@ void ADC_IRQHandler(void) {
     if (_analog_in_func) {
         _analog_in_func(result);
     }
-    _analog_in_func = 0;
+    }
+    //_analog_in_func = 0;
 }
 
 
