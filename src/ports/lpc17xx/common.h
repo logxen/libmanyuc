@@ -89,11 +89,14 @@ extern "C" {
     } InternalPinName;
 
     typedef enum PinMode {
-        Output = -1,
+        // Input Modes
         PullUp = 0, Repeater = 1, PullNone = 2, PullDown = 3,
+        // OpenDrain vs NormalMode
         OpenDrain = 4, NormalMode = 5,
         // Pin Functions, start at 8
         Primary = 8, Alt1, Alt2, Alt3,
+        // Output Modes
+        Output = 16,
     } PinMode;
 
     typedef enum IOIntMode {

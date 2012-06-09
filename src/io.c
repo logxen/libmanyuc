@@ -22,6 +22,22 @@
 #include "timers.h"
 #include <stdlib.h>
 
+Pin_t Pin_Init(PinName pin_name, uint32_t nmodes, ...) {
+
+    Pin_t pin = Pin_Get(pin_name);
+
+    // Set the modes
+    va_list modes;
+    va_start(modes, nmodes);
+    int i;
+    for (i = 0; i < nmodes; i++) {
+        Pin_Mode(pin, va_arg(modes, int));
+    }
+    va_end(modes);
+
+    return pin;
+}
+
 /* *********************************************************** */
 PinBus_t PinBus_Get(int npins, ...) {
     va_list pins;

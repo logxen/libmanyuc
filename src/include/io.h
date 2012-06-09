@@ -49,6 +49,16 @@ extern "C" {
      */
     Pin_t Pin_Get(PinName pin_name);
 
+    /** Creates the pin structure from the pin name, with the 
+     *  corresponding mode parameters.
+     *  @param pin_name One of the available pin names,
+     *  depending on the architecture.
+     *  @param nmodes The amount of mode flags that will be set.
+     *  @param ... nmodes PinMode values to set for this pin.
+     *  @return An initialized pin structure.
+     */
+    Pin_t Pin_Init(PinName pin_name, uint32_t modes, ...);
+
     /** Marks the pin as an output pin.
      *  Pins have to be set as output to turn them on or off.
      *  @param pin A pin created through Pin_Get.
@@ -57,14 +67,14 @@ extern "C" {
 
     /** Marks the pin as an input pin.
      *  Pins have to be set as input to read data from them.
-     *  @param pin A pin created through Pin_Get.
+     *  @param pin A pin created through Pin_Get or Pin_Init.
      */
     void Pin_Input(Pin_t pin);
 
     /** Sets the mode for the pin.
      *  The possible input modes or pin functions
      *  depend on the architecture.
-     *  @param pin A pin created through Pin_Get.
+     *  @param pin A pin created through Pin_Get or Pin_Init.
      *  @param mode The mode to set for the pin.
      *  Available modes depend on the architecture.
      */
@@ -76,18 +86,18 @@ extern "C" {
     void Pin_On(Pin_t pin);
 
     /** Turns the pin off.
-     *  @param pin A pin created through Pin_Get.
+     *  @param pin A pin created through Pin_Get or Pin_Init.
      */
     void Pin_Off(Pin_t pin);
 
     /** Toggles the pin state.
-     *  @param pin A pin created through Pin_Get.
+     *  @param pin A pin created through Pin_Get or Pin_Init.
      */
     void Pin_Toggle(Pin_t pin);
 
 
     /** Reads the state of the pin.
-     *  @param pin A pin created through Pin_Get.
+     *  @param pin A pin created through Pin_Get or Pin_Init.
      *  @return The state of the pin (0 or 1).
      */
     int Pin_Read(Pin_t pin);

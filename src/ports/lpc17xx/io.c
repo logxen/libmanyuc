@@ -34,7 +34,9 @@ void Pin_Mode(Pin_t pin, PinMode mode) {
     uint32_t shift = _get_half_mask(pin);
 
     // Set input type (PullUp, PullDown, PullNone)
-    if (mode < 4) {
+    if (mode == Output) {
+        Pin_Output(pin);
+    } else if (mode < 4) {
         LPC_PINCON->PINMODE[port] &= ~(3 << shift);
         LPC_PINCON->PINMODE[port] |= (mode << shift);
         // Set opendrain
