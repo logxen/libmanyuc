@@ -29,12 +29,35 @@ extern "C" {
 #include "port.h"
 #include "board.h"
 
+    /** Opaque structure to hold information about a scheduled task.
+     *  It should be constructed by calling Scheduler_Init.
+     */
     typedef struct _scheduler_t Scheduler_t;
 
-    Scheduler_t Scheduler_Init(Int_Func func, uint32_t time_delay, uint8_t repeat);
+    /** Initializes a scheduled task and starts executing that task.
+     *  @param func The task function to call.
+     *  @param delay_us The delay with which to call the function, in
+     *                  microseconds. The lower limit for this value is 
+     *                  architecture dependent.
+     *  @param repeat Whether this task should be repeated or not (1 to
+     *                repeat, 0 to execute only once).
+     *  @return An initialized Scheduler_t structure.
+     */
+    Scheduler_t Scheduler_Init_us(Int_Func func, uint32_t delay_us, uint8_t repeat);
 
-    void Delay(uint32_t dlyTicks);
-    void Delay_us(uint32_t dlyTicks);
+    /** Initializes a scheduled task and starts executing that task.
+     *  @param func The task function to call.
+     *  @param delay The delay with which to call the function, in
+     *               seconds. The lower limit for this value is 
+     *               architecture dependent.
+     *  @param repeat Whether this task should be repeated or not (1 to
+     *                repeat, 0 to execute only once).
+     *  @return An initialized Scheduler_t structure.
+     */
+    static inline Scheduler_t Scheduler_Init(Int_Func func, float delay,
+        uint8_t repeat) {
+        return Scheduler_Init_us(func, delay*1000000, repeat);
+    }
 
     /** Does nothing, for the amount of microseconds specified. 
      *  @param us amount of microseconds to wait.

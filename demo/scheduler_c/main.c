@@ -93,43 +93,42 @@ int main(void) {
         Pin_Output(pins[i]);
     }
 
-
     // Many different schedulers, 
     // going as fast as possible
     Scheduler_t s;
-    s = Scheduler_Init(toggle_pin_0, 20, 1);
-    s = Scheduler_Init(toggle_pin_1, 20, 1);
-    s = Scheduler_Init(toggle_pin_2, 20, 1);
-    s = Scheduler_Init(toggle_pin_3, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_0, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_1, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_2, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_3, 20, 1);
 
-    s = Scheduler_Init(toggle_pin_4, 20, 1);
-    s = Scheduler_Init(toggle_pin_5, 20, 1);
-    s = Scheduler_Init(toggle_pin_6, 20, 1);
-    s = Scheduler_Init(toggle_pin_7, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_4, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_5, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_6, 20, 1);
+    s = Scheduler_Init_us(toggle_pin_7, 20, 1);
 
-    s = Scheduler_Init(toggle_pin_8, 25, 1);
-    s = Scheduler_Init(toggle_pin_9, 25, 1);
-    s = Scheduler_Init(toggle_pin_10, 25, 1);
-    s = Scheduler_Init(toggle_pin_11, 25, 1);
-    s = Scheduler_Init(toggle_pin_12, 25, 1);
-    s = Scheduler_Init(toggle_pin_13, 25, 1);
-    s = Scheduler_Init(toggle_pin_14, 25, 1);
-    s = Scheduler_Init(toggle_pin_15, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_8, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_9, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_10, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_11, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_12, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_13, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_14, 25, 1);
+    s = Scheduler_Init_us(toggle_pin_15, 25, 1);
 
     // Small pause to sync.
     Delay_ms(1);
 
     // Blink at different rates
-    Scheduler_t s1 = Scheduler_Init(count0, 1000000, 1);
-    Scheduler_t s2 = Scheduler_Init(count1, 500000, 1);
-    Scheduler_t s3 = Scheduler_Init(count2, 250000, 1);
-    Scheduler_t s4 = Scheduler_Init(count3, 125000, 1);
+    Scheduler_t s1 = Scheduler_Init(count0, 1, 1);
+    Scheduler_t s2 = Scheduler_Init(count1, 0.5, 1);
+    Scheduler_t s3 = Scheduler_Init(count2, 0.25, 1);
+    Scheduler_t s4 = Scheduler_Init(count3, 0.125, 1);
 
     // Blink at the same time
-/*    Scheduler_t s1 = Scheduler_Init(count0, 500000, 1);
-    Scheduler_t s2 = Scheduler_Init(count1, 500000, 1);
-    Scheduler_t s3 = Scheduler_Init(count2, 500000, 1);
-    Scheduler_t s4 = Scheduler_Init(count3, 500000, 1); */
+/*    Scheduler_t s1 = Scheduler_Init(count0, 0.5, 1);
+    Scheduler_t s2 = Scheduler_Init(count1, 0.5, 1);
+    Scheduler_t s3 = Scheduler_Init(count2, 0.5, 1);
+    Scheduler_t s4 = Scheduler_Init(count3, 0.5, 1); */
     
     while (1) {
         // Do nothing

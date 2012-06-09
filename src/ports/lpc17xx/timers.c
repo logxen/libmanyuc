@@ -125,7 +125,7 @@ void _timer_sch_store (timer_sch_t *timer_sch, Int_Func func,
 }
 
 // Create a scheduler
-Scheduler_t Scheduler_Init(Int_Func func, uint32_t time_delay, 
+Scheduler_t Scheduler_Init_us(Int_Func func, uint32_t time_delay, 
         uint8_t repeat) {
 
     uint32_t timer_id = 0;
@@ -269,7 +269,7 @@ void TIMER3_IRQHandler() {
 // SysTick Handler
 volatile uint32_t msTicks;      /* counts 1ms timeTicks */
 void SysTick_Handler(void) {
-    msTicks++;          /* increment counter necessary in Delay() */
+    msTicks++;
 }
 
 // Delays number of tick Systicks (happens every 1 ms)
