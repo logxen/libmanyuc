@@ -23,9 +23,11 @@
 #include <stdlib.h>
 
 /* This example reads two sensors, using the ADC3 and ADC4.
-   To do that, the pins in P9 and P10 have to be turned on.
-   The output read is sent through the serial port and the
-   pins P20 and P30 are turned on or off according to the value. */
+   To do that, the pins in P9 and P10 have to be turned on. The pins
+   P20 and P30 are turned on or off according to the value. When the
+   DEBUG compiling flag is set, the output read is sent through the
+   serial port as well.
+*/
 
 int main(void) {
 
@@ -56,8 +58,13 @@ int main(void) {
             Pin_Off(light1);
         }
 
-        //wait(0.001);
         uint32_t s2 = AnalogIn_Read(q, ADC_NORMAL);
+
+        if (s2 < 2000) {
+            Pin_On(light2);
+        } else {
+            Pin_Off(light2);
+        }
 
 #ifdef DEBUG
         // Send the value through the serial port
@@ -67,13 +74,6 @@ int main(void) {
         snprintf(cadena, 10, "2: %d\r\n", s2);
         Serial_Put_Bytes(port, cadena, 9, BLOCKING);
 #endif
-
-        if (s2 < 2000) {
-            Pin_On(light2);
-        } else {
-            Pin_Off(light2);
-        }
-        wait(0.1);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

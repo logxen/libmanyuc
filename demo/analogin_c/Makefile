@@ -17,7 +17,7 @@ LANGUAGE = C
 # Compiling options
 DEBUG = -g
 OPTIMIZATION = 1
-CFLAGS = 
+#CFLAGS = -DDEBUG
 LDFLAGS = 
 
 ########################################################################

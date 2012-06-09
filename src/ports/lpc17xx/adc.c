@@ -170,16 +170,25 @@ void AnalogIn_Detach(AnalogIn_t pin) {
 
 void AnalogIn_Read_All(uint32_t speed) {
     if (speed == 0 || speed >= 256) speed = 1;
-    uint32_t id, mask = 0;
+
+    // Find out which channels have been set.
+    uint32_t id, channel_mask = 0;
     for (id = 0; id < ADC_AMOUNT; id++) {
         if (_analog_in_func[id]) {
-            mask |= (1 << id);
+            channel_mask |= (1 << id);
         }
     }
-    LPC_ADC->ADCR = mask | ADC_CR_CLKDIV(speed) | 
+
+    // Enable interrupts and start reading in burst mode
+    LPC_ADC->ADINTEN = channel_mask;
+    LPC_ADC->ADCR = channel_mask | ADC_CR_CLKDIV(speed) | 
         ADC_CR_ENABLE | ADC_CR_BURST;
 }
 
+void AnalogIn_Stop_Reading() {
+    LPC_ADC->ADINTEN = 0;
+    LPC_ADC->ADCR = ADC_CR_CLKDIV(1) | ADC_CR_ENABLE;
+}
 
 void ADC_IRQHandler(void) {
     if (_analog_in_func == NULL) return;

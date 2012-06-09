@@ -89,6 +89,10 @@ extern "C" {
      *               Architecture dependent.
      */
     void AnalogIn_Read_All(uint32_t speed);
+
+    /** Stop reading from many pins at the same time.
+     */
+    void AnalogIn_Stop_Reading();
 //@}
 
 #ifdef __cplusplus
