@@ -37,16 +37,11 @@ int main(void) {
     AnalogIn_t p = AnalogIn_Init(ADC4);
     AnalogIn_t q = AnalogIn_Init(ADC3);
 
-    Pin_t sensor1 = Pin_Get(P9);
-    Pin_t sensor2 = Pin_Get(P10);
+    Pin_t sensor1 = Pin_Init(P9, 1, Output);
+    Pin_t sensor2 = Pin_Init(P10, 1, Output);
 
-    Pin_t light1 = Pin_Get(P20);
-    Pin_t light2 = Pin_Get(P30);
-
-    Pin_Output(sensor1);
-    Pin_Output(sensor2);
-    Pin_Output(light1);
-    Pin_Output(light2);
+    Pin_t light1 = Pin_Init(P20, 1, Output);
+    Pin_t light2 = Pin_Init(P30, 1, Output);
 
     Pin_On(sensor1);
     Pin_On(sensor2);
