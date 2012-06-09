@@ -236,13 +236,13 @@ Serial_t Serial_Init(int number, int baudrate) {
 }
 
 // Returns if there is info available to be read
-__INLINE int Serial_Readable(Serial_t port) {
+inline int Serial_Readable(Serial_t port) {
     return (port.uart->LSR & UART_LSR_RDR);
 }
 
 // Returns a byte read from the serial port. If there is no byte yet, it
 // blocks until there is.
-__INLINE uint8_t Serial_Get_Byte(Serial_t port) {
+inline uint8_t Serial_Get_Byte(Serial_t port) {
     return port.uart->RBR & UART_BYTE_MASK;
 }
 
@@ -274,13 +274,13 @@ uint32_t Serial_Get_Bytes(Serial_t port, uint8_t *data,
 }
 
 // Returns if there is space to send a byte
-__INLINE int Serial_Sendable(Serial_t port) {
+inline int Serial_Sendable(Serial_t port) {
     return (port.uart->LSR & UART_LSR_THRE);
 }
 
 // Sends a byte through the serial port. If there is no space, it blocks
 // until there is.
-__INLINE void Serial_Put_Byte(Serial_t port, uint8_t data) {
+inline void Serial_Put_Byte(Serial_t port, uint8_t data) {
     port.uart->THR = data & UART_BYTE_MASK;
 }
 
