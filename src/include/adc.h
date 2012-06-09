@@ -70,14 +70,25 @@ extern "C" {
     uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode);
 
     /** Attaches a function to be called when the conversion done
-     *  on pin is finished.
-     * @param pin The pin from which to read. Should be constructed 
-     *            through AnalogIn_Init or AnalogIn_Get.
-     * @param mode The mode used to read. Architecture dependent.
-     * @return the value read from the ADC.
+     *  on pin is finished. It does not start the converstion. 
+     *  To start the converstion AnalogIn_Read should be called, with
+     *  ADC_INTERRUPT mode.
+     *  @param pin The pin from which to read. Should be constructed 
+     *             through AnalogIn_Init or AnalogIn_Get.
      */
-    void AnalogIn_Attach(AnalogIn_t pin, AnalogInMode mode, ADC_Int_Func func);
+    void AnalogIn_Attach(AnalogIn_t pin, ADC_Int_Func func);
 
+    /** Detaches the function associated to this pin.
+     * @param pin The pin to which the desired function is attached.
+     */
+    void AnalogIn_Detach(AnalogIn_t pin);
+
+    /** Starts reading all the attached pins, calling the associated
+     *  functions for each of them
+     *  @param speed A value to set the speed for the ADC conversion.
+     *               Architecture dependent.
+     */
+    void AnalogIn_Read_All(uint32_t speed);
 //@}
 
 #ifdef __cplusplus

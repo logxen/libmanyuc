@@ -20,6 +20,7 @@
 
 #include "adc.h"
 #include "io.h"
+#include <stdlib.h>
 
 // To select the ADC Modes
 const static int modes[] = { Alt1, Alt1, Alt1, Alt1, Alt3, Alt3, Alt2, Alt2 };
@@ -38,15 +39,7 @@ const static uint32_t names[] = { ADC0, ADC1, ADC2, ADC3, ADC4, ADC5, ADC6, ADC7
 #define ADC_CR_CLKDIV(n)    ((n << 8))  // Sets the clock divider
 #define ADC_CR_BURST        ((1 <<16))  // Sets the BURST signal
 #define ADC_CR_ENABLE       ((1 <<21))  // ADC Enable
-#define ADC_CR_START(s)     ((s <<24))  // Selects the start mode
-#define ADC_CR_START_MASK   ((7 <<24))  // Mask for the start mode
-#define ADC_CR_START_NOW    ((1 <<24))
-#define ADC_CR_START_EINT0  ((2 <<24))
-#define ADC_CR_START_CAP01  ((3 <<24))
-#define ADC_CR_START_MAT01  ((4 <<24))
-#define ADC_CR_START_MAT03  ((5 <<24))
-#define ADC_CR_START_MAT10  ((6 <<24))
-#define ADC_CR_START_MAT11  ((7 <<24))
+#define ADC_CR_START_NOW    ((1 <<24))  // Make ADC start converting
 #define ADC_CR_EDGE         ((1 <<27))  // Selects the start edge
 
 // ADC Data Registers
@@ -139,36 +132,65 @@ uint32_t static inline _analog_in_read_three(uint8_t channel) {
     }
 }
 
-uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
-    _analog_in_enable_channel(pin.channel);
-    if (mode == ADC_NORMAL) {
-        return _analog_in_read_one(pin.channel);
-    } else {
-        return _analog_in_read_three(pin.channel);
-    }
-}
-
-static ADC_Int_Func _analog_in_func = 0;
-static uint8_t _analog_in_channel;
-void AnalogIn_Attach(AnalogIn_t pin, AnalogInMode mode, ADC_Int_Func func) {
-    // Store function
-    _analog_in_func = func;
-    _analog_in_channel = pin.channel;
-    // Enable channel
-    _analog_in_enable_channel(pin.channel);
+void static inline _analog_in_read_int(uint8_t channel) {
     // Enable channel interrupt
-    LPC_ADC->ADINTEN = ADC_CR_CH_SEL(pin.channel);
+    LPC_ADC->ADINTEN = ADC_CR_CH_SEL(channel);
     // Start reading
     LPC_ADC->ADCR |= ADC_CR_START_NOW;
 }
 
+uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
+    _analog_in_enable_channel(pin.channel);
+    if (mode == ADC_INTERRUPT) {
+        _analog_in_read_int(pin.channel);
+        return 0;
+    } else if (mode == ADC_NORMAL) {
+        return _analog_in_read_one(pin.channel);
+    } else if (mode == ADC_MEDIAN) {
+        return _analog_in_read_three(pin.channel);
+    }
+}
+
+static ADC_Int_Func* _analog_in_func = NULL;
+
+void AnalogIn_Attach(AnalogIn_t pin, ADC_Int_Func func) {
+
+    if (_analog_in_func == NULL) {
+        _analog_in_func = calloc(ADC_AMOUNT, sizeof(ADC_Int_Func));
+    }
+    // Store function
+    _analog_in_func[pin.channel] = func;
+}
+
+void AnalogIn_Detach(AnalogIn_t pin) {
+    if (_analog_in_func == NULL) return;
+    _analog_in_func[pin.channel] = NULL;
+}
+
+void AnalogIn_Read_All(uint32_t speed) {
+    if (speed == 0 || speed >= 256) speed = 1;
+    uint32_t id, mask = 0;
+    for (id = 0; id < ADC_AMOUNT; id++) {
+        if (_analog_in_func[id]) {
+            mask |= (1 << id);
+        }
+    }
+    LPC_ADC->ADCR = mask | ADC_CR_CLKDIV(speed) | 
+        ADC_CR_ENABLE | ADC_CR_BURST;
+}
+
+
 void ADC_IRQHandler(void) {
-    uint32_t result = ADC_DR_GET_RESULT(LPC_ADC->ADDR[_analog_in_channel]);
-    if (_analog_in_func) {
-        _analog_in_func(result);
+    if (_analog_in_func == NULL) return;
+
+    uint32_t status = LPC_ADC->ADSTAT;
+    uint32_t id = 0;
+    for (; id < ADC_AMOUNT; id++) {
+        if (status & 0x01 && _analog_in_func[id]) {
+            _analog_in_func[id](ADC_DR_GET_RESULT(LPC_ADC->ADDR[id]));
+        }
+        status = status >> 1;
     }
-    }
-    //_analog_in_func = 0;
 }
 
 

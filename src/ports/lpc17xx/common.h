@@ -131,8 +131,9 @@ extern "C" {
     } SerialIRQType;
 
     typedef enum AnalogInMode {
-        ADC_NORMAL = 0,
-        ADC_MEDIAN = 1,
+        ADC_NORMAL,
+        ADC_MEDIAN,
+        ADC_INTERRUPT,
     } AnalogInMode;
 
 // **********
