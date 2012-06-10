@@ -20,6 +20,7 @@
 
 #include "serial.h"
 #include "io.h"
+#include <stdlib.h>
 
 // Port tables
 
@@ -61,10 +62,11 @@ const static int uarts[] = { UART_0, UART_1, UART_2, UART_3 };
 
 #define UART_BLOCK_TIMEOUT      0xFFFFFFFF            // Timeout for blocking 
 
+// Transmiter Holding Register Empty
+#define UART_IER_THREINT_EN     ((uint32_t)(1<<1))  // THR Interrupt enable
 
 
 #define UART_IER_RBRINT_EN      ((uint32_t)(1<<0))  // RBR Interrupt enable
-#define UART_IER_THREINT_EN     ((uint32_t)(1<<1))  // THR Interrupt enable
 #define UART_IER_RLSINT_EN      ((uint32_t)(1<<2))  // RX line status interrupt enable
 #define UART1_IER_MSINT_EN      ((uint32_t)(1<<3))  // Modem status interrupt enable 
 #define UART1_IER_CTSINT_EN     ((uint32_t)(1<<7))  // CTS1 signal transition interrupt enable 
@@ -285,10 +287,90 @@ inline void Serial_Put_Byte(Serial_t port, char data) {
 }
 
 
+static inline uint32_t _fill_fifo_queue(Serial_t port, char* data,
+        uint32_t start, uint32_t end) {
+    // Fill the fifo queue with bytes
+    uint32_t c = UART_TX_FIFO_SIZE;
+    while ((start < end) && (c > 0)) {
+        Serial_Put_Byte(port, data[start]);
+        start++;
+        c--;
+    }
+    return start;
+}
+
+// Routines to send in the background
+struct _to_send {
+    char *data;
+    uint32_t length;
+    uint32_t sent;
+};
+
+static struct _to_send *_bgdata[] = {0, 0, 0, 0};
+
+static void _send_data(int id) {
+
+    if (!_bgdata[id]) return;
+
+    Serial_t port = Serial_Get(id);
+    _bgdata[id]->sent = _fill_fifo_queue(port, 
+        _bgdata[id]->data,
+        _bgdata[id]->sent,
+        _bgdata[id]->length);
+
+    // Check if the transmission was completed
+    if (_bgdata[id]->sent >= _bgdata[id]->length) {
+        // Free memory
+        free(_bgdata[id]);
+        _bgdata[id] = 0;
+        // Disable interrupts
+        port.uart->IER = 0;
+        NVIC->ICER[0] = (1 << (5 + port.number));
+    }
+}
+
+static void _background_send(Serial_t port, char *data, 
+    uint32_t length) {
+
+    // Disable interrupts to prevent possible concurrency problems
+    NVIC->ICER[0] = (1 << (5 + port.number));
+
+    // Allows accesing the IER register
+    port.uart->LCR &= ~(UART_LCR_DLAB_EN);
+
+    if (!_bgdata[port.number]) {
+        _bgdata[port.number] = calloc(1, sizeof(struct _to_send));
+    }
+
+    // Add new data
+    struct _to_send *bgdata = _bgdata[port.number];
+    bgdata->data = realloc(bgdata->data, bgdata->length + length);
+    uint32_t i, base_length = bgdata->length;
+    for (i = 0; i < length; i++) {
+        bgdata->data[i+base_length] = data[i];
+    }
+    bgdata->length += length;
+
+    // If it's possible to send something, send it now
+    if (Serial_Sendable(port)) {
+        _send_data(port.number);
+    }
+
+    // Enable interrupts
+    port.uart->IER = UART_IER_THREINT_EN;
+    NVIC->ISER[0] = (1 << (5 + port.number));
+}
+
+// Send bytes in several different modes
 uint32_t Serial_Put_Bytes(Serial_t port, SerialTransferMode mode, 
                           char *data, uint32_t length)  {
 
-    uint32_t i = 0, c, wait;
+    uint32_t i = 0, wait;
+
+    if (mode == BACKGROUND) {
+        _background_send(port, data, length);
+        return 0;
+    }
 
     while (i < length) {
 
@@ -304,40 +386,36 @@ uint32_t Serial_Put_Bytes(Serial_t port, SerialTransferMode mode,
         }
         if (!wait) break;
 
-        // Fill the fifo queue with bytes
-        c = UART_TX_FIFO_SIZE;
-        while ((i < length) && (c > 0)) {
-            Serial_Put_Byte(port, data[i]);
-            i++;
-            c--;
-        }
+        i = _fill_fifo_queue(port, data, i, length);
+
     }
     // Return the amount of bytes that were sent
     return i;
 }
 
-static FILE* serial_files[] = { 0, 0, 0, 0 };
+static FILE* _serial_files[] = { 0, 0, 0, 0 };
 FILE *Serial_Get_File(Serial_t port) {
-    if (! serial_files[port.number]) {
-        serial_files[port.number] = fdopen(0x0100 | port.number, "r+");
+    if (! _serial_files[port.number]) {
+        _serial_files[port.number] = fdopen(0x0100 | port.number, "r+");
     }
-    return serial_files[port.number];
+    return _serial_files[port.number];
 }
 
-void UART0_IRQ_Handler() {
+
+void UART0_IRQHandler() {
+    _send_data(0);
 }
 
-void UART1_IRQ_Handler() {
+void UART1_IRQHandler() {
+    _send_data(1);
 }
 
-void UART2_IRQ_Handler() {
+void UART2_IRQHandler() {
+    _send_data(2);
 }
 
-void UART3_IRQ_Handler() {
-}
-
-void Serial_Attach(Serial_t port, void (*function)(void), SerialIRQType type) {
-    port.uart->IER |= type;
+void UART3_IRQHandler() {
+    _send_data(3);
 }
 
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
