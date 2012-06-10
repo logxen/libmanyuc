@@ -242,14 +242,14 @@ inline int Serial_Readable(Serial_t port) {
 
 // Returns a byte read from the serial port. If there is no byte yet, it
 // blocks until there is.
-inline uint8_t Serial_Get_Byte(Serial_t port) {
+inline char Serial_Get_Byte(Serial_t port) {
     return port.uart->RBR & UART_BYTE_MASK;
 }
 
 // Reads the amount of bytes from the serial port into the buffer.
 // Memory for the buffer must have been allocated first.
-uint32_t Serial_Get_Bytes(Serial_t port, uint8_t *data,
-                          uint32_t length, SerialTransferMode mode) {
+uint32_t Serial_Get_Bytes(Serial_t port, SerialTransferMode mode, 
+                          char *data, uint32_t length) {
 
     uint32_t i = 0, wait;
 
@@ -280,13 +280,13 @@ inline int Serial_Sendable(Serial_t port) {
 
 // Sends a byte through the serial port. If there is no space, it blocks
 // until there is.
-inline void Serial_Put_Byte(Serial_t port, uint8_t data) {
+inline void Serial_Put_Byte(Serial_t port, char data) {
     port.uart->THR = data & UART_BYTE_MASK;
 }
 
 
-uint32_t Serial_Put_Bytes(Serial_t port, uint8_t *data,
-                          uint32_t length, SerialTransferMode mode) {
+uint32_t Serial_Put_Bytes(Serial_t port, SerialTransferMode mode, 
+                          char *data, uint32_t length)  {
 
     uint32_t i = 0, c, wait;
 
@@ -314,6 +314,14 @@ uint32_t Serial_Put_Bytes(Serial_t port, uint8_t *data,
     }
     // Return the amount of bytes that were sent
     return i;
+}
+
+static FILE* serial_files[] = { 0, 0, 0, 0 };
+FILE *Serial_Get_File(Serial_t port) {
+    if (! serial_files[port.number]) {
+        serial_files[port.number] = fdopen(0x0100 | port.number, "r+");
+    }
+    return serial_files[port.number];
 }
 
 void UART0_IRQ_Handler() {

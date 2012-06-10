@@ -19,6 +19,7 @@
  */
 
 #include "libmanyuc.h"
+#include <stdio.h>
 
 /*
  This example repeats all the characters received from the serial port,
@@ -39,13 +40,16 @@ int main(void) {
     Serial_t port = Serial_Init(0, 9600);
 
     Pin_All_On(leds, nleds);
-    Serial_Put_Bytes(port, "Hola que tal, como te va 123456789 123456789\r\n", 46, BLOCKING);
+    Serial_Put_Bytes(port, BLOCKING, "Hola que tal, como te va 123456789 123456789\r\n", 46);
+
+    FILE * f = Serial_Get_File(port);
+    fprintf(f,"File pointer: %p\r\n", f);
 
     uint8_t buffer[1];
     while (1) {
-        Serial_Get_Bytes(port, buffer, 1, BLOCKING);
+        Serial_Get_Bytes(port, BLOCKING, buffer, 1);
         Pin_Show_Byte(leds, nleds, buffer[0]);
-        Serial_Put_Bytes(port, buffer, 1, BLOCKING);
+        Serial_Put_Bytes(port, BLOCKING, buffer, 1);
     }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,5 +1,6 @@
 
 #include "port.h"
+#include "serial.h"
 
 #include <errno.h>
 #include <sys/times.h>
@@ -110,6 +111,8 @@ int _wait(int *status) {
 }
 
 int _write(int file, char *ptr, int len) {
-    return 0;
+    if (file & 0x0100) {
+        return Serial_Put_Bytes( Serial_Get(0xFF & file), BLOCK_WITH_TIMEOUT, ptr, len);
+    }
 }
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
