@@ -1,0 +1,15 @@
+
+Hi,
+
+This is the template directory for creating a new port for libmanyuc.
+
+There are many stubs that need to be filled in order for the library to
+work properly.  However, you don't need to fill them all at once, you can
+start implementing it bit by bit, leaving the rest of the features as
+stubs.
+
+To add your own architecture, copy this directory with a new name
+representing the architecture that you want to port and start modifying the
+files as appropriate.
+
+Happy Hacking!
