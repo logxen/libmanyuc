@@ -21,13 +21,14 @@
 #ifndef PIN_CPP_H
 #define PIN_CPP_H
 
-#include "port.h"
+#include "io.h"
+#include <stdint.h>
 
 /** The pin class represents an extenal pin in the board,
  *  it can be used as input or output.
  *
  *  @author Margarita Manterola
- *  @date May 2012
+ *  @date 2012
  */
 
 class Pin {
@@ -36,26 +37,38 @@ private:
 public:
     /** Pin Constructor.
      *  @param pin_name the board name for the pin.
-     *  @param mode the mode to use for the pin.
+     *  @param nmodes the amount of modes to set for this pin.
+     *  @param ... a list of modes that have to be set.
      *         Output is the default mode.
      *         Other modes depend on the microcontroller.
      */
-    Pin(PinName pin_name, PinMode mode = Output);
+    Pin(PinName pin_name, uint32_t nmodes = 0, ...);
 
     /** Returns the current value set in the pin. */
-    int read();
+    int read() {
+        return Pin_Read(this->pin);
+    }
 
     /** Writes a value for the pin. */
-    void write(int value);
+    void write(int value) {
+        (value) ? Pin_On(this->pin): Pin_Off(this->pin);
+    }
 
     /** Sets the operation mode for the pin. */
-    void mode(PinMode mode);
+    void mode(PinMode mode) {
+        Pin_Mode(this->pin, mode);
+    }
 
     /** Shorthand for write, sets the value to the pin. */
-    Pin &operator= (int value);
+    Pin &operator= (int value) {
+        this->write(value);
+        return *this;
+    }
 
     /** Shorthand for read, returns the value of the pin. */
-    operator int();
+    operator int() {
+        return this->read();
+    }
 };
 
 #endif

@@ -18,45 +18,25 @@
  * MA 02110-1301 USA
  */
 
-#include "libmanyuc.h"
+#include "pin_cpp.h"
+#include <stdarg.h>
 
-Pin::Pin(PinName pin_name, PinMode mode) {
+// Only the constructor is here, the rest are all inline functions.
+
+Pin::Pin(PinName pin_name, uint32_t nmodes, ... ) {
     this->pin = Pin_Get(pin_name);
-    this->mode(mode);
-}
 
-// TODO: ver tema de inlines
-
-int Pin::read() {
-    return Pin_Read(this->pin);
-}
-
-void Pin::write(int value) {
-    if (value) {
-        Pin_On(this->pin);
+    if (nmodes == 0) {
+        this->mode(Output);
     } else {
-        Pin_Off(this->pin);
+        va_list modes;
+        va_start(modes, nmodes);
+        for (int i = 0; i < nmodes; i++) {
+            this->mode((PinMode) va_arg(modes, int));
+        }
+        va_end(modes);
     }
 }
 
-void Pin::mode(PinMode mode) {
-    switch (mode) {
-    case Output:
-        Pin_Output(this->pin);
-        break;
-    default:
-        Pin_Input(this->pin);
-        Pin_Mode(this->pin, mode);
-    }
-}
-
-Pin &Pin::operator= (int value) {
-    this->write(value);
-    return *this;
-}
-
-Pin::operator int() {
-    return this->read();
-}
 
 // vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
