@@ -31,7 +31,7 @@ Pin::Pin(PinName pin_name, uint32_t nmodes, ... ) {
     } else {
         va_list modes;
         va_start(modes, nmodes);
-        for (int i = 0; i < nmodes; i++) {
+        for (uint32_t i = 0; i < nmodes; i++) {
             this->mode((PinMode) va_arg(modes, int));
         }
         va_end(modes);
