@@ -17,6 +17,7 @@ const uint8_t REG_Z10L = 0x04;
 const uint8_t REG_Z10H = 0x05;
 
 void Accelerometer::calibrate() {
+    Pin led1(LED2);
     int8_t Xdata, Ydata, Zdata;
     int32_t Xcal, Xcalp, Ycal, Ycalp, Zcal, Zcalp;
     uint8_t Xcal_L, Xcal_H, Ycal_L, Ycal_H, Zcal_L, Zcal_H;
@@ -26,13 +27,7 @@ void Accelerometer::calibrate() {
     //reg[0] = 0x11; reg[1] = 0;
     //i2c.write(addr, reg, 2);
     Xcal = Ycal = Zcal = 0;
-Serial pc1(0);
-    pc1.printf("Calibrando...");
-    //Timer t;
-    //t.start();
-Pin led1(LED2);
     for (int i = 0; i < CALIBRATION ; i++) {
-        //pc1.printf("");
         //Lee X, Y, Z en 8bits
         Xdata = readAccel8(REG_X8);
         Ydata = readAccel8(REG_Y8);
@@ -71,20 +66,13 @@ Pin led1(LED2);
         Delay(0.008);
         led1 = !led1;
     }
-    //t.stop();
-    //pc1.printf("COMPLETADO EN %f SEGUNDOS", t.read());
-    pc1.printf("COMPLETADO ");
 }
 
-
 void Accelerometer::setup() {
-Serial pc1(0);
-    pc1.printf("Setup\r\n");
     uint8_t cmd[2];
     cmd[0] = 0x16;  // registro 16h, Mode Control
     cmd[1] = 0x05;  // 2g + Measurement Mode
     this->i2c.write(addr, cmd, 2);
-    pc1.printf("Fin Setup\r\n");
 }
 
 uint8_t Accelerometer::check() {
@@ -96,7 +84,7 @@ uint8_t Accelerometer::check() {
 }
 
 Accelerometer::Accelerometer(uint8_t port): i2c(port) {
-Pin led1(LED2);
+    Pin led1(LED2);
     led1 = 1;
     this->i2c.frequency(100000); //freq de i2c 100KHz
     Delay(0.02); // El acelerometro tarda 20ms en arrancar
