@@ -40,21 +40,27 @@ public:
      *              Master is the default mode, set if omitted.
      *  @param address The address to identify the device if in Slave mode, 0 if omitted.
      */
-    I2C(uint8_t port, uint8_t address = 0, I2CMode mode = I2CMaster);
+    I2C(uint8_t port, uint8_t address = 0, I2CMode mode = I2CMaster) {
+        this->device = I2C_Init(port, address, mode);
+    }
 
     /* === Reading for Slaves === */
 
     /** Reads one byte from the I2C bus.
      *  @return The byte read from the bus
      */
-    uint8_t read();
+    uint8_t read() {
+        return I2C_Read_Byte(this->device, 0);
+    }
 
     /** Reads any number of bytes from the I2C bus.
      *  @param data A pointer to an initialized byte array.
      *  @param length The amount of bytes to read into the array.
      *  @return The amount of bytes actually read.
      */
-    uint8_t read(uint8_t *data, uint8_t length);
+    uint8_t read(uint8_t *data, uint8_t length) {
+        return I2C_Read_Bytes(this->device, 0, data, length);
+    }
 
 
     /* === Reading for Masters === */
@@ -64,7 +70,9 @@ public:
      *                 Master mode, ignored if in Slave mode.
      *  @return The byte read from the bus
      */
-    uint8_t read(uint8_t address);
+    uint8_t read(uint8_t address) {
+        return I2C_Read_Byte(this->device, address);
+    }
 
     /** Reads any number of bytes from the I2C bus.
      *  @param address The slave address when operating in Master mode,
@@ -73,7 +81,9 @@ public:
      *  @param length The amount of bytes to read into the array.
      *  @return The amount of bytes actually read.
      */
-    uint8_t read(uint8_t address, uint8_t *data, uint8_t length);
+    uint8_t read(uint8_t address, uint8_t *data, uint8_t length) {
+        return I2C_Read_Bytes(this->device, address, data, length);
+    }
 
     /* === Writing for Slaves === */
 
@@ -81,14 +91,18 @@ public:
      *  @param data The byte to write to the bus.
      *  @return 1 if the write was acknowledged, 0 otherwise
      */
-    uint8_t write(uint8_t data);
+    uint8_t write(uint8_t data) {
+        return I2C_Write_Byte(this->device, 0, data);
+    }
 
     /** Writes any number of bytes to the I2C bus.
      *  @param data A pointer to a byte array containing the data to send.
      *  @param length The amount of bytes to read from the array
      *  @return The amount of bytes actually written.
      */
-    uint8_t write(uint8_t *data, uint8_t length);
+    uint8_t write(uint8_t *data, uint8_t length) {
+        return I2C_Write_Bytes(this->device, 0, data, length);
+    }
 
     /* === Writing for Masters === */
 
@@ -98,7 +112,9 @@ public:
      *  @param data The byte to write to the bus.
      *  @return 1 if the write was acknowledged, 0 otherwise
      */
-    uint8_t write(uint8_t address, uint8_t data);
+    uint8_t write(uint8_t address, uint8_t data) {
+        return I2C_Write_Byte(this->device, address, data);
+    }
 
     /** Writes any number of bytes to the I2C bus.
      *  @param address The slave address when operating in Master mode,
@@ -107,27 +123,37 @@ public:
      *  @param length The amount of bytes to read from the array
      *  @return The amount of bytes actually written.
      */
-    uint8_t write(uint8_t address, uint8_t *data, uint8_t length);
+    uint8_t write(uint8_t address, uint8_t *data, uint8_t length) {
+        return I2C_Write_Bytes(this->device, address, data, length);
+    }
 
     /** Generate a start condition in the I2C bus.
      *  Only meaningful in Master mode.
      */
-    void start();
+    void start() {
+        I2C_Start(this->device);
+    }
 
     /** Transmit a stop condition to the I2C bus in Master mode,
      *  recover from errors in slave mode.
      */
-    void stop();
+    void stop() {
+        I2C_Stop(this->device);
+    }
 
     /** Sets the device address. Only relevant in slave mode.
      *  @param address The slave address to set.
      */
-    void address(uint8_t address);
+    void address(uint8_t address) {
+        I2C_Address(this->device, address);
+    }
 
     /** Sets the bus frequency in hertz.
      *  @param hz The frequency to set in hertz.
      */
-    void frequency(uint32_t hz);
+    void frequency(uint32_t hz) {
+        I2C_Frequency(this->device, hz);
+    }
 
 };
 
