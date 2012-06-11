@@ -118,42 +118,56 @@ PinBus_t PinBus_Get_Notification() {
 
 #include "hash.h"
 
+// Interrupt table where all interrupts are registered
 Hash_t *io_interrupt_table = NULL;
+
+#define _IO_PORT_SHIFT 32
+#define _IO_MODE_SHIFT 64
 
 // Returns the corresponding byte identification for the pin
 // address, port, and interrupt mode
 static inline uint8_t io_interrupt_get_byte(uint32_t address,
 uint8_t port, uint8_t mode) {
     uint8_t pos = address;
-    pos += 32 * (port / 2);
-    pos += 64 * (mode);
+    pos += _IO_PORT_SHIFT * (port / 2);
+    pos += _IO_MODE_SHIFT * (mode);
     return pos;
 }
 
 // Call both handlers (if apropriate) and clear the interrupts
-static inline void io_interrupt_call_handlers(uint32_t *states, uint8_t id, uint8_t port_mask) {
+static inline void io_interrupt_call_handlers(uint32_t *states, 
+    uint8_t id, uint8_t port_shift) {
+
     uint32_t mask = (1 << id);
     Int_Func f = NULL;
+
+    // Check which (or both) of the handlers has to be called
     if (states[0] & mask) {
-        f = (Int_Func) Hash_Get(io_interrupt_table, id + port_mask);
+        f = (Int_Func) Hash_Get(io_interrupt_table, id 
+            + port_shift);
         if (f != NULL) f();
     }
     if (states[1] & mask) {
-        f = (Int_Func) Hash_Get(io_interrupt_table, id + port_mask + 64);
+        f = (Int_Func) Hash_Get(io_interrupt_table, id + 
+            port_shift + _IO_MODE_SHIFT);
         if (f != NULL) f();
     }
+    // Set the interrupt as handled
     states[2] |= mask;
 }
 
 // Iterate over a register of interrupts, calling the functions
-static void io_interrupt_read_all(uint32_t *states,  uint8_t port) {
+static void io_interrupt_read_all(uint32_t *states,  uint8_t port_shift) {
 
+    // OR both states (postive edge and negative edge)
     uint32_t ints = states[0] | states[1];
-    uint8_t j = 0;
 
+    // Iterate the interrupt state vector until all interrupts 
+    // have been handled
+    uint8_t j = 0;
     while (ints != 0) {
         if (ints & 0x1) {
-            io_interrupt_call_handlers(states, j, port * 16);
+            io_interrupt_call_handlers(states, j, port_shift);
         }
         ints >>= 1;
         j++;
@@ -162,15 +176,17 @@ static void io_interrupt_read_all(uint32_t *states,  uint8_t port) {
 
 void EINT3_IRQHandler(void) {
 
-    // TODO: this could probably be done better.  Some strategies:
-    // 1 - if the amount of interrupts is small, iterate the hash items and check them.
-    // 2 - go through the 32bit register as if it were a tree, using pre-codified masks.
-    // 3 - OR the 4 words, shift the result and when finding a 1 check the 4 registers.
     if (io_interrupt_table == NULL) return;
 
+    io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO0IntStat, 0);
+    io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO2IntStat, _IO_PORT_SHIFT);
+
+    /* 
+     * This code is commented out because the other alternative is better.
+     *
     // If there are less than 16 interrupts registered,
     // go through the list and check all of them
-    /*if (Hash_Len(io_interrupt_table) < 16) {
+    if (Hash_Len(io_interrupt_table) < 16) {
         Hash_Iter_t *iter = Hash_Iter_Init(io_interrupt_table);
         while (Hash_Iter_Has_Next(iter)) {
             Hash_Key_t key = Hash_Iter_Get_Next(iter);
@@ -186,10 +202,11 @@ void EINT3_IRQHandler(void) {
     }
     // If there are more than 16 interrupts registered,
     // go through the interrupt state vectors.
-    else { */
-    io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO0IntStat, 0);
-    io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO2IntStat, 2);
-    /*}*/
+    else { 
+        io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO0IntStat, 0);
+        io_interrupt_read_all((uint32_t *) LPC_GPIOINT->IO2IntStat, 32);
+    }
+    */
 }
 
 // Initializes the interrupt table
