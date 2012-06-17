@@ -36,9 +36,9 @@ extern "C" {
 #include "board.h"
 #include "port.h"
 
-    /** Opaque structure to hold pin information.
-     *  The data contained in the structure depends on the
-     *  architecture. It should be created through Pin_Get.
+    /** Opaque structure to hold pin information. The data
+     *  contained in the structure depends on the architecture.
+     *  It should be created through Pin_Get or Pin_Init.
      */
     typedef struct _pin_t Pin_t;
 
