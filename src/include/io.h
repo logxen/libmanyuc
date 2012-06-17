@@ -114,7 +114,7 @@ extern "C" {
      * @param mode The mode for the pin interrupt (architecture
      * dependent).
      */
-    void Pin_Int_Attach(Pin_t pin, void(*function)(void), IOIntMode mode);
+    void Pin_Int_Attach(Pin_t pin, Int_Func function, IOIntMode mode);
 
     /** Disables a pin interrupt that had been previously
      * attached/enabled.
@@ -166,7 +166,7 @@ extern "C" {
     void PinBus_Input(PinBus_t bus);
 
     /** Sets the mode for the group of pins.
-     *  The possible input modes or pin functions
+     *  The possible input/output modes or pin functions
      *  depend on the architecture.
      *  @param bus A group of pins created through PinBus_Get.
      *  @param mode The mode to set for the pins.
@@ -215,7 +215,6 @@ extern "C" {
      *  @return A structure that represents the group of pins.
      */
     Bus_t Bus_Get(int npins, ...);
-//void Bus_Get(int npins, ...);
 
     /** Sets the bus as output.
      *  @param bus A bus created through Bus_Get.
