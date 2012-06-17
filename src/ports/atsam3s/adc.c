@@ -107,7 +107,7 @@ uint32_t AnalogIn_Get(PinName pin_name) {
     return id;
 }
 
-uint16_t AnalogIn_Read(uint32_t channel) {
+unsigned int AnalogIn_Read(uint32_t channel) {
 
     uint32_t channel_mask = ADC_CHANNEL_MASK(channel);
 

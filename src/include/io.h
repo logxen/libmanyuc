@@ -263,10 +263,13 @@ extern "C" {
     /** Display an error with the arch leds.  Show's SOS in morse. */
     void Show_Error();
 
+    /** Set all pins on. */ 
     void Pin_All_On(Pin_t *pins, int n);
 
+    /** Set all pins off. */
     void Pin_All_Off(Pin_t *pins, int n);
 
+    /** Show a byte with pins */
     void Pin_Show_Byte(Pin_t *pins, int n, uint8_t byte);
 
 //@}

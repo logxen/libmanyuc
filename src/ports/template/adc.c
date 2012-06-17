@@ -38,7 +38,7 @@ AnalogIn_t AnalogIn_Get(PinName pin_name) {
 }
 
 // Read values according to the different possibilities
-uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
+unsigned int AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
 
     return 0;
 }
@@ -55,7 +55,7 @@ void AnalogIn_Detach(AnalogIn_t pin) {
 }
 
 // Read values continuously
-void AnalogIn_Read_All(uint32_t speed) {
+void AnalogIn_Read_All(unsigned int speed) {
 
 }
 

@@ -46,7 +46,7 @@ extern "C" {
     /** Type for functions passed to AnalogIn_Attach.
      *  It receives the value converted through the ADC.
      */
-    typedef void (*ADC_Int_Func)(uint32_t);
+    typedef void (*ADC_Int_Func)(unsigned int);
 
     /** Returns a structure with the information necessary to read
      *  from this pin. The pin must be an ADC enabled pin, or an 
@@ -64,14 +64,16 @@ extern "C" {
     /** Returns a value read from the ADC pin specified.
      * @param pin The pin from which to read. Should be constructed 
      *            through AnalogIn_Init or AnalogIn_Get.
-     * @param mode The mode used to read. Architecture dependent.
+     * @param mode The mode used to read. Basic modes are: ADC_NORMAL
+     *             and ADC_INTERRUPT. Other modes are architecture 
+     *             dependent.
      * @return the value read from the ADC.
      */
-    uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode);
+    unsigned int AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode);
 
     /** Attaches a function to be called when the conversion done
      *  on pin is finished. It does not start the converstion. 
-     *  To start the converstion AnalogIn_Read should be called, with
+     *  To start the conversion AnalogIn_Read should be called, with
      *  ADC_INTERRUPT mode.
      *  @param pin The pin from which to read. Should be constructed 
      *             through AnalogIn_Init or AnalogIn_Get.
@@ -88,7 +90,7 @@ extern "C" {
      *  @param speed A value to set the speed for the ADC conversion.
      *               Architecture dependent.
      */
-    void AnalogIn_Read_All(uint32_t speed);
+    void AnalogIn_Read_All(unsigned int speed);
 
     /** Stop reading from many pins at the same time.
      */

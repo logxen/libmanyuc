@@ -103,7 +103,7 @@ void static inline _analog_in_enable_channel(uint8_t channel) {
 }
 
 // Read one value and return it
-uint32_t static inline _analog_in_read_one(uint8_t channel) {
+unsigned int static inline _analog_in_read_one(uint8_t channel) {
     uint16_t result;
     LPC_ADC->ADCR |= ADC_CR_START_NOW;
     while (!(LPC_ADC->ADDR[channel] & ADC_DR_DONE_FLAG));
@@ -111,7 +111,7 @@ uint32_t static inline _analog_in_read_one(uint8_t channel) {
 }
 
 // Read three values and return the median
-uint32_t static inline _analog_in_read_three(uint8_t channel) {
+unsigned int static inline _analog_in_read_three(uint8_t channel) {
     // Get 3 values
     uint16_t results[3];
     int i = 0;
@@ -140,7 +140,7 @@ void static inline _analog_in_read_int(uint8_t channel) {
     LPC_ADC->ADCR |= ADC_CR_START_NOW;
 }
 
-uint32_t AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
+unsigned int AnalogIn_Read(AnalogIn_t pin, AnalogInMode mode) {
     _analog_in_enable_channel(pin.channel);
     if (mode == ADC_INTERRUPT) {
         _analog_in_read_int(pin.channel);
@@ -168,7 +168,7 @@ void AnalogIn_Detach(AnalogIn_t pin) {
     _analog_in_func[pin.channel] = NULL;
 }
 
-void AnalogIn_Read_All(uint32_t speed) {
+void AnalogIn_Read_All(unsigned int speed) {
     if (speed == 0 || speed >= 256) speed = 1;
 
     // Find out which channels have been set.
