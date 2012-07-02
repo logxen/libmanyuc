@@ -13,7 +13,7 @@ MEMORY
 }
 
 /* Define the top our stack at the end of SRAM */
-_end_stack = 0x10008000;
+_end_stack = 0x10002000;
 
 EXTERN(__interrupt_vector_table);
 

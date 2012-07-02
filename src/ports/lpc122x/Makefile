@@ -2,7 +2,7 @@
 
 #  List of the objects files to be compiled/assembled
 #PORT_OBJECTS = startup_LPC17xx.o port.o io.o serial.o syscalls.o adc.o pwm.o timers.o i2c.o
-PORT_OBJECTS = startup_LPC17xx.o system_LPC122x.o core_cm0.o io.o serial.o syscalls.o adc.o timers.o
+PORT_OBJECTS = startup_LPC122x.o system_LPC122x.o core_cm0.o port.o io.o serial.o syscalls.o adc.o timers.o
 PORT_OBJECTS := $(addprefix $(ARCH_COMMON_DIR)/, $(PORT_OBJECTS))
 # Unused hack
 #INC_PORT_OBJS = $(addprefix $(ARCH_DIR)/, $(PORT_OBJECTS))
